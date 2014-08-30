@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>NLPNote | Gray Times</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1.《Python自然语言处理》笔记
+
+遍历序列的各种方式
+
+123456789Python 表达式                       评论for item in s                       遍历 s 中的元素for item in sorted(s)               按顺序遍历 s 中的元素for item in set(s)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NLPNote">
+<meta property="og:url" content="http://yoursite.com/2014/02/06/nlpNote/">
+<meta property="og:site_name" content="Gray Times">
+<meta property="og:description" content="1.《Python自然语言处理》笔记
+
+遍历序列的各种方式
+
+123456789Python 表达式                       评论for item in s                       遍历 s 中的元素for item in sorted(s)               按顺序遍历 s 中的元素for item in set(s)">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NLPNote">
+<meta name="twitter:description" content="1.《Python自然语言处理》笔记
+
+遍历序列的各种方式
+
+123456789Python 表达式                       评论for item in s                       遍历 s 中的元素for item in sorted(s)               按顺序遍历 s 中的元素for item in set(s)">
+
+  
+    <link rel="alternative" href="/atom.xml" title="Gray Times" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Gray Times</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Record the history that you will forget.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-nlpNote" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/02/06/nlpNote/" class="article-date">
+  <time datetime="2014-02-05T23:56:29.000Z" itemprop="datePublished">2月 6 2014</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/nlp/">nlp</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      NLPNote
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-《Python自然语言处理》笔记">1.《Python自然语言处理》笔记</h2>
+<ul>
+<li>遍历序列的各种方式</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Python 表达式                       评论</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> s                       遍历 s 中的元素</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> sorted(s)               按顺序遍历 s 中的元素</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> set(s)                  遍历 s 中的无重复的元素</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> reversed(s)             按逆序遍历 s 中的元素</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> set(s).difference(t)    遍历在集合 s 中不在集合 t 的元素</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> random.shuffle(s)       按随机顺序遍历 s 中的元素</div><div class="line"></div><div class="line">组合使用显威力： reversed(sorted(set(s)))</div></pre></td></tr></table></figure>
+
+<ul>
+<li>zip &amp;&amp; enumerate</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span>words = [<span class="string">'I'</span>, <span class="string">'turned'</span>, <span class="string">'off'</span>, <span class="string">'the'</span>, <span class="string">'spectroroute'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>tags = [<span class="string">'noun'</span>, <span class="string">'verb'</span>, <span class="string">'prep'</span>, <span class="string">'det'</span>, <span class="string">'noun'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>zip(words, tags)</div><div class="line">[(<span class="string">'I'</span>, <span class="string">'noun'</span>), (<span class="string">'turned'</span>, <span class="string">'verb'</span>), (<span class="string">'off'</span>, <span class="string">'prep'</span>),</div><div class="line">(<span class="string">'the'</span>, <span class="string">'det'</span>), (<span class="string">'spectroroute'</span>, <span class="string">'noun'</span>)]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>list(enumerate(words))</div><div class="line">[(<span class="number">0</span>, <span class="string">'I'</span>), (<span class="number">1</span>, <span class="string">'turned'</span>), (<span class="number">2</span>, <span class="string">'off'</span>), (<span class="number">3</span>, <span class="string">'the'</span>), (<span class="number">4</span>, <span class="string">'spectroroute'</span>)]</div></pre></td></tr></table></figure>
+
+<p>对于一些 NLP 的任务,有必要将一个序列分割成两个或两个以上的部分。例如:我们<br>可能需要用 90%的数据来“训练”一个系统,剩余 10%进行测试。要做到这一点,我们指<br>定想要分割数据的位置,然后在这个位置分割序列。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span>text = nltk.corpus.nps_chat.words()</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>cut = int(<span class="number">0.9</span> * len(text)) </div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>training_data, test_data = text[:cut], text[cut:] </div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>text == training_data + test_data </div><div class="line"><span class="keyword">True</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>len(training_data) / len(test_data) <span class="number">4</span></div><div class="line"><span class="number">9</span></div></pre></td></tr></table></figure>
+
+<p>我们可以验证在此过程中的原始数据没有丢失,也不是复制。我们也可以验证两块大<br>小的比例是我们预期的。</p>
+<p>让我们综合关于这三种类型的序列的知识,一起使用链表推导处理一个字符串中的词,<br>按它们的长度排序。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span>words = <span class="string">'I turned off the spectroroute'</span>.split() </div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>wordlens = [(len(word), word) <span class="keyword">for</span> word <span class="keyword">in</span> words] </div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>wordlens.sort() </div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">' '</span>.join(w <span class="keyword">for</span> (_, w) <span class="keyword">in</span> wordlens)</div><div class="line"><span class="string">'I off the turned spectroroute'</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>从html中提取信息的通用办法</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_text</span><span class="params">(file)</span>:</span></div><div class="line"><span class="string">"""Read text from a file, normalizing whitespace and stripping HTML markup."""</span></div><div class="line">text = open(file).read()</div><div class="line">text = re.sub(<span class="string">'\s+'</span>, <span class="string">' '</span>, text)</div><div class="line">text = re.sub(<span class="string">r'&lt;.*?&gt;'</span>, <span class="string">' '</span>, text)</div><div class="line"><span class="keyword">return</span> text</div></pre></td></tr></table></figure>
+
+<ul>
+<li>防御性编程</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">tag</span><span class="params">(word)</span>:</span></div><div class="line">   <span class="keyword">assert</span> isinstance(word, basestring), <span class="string">"argument to tag() must be a string"</span></div><div class="line">   <span class="keyword">if</span> word <span class="keyword">in</span> [<span class="string">'a'</span>, <span class="string">'the'</span>, <span class="string">'all'</span>]:</div><div class="line">       <span class="keyword">return</span> <span class="string">'det'</span></div><div class="line">   <span class="keyword">else</span>:</div><div class="line">       <span class="keyword">return</span> <span class="string">'noun'</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>FreqDist</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">freq_words</span><span class="params">(file, min=<span class="number">1</span>, num=<span class="number">10</span>)</span>:</span></div><div class="line">    text = open(file).read()</div><div class="line">    tokens = nltk.word_tokenize(text)</div><div class="line">    freqdist = nltk.FreqDist(t <span class="keyword">for</span> t <span class="keyword">in</span> tokens <span class="keyword">if</span> len(t) &gt;= min)</div><div class="line">    <span class="keyword">return</span> freqdist.keys()[:num]</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">freq_words_verbose</span><span class="params">(file, min=<span class="number">1</span>, num=<span class="number">10</span>, verbose=False)</span>:</span></div><div class="line"> <span class="string">'''如果设置了 verbose 标志将会报告其进展情况'''</span></div><div class="line"> freqdist = FreqDist()</div><div class="line"> <span class="keyword">if</span> trace: <span class="keyword">print</span> <span class="string">"Opening"</span>, file</div><div class="line"> text = open(file).read()</div><div class="line"> <span class="keyword">if</span> trace: <span class="keyword">print</span> <span class="string">"Read in %d characters"</span> % len(file)</div><div class="line"> <span class="keyword">for</span> word <span class="keyword">in</span> nltk.word_tokenize(text):</div><div class="line">     <span class="keyword">if</span> len(word) &gt;= min:</div><div class="line">        freqdist.inc(word)</div><div class="line">        <span class="keyword">if</span> trace <span class="keyword">and</span> freqdist.N() % <span class="number">100</span> == <span class="number">0</span>: <span class="keyword">print</span> <span class="string">"."</span></div><div class="line"> <span class="keyword">if</span> trace: <span class="keyword">print</span></div><div class="line"> <span class="keyword">return</span> freqdist.keys()[:num]</div></pre></td></tr></table></figure>
+
+<ul>
+<li><p>调试＆＆Pdb</p>
+</li>
+<li><p>CSV :Python有自己的CSV库，csv.reader</p>
+</li>
+</ul>
+<blockquote>
+<p>动态规划是一种在 NLP 中广泛使用的算法设计技术,它存储以前的计算结果,<br>以避免不必要的重复计算。</p>
+</blockquote>
+<h2 id="2-_文本分类">2. 文本分类</h2>
+<ul>
+<li><p>过拟合： 如果你提供太多的特征,那么该算法将高度依赖你的训练数据的特性，而一般化到新的例子的效果不会很好。这个问题被称为过拟合。</p>
+</li>
+<li><p>devtest： 一旦初始特征集被选定,完善特征集的一个非常有成效的方法是错误分析。首先,我们选择一个开发集,包含用于创建模型的语料数据。然后将这种开发集分为训练集和开发测试集。</p>
+</li>
+<li><p>Topic映射到关键词组，映射的越多，表示越切题。</p>
+</li>
+<li>不去关注词法，语法阶段的错误，做到隔离。面面俱到的效果未必好。</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">algorithm : 主题检测</div><div class="line">input: document</div><div class="line">tools: </div><div class="line">     -<span class="ruby"> 特征提取器(<span class="symbol">eg:</span>给定一些模式（词，词组，词模式)，得到对于给定document的`布尔数组`)</span></div><div class="line">     -<span class="ruby"> 训练一个文档分类器</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li><p>特征提取函数的行为就像有色眼镜一样,强调我们的数据中的某些属性(颜色),并使其无法看到其他属性。分类器在决定如何标记输入时,将完全依赖它们强调的属性。</p>
+</li>
+<li><p>要不要走一条无监督学习之路，寻找不动点。</p>
+</li>
+<li><p>文本自动层级聚类<br>这种试探性的数据分析(exploratory data  analysis)来识别跑题作文,并辅以人工鉴别。这种内容评价方法的特点是不需要事先基于大规模标注训练集构建评价模型,并且有着层级聚合聚类法的突出优点,郎能够生成比较规整的类集合,聚类结果不依赖文档的初始排列或输入次序,与聚类过程的先后次序无关,聚类结果比较稳定,不易导致类的重构。并且对于作文i平价来讲,得到的结果比较容易解释。实验结果表明,该方法能比较清晰地识别与大多数作文内容不同的作文,再辅以人工鉴别,可准确识别跑题作文,从而在通用自动作文评价中实现作文内容的测量。</p>
+</li>
+</ul>
+<h2 id="3-_代码工具库">3. 代码工具库</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="string">"""</span></div><div class="line">为跑题检测储备的工具代码</div><div class="line">~/Project/NLTK-offTopic/.temp.py</div><div class="line">"""</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> nltk <span class="keyword">as</span> nk</div><div class="line"><span class="keyword">import</span> re</div><div class="line"></div><div class="line">s=open(<span class="string">"nlptest.txt"</span>,<span class="string">"r"</span>)</div><div class="line"><span class="string">'''s.seek(0)'''</span></div><div class="line">m1=s.read()</div><div class="line">pattern=re.compile(<span class="string">"^A-Za-z"</span>)</div><div class="line">s1=re.split(<span class="string">"\s+"</span>,re.sub(pattern,<span class="string">" "</span>,m1.replace(<span class="string">"\n"</span>,<span class="string">" "</span>)))</div><div class="line">s2=set(s1) <span class="comment">#union作用</span></div><div class="line">s3=nk.FreqDist(s1)</div><div class="line">nk.FreqDist(s1).items()<span class="comment">#显示所有信息</span></div><div class="line">nk.FreqDist(s1).keys()[:<span class="number">50</span>]<span class="comment">#显示前50的词频为降序排列</span></div><div class="line">s4=[len(ca) <span class="keyword">for</span> ca <span class="keyword">in</span> s1]<span class="comment">#计算词频长度</span></div><div class="line">s5=nk.FreqDist(s4)</div><div class="line">max(s5)<span class="comment">#显示最大的词频</span></div><div class="line">s5.freq(s5.keys(max(s5))<span class="comment">#可显示比率</span></div><div class="line">z1=[ca <span class="keyword">for</span> ca <span class="keyword">in</span> set(s1) <span class="keyword">if</span> s3[ca]&gt;<span class="number">10</span>]<span class="comment">#可以只输出符合规则的词频</span></div><div class="line">s3.plot(<span class="number">50</span>,cumulative=<span class="keyword">True</span>)<span class="comment">#累计汇总图前50个词频的</span></div><div class="line">s3.hapaxes()<span class="comment">#输出只一次的词</span></div><div class="line">nk.bigrams(s1)<span class="comment">#形成双连词</span></div><div class="line">s3.inc(s3)<span class="comment">#可添加样本</span></div><div class="line">s3.N()可现实总量</div><div class="line">s3.tabulate(conditions=<span class="string">"表示第几个文本对应的名字"</span>,samples=<span class="string">"表示要显示的词"</span>)<span class="comment">#绘制频率分布表</span></div><div class="line"> </div><div class="line"><span class="comment">###nltk上的人机交互程序</span></div><div class="line">nk.chat.chatbots()</div><div class="line"> </div><div class="line"><span class="comment">##载入自己的语料库</span></div><div class="line"> </div><div class="line"><span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> PlaintextCorpusReader</div><div class="line">wd=<span class="string">"D:\\nlptest"</span></div><div class="line">wd1=PlaintextCorpusReader(wd,<span class="string">".*"</span>)</div><div class="line">wd1.fileids()<span class="comment">#显示语料库中的文件名</span></div><div class="line">wd1.words(<span class="string">"nlptest.txt"</span>)<span class="comment">#显示词和split效果一样</span></div><div class="line">cfd=nk.ConditionalFreqDist((genre,word) <span class="keyword">for</span> genre <span class="keyword">in</span> [<span class="string">"first"</span>,<span class="string">"second"</span>] <span class="keyword">for</span> word <span class="keyword">in</span> s1)</div><div class="line"><span class="comment">#对应的条件概率如果在word，其实就是分类汇总</span></div><div class="line">cfd.conditions()<span class="comment">#显示并按照条件字母排序</span></div><div class="line"><span class="comment">#一样可以用tabulate显示table列表</span></div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">#英文同义词字典库</span></div><div class="line"> </div><div class="line"><span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> wordnet <span class="keyword">as</span> wn</div><div class="line">wn.synsets(<span class="string">"hell"</span>)<span class="comment">#显示出同义词类</span></div><div class="line">wn.synset(<span class="string">"hell.n.01"</span>).lemma_names<span class="comment">#可以显示出在第几种词义词性下对应的相同英文</span></div><div class="line">wn.synset(<span class="string">"hell.n.01"</span>).definition<span class="comment">#词语定义</span></div><div class="line">wn.synset(<span class="string">"hell.n.01"</span>).examples<span class="comment">#常用词义例句子</span></div><div class="line">wn.synset(<span class="string">"hell.n.01"</span>).lemmas<span class="comment">#显示所有词条</span></div><div class="line">wn.lemma(<span class="string">"hell.n.01.hell_on_earth"</span>)</div><div class="line">wn.lemma(<span class="string">"hell.n.01.hell_on_earth"</span>).synset<span class="comment">#显示上层hell.n.01</span></div><div class="line">wn.lemma(<span class="string">"hell.n.01.hell_on_earth"</span>).name<span class="comment">#显示单词'hell_on_earth'</span></div><div class="line">hell=wn.synset(<span class="string">"cat.n.01"</span>)</div><div class="line">hell1=hell.hyponyms()</div><div class="line">sorted([lemma.name <span class="keyword">for</span> synset1 <span class="keyword">in</span> hell1 <span class="keyword">for</span> lemma <span class="keyword">in</span> synset1.lemmas])</div><div class="line"><span class="comment">#Out[65]: ['Felis_catus', 'Felis_domesticus', 'domestic_cat', 'house_cat', 'wildcat']</span></div><div class="line"><span class="comment">#先进行词条分类</span></div><div class="line"><span class="comment">#通过hyponyms找到下位词如毛 可以使什么类型的猫等</span></div><div class="line">hell.root_hypernyms()<span class="comment">#可以找到最一般的上位词</span></div><div class="line">hell.hypernym_paths()<span class="comment">#可以找到层次 len测是几类</span></div><div class="line">wn.synset(<span class="string">"cat.n.01"</span>).part_meronyms()<span class="comment">#可以显示出如猫耳朵，猫毛这类词汇关系</span></div><div class="line">wn.synset(<span class="string">"cat.n.01"</span>).substance_meronyms()<span class="comment">#不理解什么叫树的实质是心材和边材</span></div><div class="line">wn.synset(<span class="string">"walk.v.01"</span>).entailments()<span class="comment">#动词的蕴含意义，如走路蕴含着抬脚，吃蕴含着咀嚼等</span></div><div class="line">wn.lemma(<span class="string">"rush.v.01"</span>).antonyms()<span class="comment">#动词的反义</span></div><div class="line">dir(wn.synset(<span class="string">"rush.v.01"</span>))<span class="comment">#可以通过此种方式再词汇挂你选等上查找</span></div><div class="line">wn.synset(<span class="string">"right_whale.n.01"</span>).lowest_common_hypernyms(wn.synset(<span class="string">"orca.n.01"</span>))<span class="comment">#可以计算出两个相似的类</span></div><div class="line">wn.synset(<span class="string">"right_whale.n.01"</span>).min_depth()<span class="comment">#可以查对应的深度量化</span></div><div class="line">wn.synset(<span class="string">"right_whale.n.01"</span>).path_similarity(wn.synset(<span class="string">"orca.n.01"</span>))<span class="comment">#直接可以计算相似度1为基本一样</span></div><div class="line"><span class="string">'''urllib urlopen urlopen().read()</span></div><div class="line">#nk.word_tokenize()可直接对文本分词</div><div class="line">#text=nk.Text(nk.word_tokenize)的list形变为nltk文本</div><div class="line">list形式可用 .find("")</div><div class="line"> </div><div class="line">#html</div><div class="line">k1=urlopen().read()</div><div class="line">#直接转换</div><div class="line">k2=nk.clean_html(k1)</div><div class="line">k3=nk.word_tokenize(k2)</div><div class="line">'''</div><div class="line"> </div><div class="line"><span class="comment">#词干提取器</span></div><div class="line">porter=nk.PorterStemmer()<span class="comment">#或者LancasterStemmer()</span></div><div class="line">[porter.stem(t) <span class="keyword">for</span> t <span class="keyword">in</span> s1]</div><div class="line"><span class="comment">#词型归并器</span></div><div class="line">l1=nk.WordNetLemmatizer()</div><div class="line">[l1.lemmatize(t) <span class="keyword">for</span> t <span class="keyword">in</span> s1]</div><div class="line"><span class="comment">#nk.regexp_tokenize(text,pattern)比re.findall快很多</span></div><div class="line"><span class="comment">#random.shuffle(sample)</span></div><div class="line"> </div><div class="line"><span class="comment">#词性标注器</span></div><div class="line">nk.pos_tag(s1)<span class="comment">#cc连词 rb副词 in介词 nn名词 jj形容词 vbp动词</span></div><div class="line"><span class="comment">#adj形容词 adv动词 cnj连词 det限定词 ex存量词 fw外来词 mod情态动词</span></div><div class="line"><span class="comment">#n 名词 np 专有名词 num数量词 pro代词 p介词 to 词投 uh感叹词 v动词</span></div><div class="line"><span class="comment">#vd过去式 vg现有分词 vn过去分词 wh wh限定词</span></div><div class="line"> </div><div class="line"><span class="comment">#读取已标注的语料库</span></div><div class="line">s1.tagged_words()</div><div class="line"><span class="comment">#朴素贝叶斯</span></div><div class="line">cla=nk.NaiveBayesClassifier.train()</div><div class="line">cla.classfiy()</div><div class="line">nk.classify.accuracy(cla,<span class="string">"测试集"</span>)</div><div class="line"><span class="comment">#决策树</span></div><div class="line">nk.DecisionTreeClassifier.tarin()</div></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/02/06/nlpNote/" data-id="p74pvqmbliw4kirb" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NLP/">NLP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note/">note</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/project/">project</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/08/06/tomcat-tune/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Tomcat 并发调优
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/11/07/StructHack/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Struct Hack</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaEE/">JavaEE</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nlp/">nlp</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/reading/">reading</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/">NLP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javaee/">javaee</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/muse/">muse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note/">note</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/">project</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/struct/">struct</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tomcat/">tomcat</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10.00px;">C</a><a href="/tags/NLP/" style="font-size: 10.00px;">NLP</a><a href="/tags/javaee/" style="font-size: 10.00px;">javaee</a><a href="/tags/muse/" style="font-size: 10.00px;">muse</a><a href="/tags/note/" style="font-size: 10.00px;">note</a><a href="/tags/project/" style="font-size: 10.00px;">project</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/reading/" style="font-size: 20.00px;">reading</a><a href="/tags/struct/" style="font-size: 10.00px;">struct</a><a href="/tags/tomcat/" style="font-size: 10.00px;">tomcat</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03">March 2013</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2014/08/06/tomcat-tune/">Tomcat 并发调优</a>
+          </li>
+        
+          <li>
+            <a href="/2014/02/06/nlpNote/">NLPNote</a>
+          </li>
+        
+          <li>
+            <a href="/2013/11/07/StructHack/">Struct Hack</a>
+          </li>
+        
+          <li>
+            <a href="/2013/03/16/muse5minutes/">《冥想5分钟》学习笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2013/03/16/pythonNote1/">《Python学习笔记》的笔记</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2014 Kangkona D.Han<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

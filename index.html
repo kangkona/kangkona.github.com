@@ -3,20 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hexo</title>
+  <title>Gray Times</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="Gray Times">
 <meta property="og:url" content="http://yoursite.com/">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Gray Times">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="Gray Times">
 <meta name="twitter:description">
 
   
-    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Gray Times" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -34,8 +34,12 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">Gray Times</a>
       </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Record the history that you will forget.</a>
+        </h2>
       
     </div>
     <div id="header-inner" class="inner">
@@ -62,12 +66,16 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-tomcat-tune" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2014/08/29/hello-world/" class="article-date">
-  <time datetime="2014-08-29T08:34:44.000Z" itemprop="datePublished">Aug 29 2014</time>
+    <a href="/2014/08/06/tomcat-tune/" class="article-date">
+  <time datetime="2014-08-05T23:56:29.000Z" itemprop="datePublished">8月 6 2014</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/JavaEE/">JavaEE</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -76,7 +84,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2014/08/29/hello-world/">Hello World</a>
+      <a class="article-title" href="/2014/08/06/tomcat-tune/">Tomcat 并发调优</a>
     </h1>
   
 
@@ -84,31 +92,639 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">trobuleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2>
-<h3 id="Create_a_new_post">Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+        <h2 id="一-_Linux系统配置">一. Linux系统配置</h2>
+<h3 id="1-_增大最大打开文件数限制">1. 增大最大打开文件数限制</h3>
+<pre><code> $ sudo <span class="keyword">vim</span> /etc/sysctl.<span class="keyword">conf</span> 
+ # <span class="built_in">add</span> <span class="string">"fs.file-max = 8061540"</span>
+ $ sudo <span class="keyword">vim</span> /etc/security/limit.<span class="keyword">conf</span> 
+ # <span class="built_in">add</span> <span class="string">"* soft nofile 8192"</span>  <span class="built_in">and</span> <span class="string">"* hard nofile 16384"</span>
+</code></pre><h3 id="2-_优化网络">2. 优化网络</h3>
+<pre><code>$ sudo <span class="keyword">vim</span> /etc/sysctl.<span class="keyword">conf</span>
+</code></pre><p>优化后的内容如下：</p>
+<pre><code> net.ipv4.<span class="variable">ip_forward =</span> <span class="number">0</span>
 
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+ <span class="comment"># Controls source route verification</span>
+ net.ipv4.conf.default.<span class="variable">rp_filter =</span> <span class="number">1</span>
 
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+ <span class="comment"># Do not accept source routing</span>
+ net.ipv4.conf.default.<span class="variable">accept_source_route =</span> <span class="number">0</span>
 
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+ <span class="comment"># Controls the System Request debugging functionality of the kernel</span>
+ kernel.<span class="variable">sysrq =</span> <span class="number">0</span>
 
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+ <span class="comment"># Controls whether core dumps will append the PID to the core filename</span>
+ <span class="comment"># Useful for debugging multi-threaded applications</span>
+ kernel.<span class="variable">core_uses_pid =</span> <span class="number">1</span>
+
+ <span class="comment"># Controls the use of TCP syncookies</span>
+ net.ipv4.<span class="variable">tcp_syncookies =</span> <span class="number">1</span>
+
+ <span class="comment"># Controls the maximum size of a message, in bytes</span>
+ kernel.<span class="variable">msgmnb =</span> <span class="number">65536</span>
+
+ <span class="comment"># Controls the default maxmimum size of a mesage queue</span>
+ kernel.<span class="variable">msgmax =</span> <span class="number">65536</span>
+
+ <span class="comment"># Controls the maximum shared segment size, in bytes</span>
+ kernel.<span class="variable">shmmax =</span> <span class="number">68719476736</span>
+
+ <span class="comment"># Controls the maximum number of shared memory segments, in pages</span>
+ kernel.<span class="variable">shmall =</span> <span class="number">4294967296</span>
+ vm.<span class="variable">swappiness =</span> <span class="number">0</span>
+ kernel.<span class="variable">core_pattern =</span> /tmp/corefile/core-%e-%p-%t
+ net.ipv4.<span class="variable">tcp_tw_reuse =</span> <span class="number">1</span>
+ net.ipv4.<span class="variable">tcp_tw_recycle =</span> <span class="number">1</span>
+ net.ipv4.<span class="variable">tcp_fin_timeout =</span> <span class="number">5</span>
+ net.ipv4.<span class="variable">tcp_max_syn_backlog =</span> <span class="number">65536</span>
+ net.core.<span class="variable">netdev_max_backlog =</span>  <span class="number">32768</span>
+ net.core.<span class="variable">somaxconn =</span> <span class="number">32768</span>
+ net.core.<span class="variable">wmem_default =</span> <span class="number">8388608</span>
+ net.core.<span class="variable">rmem_default =</span> <span class="number">8388608</span>
+ net.core.<span class="variable">rmem_max =</span> <span class="number">16777216</span>
+ net.core.<span class="variable">wmem_max =</span> <span class="number">16777216</span>
+ net.ipv4.<span class="variable">tcp_timestamps =</span> <span class="number">0</span>
+ net.ipv4.<span class="variable">tcp_synack_retries =</span> <span class="number">2</span>
+ net.ipv4.<span class="variable">tcp_syn_retries =</span> <span class="number">2</span>
+ net.ipv4.<span class="variable">tcp_mem =</span> <span class="number">94500000</span> <span class="number">915000000</span> <span class="number">927000000</span>
+ net.ipv4.<span class="variable">tcp_max_orphans =</span> <span class="number">3276800</span>
+ net.ipv4.<span class="variable">ip_local_port_range =</span> <span class="number">2000</span>  <span class="number">65535</span>
+ net.ipv4.<span class="variable">tcp_max_tw_buckets =</span> <span class="number">5000</span>
+ net.ipv4.netfilter.<span class="variable">ip_conntrack_max =</span> <span class="number">1000000</span>
+</code></pre><h2 id="二-_Tomcat内存优化">二. Tomcat内存优化</h2>
+<h4 id="Tomcat内存优化主要是对_Tomcat_启动参数优化，我们可以在_Tomcat_的启动脚本_catalina-sh_中设置_JAVA_OPTS_参数"><strong>Tomcat内存优化主要是对 Tomcat 启动参数优化，我们可以在 Tomcat 的启动脚本 catalina.sh 中设置 JAVA_OPTS 参数</strong></h4>
+<pre><code>-<span class="ruby"><span class="symbol">server:</span>  启用jdk的server版,一定要作为第一个参数，在多个<span class="constant">CPU</span>时性能佳 
+</span>-<span class="ruby"><span class="constant">Xms</span>： 初始<span class="constant">Heap</span>大小，使用的最小内存,cpu性能高时此值应设的大一些 
+</span>-<span class="ruby"><span class="constant">Xmx</span>： java heap最大值，使用的最大内存 
+</span>上面两个值是分配JVM的最小和最大内存，取决于硬件物理内存的大小，建议均设为物理内存的一半。 
+-<span class="ruby"><span class="constant">XX</span><span class="symbol">:PermSize</span><span class="symbol">:</span>设定内存的永久保存区域 
+</span>-<span class="ruby"><span class="constant">XX</span><span class="symbol">:MaxPermSize</span><span class="symbol">:</span>设定最大内存的永久保存区域 
+</span>-<span class="ruby"><span class="constant">XX</span><span class="symbol">:MaxNewSize</span><span class="symbol">:</span> 
+</span>-<span class="ruby"><span class="constant">Xss</span> <span class="number">15120</span> 这使得<span class="constant">JBoss</span>每增加一个线程（thread)就会立即消耗<span class="number">15</span>M内存，而最佳值应该是<span class="number">128</span>K,默认值好像是<span class="number">512</span>k. 
+</span>+XX:AggressiveHeap 会使得 Xms没有意义。这个参数让jvm忽略Xmx参数,疯狂地吃完一个G物理内存,再吃尽一个G的swap。 
+-<span class="ruby"><span class="constant">Xss</span>：每个线程的<span class="constant">Stack</span>大小 
+</span>-<span class="ruby"><span class="symbol">verbose:</span>gc 现实垃圾收集信息 
+</span>-<span class="ruby"><span class="constant">Xloggc</span><span class="symbol">:gc</span>.log 指定垃圾收集日志文件 
+</span>-<span class="ruby"><span class="constant">Xmn</span>：young generation的heap大小，一般设置为<span class="constant">Xmx</span>的<span class="number">3</span>、<span class="number">4</span>分之一 
+</span>-<span class="ruby"><span class="constant">XX</span><span class="symbol">:+UseParNewGC</span> ：缩短minor收集的时间 
+</span>-<span class="ruby"><span class="constant">XX</span><span class="symbol">:+UseConcMarkSweepGC</span> ：缩短major收集的时间 
+</span>提示：此选项在Heap Size 比较大而且Major收集时间较长的情况下使用更合适。
+</code></pre><h4 id="_"> </h4>
+<h2 id="三-_Tomcat并发优化">三. Tomcat并发优化</h2>
+<h3 id="1-Tomcat连接相关参数">1.Tomcat连接相关参数</h3>
+<p>在Tomcat配置文件conf/server.xml 中的Connector配置中</p>
+<pre><code> acceptCount：允许的最大连接数
+ enableLookups：是否反查域名，取值为： <span class="literal">true</span> 或 <span class="literal">false</span> 。为了提高处理能力，应设置为 <span class="literal">false</span>
+ connectionTimeout：网络连接超时，单位：毫秒。设置为 <span class="number">0</span> 表示永不超时，这样设置有隐患的。通常可设置为 <span class="number">30000</span> 毫秒。
+ 其中和最大连接数相关的参数为maxProcessors 和 acceptCount。如果要加大并发连接数，应同时加大这两个参数。
+</code></pre><h3 id="2-调整连接器connector的并发处理能力">2.调整连接器connector的并发处理能力</h3>
+<pre><code>  maxThreads        客户请求最大线程数
+  minSpareThreads   Tomcat初始化时创建的 <span class="built_in">socket</span> 线程数
+  maxSpareThreads   Tomcat连接器的最大空闲 <span class="built_in">socket</span> 线程数
+  enableLookups     若设为<span class="constant">true</span>, 则支持域名解析，可把 ip 地址解析为主机名
+  redirectPort      在需要基于安全通道的场合，把客户请求转发到基于SSL 的 redirectPort 端口
+  acceptAccount     监听端口队列最大数，满了之后客户请求会被拒绝(不能小于maxSpareThreads)
+  connectionTimeout 连接超时
+  URIEncoding    <span class="built_in">URL</span>统一编码
+</code></pre><h3 id="3-Tomcat缓存优化">3.Tomcat缓存优化</h3>
+<pre><code>      compression 打开压缩功能   
+      compressionM<span class="keyword">in</span>Size   启用压缩的输出内容大小，这里面默认为<span class="number">2</span>KB
+      compressableMimeType 压缩类型
+      connectionTimeout 定义建立客户连接超时的时间. 如果为 -<span class="number">1</span>, 表示不限制建立客户连接的时间
+</code></pre><p>结合以上方面，对server.xml的现有配置为：</p>
+<pre><code>      &lt;Connector  <span class="variable">port=</span><span class="string">"9027"</span> 
+
+              <span class="variable">maxHttpHeaderSize=</span><span class="string">"8192"</span>
+
+              <span class="variable">maxThreads=</span><span class="string">"2048"</span>
+
+              <span class="variable">minSpareThreads=</span><span class="string">"256"</span>
+
+              <span class="variable">enableLookups=</span><span class="string">"false"</span>
+
+              <span class="variable">compression=</span><span class="string">"on"</span>
+
+              <span class="variable">compressionMinSize=</span><span class="string">"2048"</span>
+
+              <span class="variable">compressableMimeType=</span><span class="string">"text/html,text/xml,text/javascript,text/css,text/plain"</span>
+
+              <span class="variable">connectionTimeout=</span><span class="string">"20000"</span>
+
+              <span class="variable">URIEncoding=</span><span class="string">"utf-8"</span>
+
+              <span class="variable">acceptCount=</span><span class="string">"2048"</span>
+
+              <span class="variable">redirectPort=</span><span class="string">"8443"</span>
+
+              <span class="variable">disableUploadTimeout=</span><span class="string">"true"</span>
+
+              <span class="variable">executor=</span><span class="string">"tomcatThreadPool"</span> /&gt;
+
+      &lt;Executor <span class="variable">name=</span><span class="string">"tomcatThreadPool"</span> 
+                <span class="variable">namePrefix=</span><span class="string">"catalina-exec-"</span> 
+                <span class="variable">maxThreads=</span><span class="string">"2048"</span> 
+                <span class="variable">minSpareThreads=</span><span class="string">"512"</span> 
+                <span class="variable">prestartminSpareThreads=</span><span class="string">"true"</span> /&gt;
+</code></pre><h2 id="四-_Tomcat_Native">四. Tomcat Native</h2>
+<blockquote>
+<p><strong>Tomcat可以使用APR来提供超强的可伸缩性和性能，更好地集成本地服务器技术。APR(Apache Portable Runtime)是一个高可移植库，它是Apache HTTP Server 2.x的核心。APR有很多用途，包括访问高级IO功能(例如sendfile,epoll和OpenSSL)，OS级别功能(随机数生成，系统状态等等)，本地进程管理(共享内存，NT管道和UNIX sockets)。这些功能可以使Tomcat作为一个通常的前台WEB服务器，能更好地和其它本地web技术集成，总体上让Java更有效率作为一个高性能web服务器平台而不是简单作为后台容器</strong>。</p>
+</blockquote>
+<p>在产品环境中，特别是直接使用Tomcat做WEB服务器的时候，应该使用Tomcat Native来提高其性能。<br>说白了，就是如何 在Tomcat中使用JNI的方式来读取文件以及进行网络传输。这个东西可以大大提升Tomcat对静态文件的处理性能，同时如果你使用了HTTPS方式 传输的话，也可以提升SSL的处理性能。</p>
+<ul>
+<li>a. 安装 apr</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ </span>sudo ./configure --prefix=<span class="regexp">/opt/apr</span></div><div class="line"><span class="variable">$ </span>sudo make</div><div class="line"><span class="variable">$ </span>sudo make install</div></pre></td></tr></table></figure>
+
+<ul>
+<li>b. 安装 apr-iconv</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo ./configure --prefix=/<span class="keyword">opt</span>/apr-<span class="built_in">iconv</span> --with-apr=/<span class="keyword">opt</span>/apr </div><div class="line">$ sudo <span class="keyword">make</span></div><div class="line">$ sudo <span class="keyword">make</span> install</div></pre></td></tr></table></figure>
+
+<ul>
+<li>c. 安装 apr-util</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ sudo  ./configure --prefix=/<span class="keyword">opt</span>/apr-util  --with-apr=/<span class="keyword">opt</span>/apr --with-apr-<span class="built_in">iconv</span>=/<span class="keyword">opt</span>/apr-<span class="built_in">iconv</span>/bin/apriconv </div><div class="line">$ sudo <span class="keyword">make</span></div><div class="line">$ sudo <span class="keyword">make</span> install</div></pre></td></tr></table></figure>
+
+<ul>
+<li>d. 安装 tomcat-native</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$ </span>cd <span class="variable">$TOMCAT_HOME</span>/bin/tomcat-native-<span class="number">1.1</span>.<span class="number">30</span>-src/jni/native</div><div class="line"><span class="variable">$ </span>./configure --with-apr=<span class="regexp">/opt/apr</span> --with-java-home=<span class="regexp">/usr/lib</span><span class="regexp">/jvm/java</span>-<span class="number">7</span>-openjdk-i386/ </div><div class="line"><span class="variable">$ </span>sudo make</div><div class="line"><span class="variable">$ </span>sudo make install</div></pre></td></tr></table></figure>
+
+<h2 id="五-_总结">五. 总结</h2>
+<p>为了提高Tomcat的并发处理能力，我从以上几个方面进行了逐步的增量调优，每次优化或者做出改变之后，都从Client用ab模拟并发，观察QPS等指标，并同时在Server端监控各种系统信息：</p>
+<pre><code>           sudo <span class="regexp">/opt/</span>apache<span class="regexp">/bin/</span>ab -n <span class="number">50000</span> -c <span class="number">2000</span> http:<span class="comment">//192.168.1.2:9027/performance/test.jsp </span>
+</code></pre><p>目前比较好的测试结果如下：</p>
+<pre><code>           Server Software:        Apache-Coyote/<span class="number">1.1</span>
+           Server Hostname:        <span class="number">192.168</span><span class="number">.1</span><span class="number">.2</span>
+           Server Port:            <span class="number">9027</span>
+
+           Document Path:          /performance/test.jsp
+           Document Length:        <span class="number">253</span> <span class="keyword">bytes</span>
+
+           Concurrency Level:      <span class="number">2000</span>
+           Time taken <span class="keyword">for</span> tests:   <span class="number">4.089</span> <span class="built_in">seconds</span>
+           Complete requests:      <span class="number">50000</span>
+           Failed requests:        <span class="number">0</span>
+           Total transferred:      <span class="number">25100000</span> <span class="keyword">bytes</span>
+           HTML transferred:       <span class="number">12650000</span> <span class="keyword">bytes</span>
+           Requests per <span class="keyword">second</span>:    <span class="number">12227.55</span> [<span class="comment">#/sec] (mean)</span>
+           Time per request:       <span class="number">163.565</span> [ms] (mean)
+           Time per request:       <span class="number">0.082</span> [ms] (mean, across all concurrent requests)
+           Transfer rate:          <span class="number">5994.36</span> [Kbytes/<span class="built_in">sec</span>] received
+
+           Connection Times (ms)
+                         <span class="built_in">min</span>  mean[+/-sd] <span class="built_in">median</span>   <span class="built_in">max</span>
+           Connect:        <span class="number">9</span>   <span class="number">77</span> <span class="number">138.5</span>     <span class="number">54</span>    <span class="number">1070</span>
+           Processing:    <span class="number">15</span>   <span class="number">81</span>  <span class="number">51.7</span>     <span class="number">76</span>     <span class="number">617</span>
+           Waiting:       <span class="number">11</span>   <span class="number">59</span>  <span class="number">34.4</span>     <span class="number">57</span>     <span class="number">608</span>
+           Total:         <span class="number">40</span>  <span class="number">158</span> <span class="number">148.6</span>    <span class="number">127</span>    <span class="number">1221</span>
+
+           Percentage <span class="operator">of</span> <span class="operator">the</span> requests served <span class="operator">within</span> <span class="operator">a</span> certain <span class="built_in">time</span> (ms)
+             <span class="number">50</span>%    <span class="number">127</span>
+             <span class="number">66</span>%    <span class="number">147</span>
+             <span class="number">75</span>%    <span class="number">177</span>
+             <span class="number">80</span>%    <span class="number">180</span>
+             <span class="number">90</span>%    <span class="number">196</span>
+             <span class="number">95</span>%    <span class="number">219</span>
+             <span class="number">98</span>%    <span class="number">662</span>
+             <span class="number">99</span>%   <span class="number">1105</span>
+            <span class="number">100</span>%   <span class="number">1221</span> (longest request)
+</code></pre><p>但在调优时发现，无论怎样提高各种参数的阈值，并发性都不会再得到明显的提高，有时反而会降低。而且在设置JAVA_OPTS时，-Xms, -Xmx超过2048m时，就会提示超过内存限制。在网路上看到以下内容可以解释这个问题:</p>
+<pre><code><span class="escape">`J</span>VM<span class="escape">`内</span>存限制于实际的最大物理内存，假设物理内存无限大的话，<span class="escape">`J</span>VM<span class="escape">`内</span>存的最大值跟操作系统有很大的关系。
+简单的说就<span class="number">32</span>位处理器虽然可控内存空间有<span class="number">4</span>GB,但是具体的操作系统会给一个限制，这个限制一般是<span class="number">2</span>GB-<span class="number">3</span>GB（一般
+来说<span class="escape">`W</span>indows<span class="escape">`系</span>统下为<span class="number">1.5</span>G-<span class="number">2</span>G，<span class="escape">`L</span>inux<span class="escape">`系</span>统下为<span class="number">2</span>G-<span class="number">3</span>G），而<span class="number">64</span>bit以上的处理器就不会有限制了。
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/08/06/tomcat-tune/" data-id="pf3d5idxafm7fg92" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javaee/">javaee</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tomcat/">tomcat</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-nlpNote" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/02/06/nlpNote/" class="article-date">
+  <time datetime="2014-02-05T23:56:29.000Z" itemprop="datePublished">2月 6 2014</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/nlp/">nlp</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/02/06/nlpNote/">NLPNote</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-《Python自然语言处理》笔记">1.《Python自然语言处理》笔记</h2>
+<ul>
+<li>遍历序列的各种方式</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Python 表达式                       评论</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> s                       遍历 s 中的元素</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> sorted(s)               按顺序遍历 s 中的元素</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> set(s)                  遍历 s 中的无重复的元素</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> reversed(s)             按逆序遍历 s 中的元素</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> set(s).difference(t)    遍历在集合 s 中不在集合 t 的元素</div><div class="line"><span class="keyword">for</span> item <span class="keyword">in</span> random.shuffle(s)       按随机顺序遍历 s 中的元素</div><div class="line"></div><div class="line">组合使用显威力： reversed(sorted(set(s)))</div></pre></td></tr></table></figure>
+
+<ul>
+<li>zip &amp;&amp; enumerate</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span>words = [<span class="string">'I'</span>, <span class="string">'turned'</span>, <span class="string">'off'</span>, <span class="string">'the'</span>, <span class="string">'spectroroute'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>tags = [<span class="string">'noun'</span>, <span class="string">'verb'</span>, <span class="string">'prep'</span>, <span class="string">'det'</span>, <span class="string">'noun'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>zip(words, tags)</div><div class="line">[(<span class="string">'I'</span>, <span class="string">'noun'</span>), (<span class="string">'turned'</span>, <span class="string">'verb'</span>), (<span class="string">'off'</span>, <span class="string">'prep'</span>),</div><div class="line">(<span class="string">'the'</span>, <span class="string">'det'</span>), (<span class="string">'spectroroute'</span>, <span class="string">'noun'</span>)]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>list(enumerate(words))</div><div class="line">[(<span class="number">0</span>, <span class="string">'I'</span>), (<span class="number">1</span>, <span class="string">'turned'</span>), (<span class="number">2</span>, <span class="string">'off'</span>), (<span class="number">3</span>, <span class="string">'the'</span>), (<span class="number">4</span>, <span class="string">'spectroroute'</span>)]</div></pre></td></tr></table></figure>
+
+<p>对于一些 NLP 的任务,有必要将一个序列分割成两个或两个以上的部分。例如:我们<br>可能需要用 90%的数据来“训练”一个系统,剩余 10%进行测试。要做到这一点,我们指<br>定想要分割数据的位置,然后在这个位置分割序列。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span>text = nltk.corpus.nps_chat.words()</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>cut = int(<span class="number">0.9</span> * len(text)) </div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>training_data, test_data = text[:cut], text[cut:] </div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>text == training_data + test_data </div><div class="line"><span class="keyword">True</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>len(training_data) / len(test_data) <span class="number">4</span></div><div class="line"><span class="number">9</span></div></pre></td></tr></table></figure>
+
+<p>我们可以验证在此过程中的原始数据没有丢失,也不是复制。我们也可以验证两块大<br>小的比例是我们预期的。</p>
+<p>让我们综合关于这三种类型的序列的知识,一起使用链表推导处理一个字符串中的词,<br>按它们的长度排序。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span>words = <span class="string">'I turned off the spectroroute'</span>.split() </div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>wordlens = [(len(word), word) <span class="keyword">for</span> word <span class="keyword">in</span> words] </div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>wordlens.sort() </div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">' '</span>.join(w <span class="keyword">for</span> (_, w) <span class="keyword">in</span> wordlens)</div><div class="line"><span class="string">'I off the turned spectroroute'</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>从html中提取信息的通用办法</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> re</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_text</span><span class="params">(file)</span>:</span></div><div class="line"><span class="string">"""Read text from a file, normalizing whitespace and stripping HTML markup."""</span></div><div class="line">text = open(file).read()</div><div class="line">text = re.sub(<span class="string">'\s+'</span>, <span class="string">' '</span>, text)</div><div class="line">text = re.sub(<span class="string">r'&lt;.*?&gt;'</span>, <span class="string">' '</span>, text)</div><div class="line"><span class="keyword">return</span> text</div></pre></td></tr></table></figure>
+
+<ul>
+<li>防御性编程</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">tag</span><span class="params">(word)</span>:</span></div><div class="line">   <span class="keyword">assert</span> isinstance(word, basestring), <span class="string">"argument to tag() must be a string"</span></div><div class="line">   <span class="keyword">if</span> word <span class="keyword">in</span> [<span class="string">'a'</span>, <span class="string">'the'</span>, <span class="string">'all'</span>]:</div><div class="line">       <span class="keyword">return</span> <span class="string">'det'</span></div><div class="line">   <span class="keyword">else</span>:</div><div class="line">       <span class="keyword">return</span> <span class="string">'noun'</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li>FreqDist</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">freq_words</span><span class="params">(file, min=<span class="number">1</span>, num=<span class="number">10</span>)</span>:</span></div><div class="line">    text = open(file).read()</div><div class="line">    tokens = nltk.word_tokenize(text)</div><div class="line">    freqdist = nltk.FreqDist(t <span class="keyword">for</span> t <span class="keyword">in</span> tokens <span class="keyword">if</span> len(t) &gt;= min)</div><div class="line">    <span class="keyword">return</span> freqdist.keys()[:num]</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">freq_words_verbose</span><span class="params">(file, min=<span class="number">1</span>, num=<span class="number">10</span>, verbose=False)</span>:</span></div><div class="line"> <span class="string">'''如果设置了 verbose 标志将会报告其进展情况'''</span></div><div class="line"> freqdist = FreqDist()</div><div class="line"> <span class="keyword">if</span> trace: <span class="keyword">print</span> <span class="string">"Opening"</span>, file</div><div class="line"> text = open(file).read()</div><div class="line"> <span class="keyword">if</span> trace: <span class="keyword">print</span> <span class="string">"Read in %d characters"</span> % len(file)</div><div class="line"> <span class="keyword">for</span> word <span class="keyword">in</span> nltk.word_tokenize(text):</div><div class="line">     <span class="keyword">if</span> len(word) &gt;= min:</div><div class="line">        freqdist.inc(word)</div><div class="line">        <span class="keyword">if</span> trace <span class="keyword">and</span> freqdist.N() % <span class="number">100</span> == <span class="number">0</span>: <span class="keyword">print</span> <span class="string">"."</span></div><div class="line"> <span class="keyword">if</span> trace: <span class="keyword">print</span></div><div class="line"> <span class="keyword">return</span> freqdist.keys()[:num]</div></pre></td></tr></table></figure>
+
+<ul>
+<li><p>调试＆＆Pdb</p>
+</li>
+<li><p>CSV :Python有自己的CSV库，csv.reader</p>
+</li>
+</ul>
+<blockquote>
+<p>动态规划是一种在 NLP 中广泛使用的算法设计技术,它存储以前的计算结果,<br>以避免不必要的重复计算。</p>
+</blockquote>
+<h2 id="2-_文本分类">2. 文本分类</h2>
+<ul>
+<li><p>过拟合： 如果你提供太多的特征,那么该算法将高度依赖你的训练数据的特性，而一般化到新的例子的效果不会很好。这个问题被称为过拟合。</p>
+</li>
+<li><p>devtest： 一旦初始特征集被选定,完善特征集的一个非常有成效的方法是错误分析。首先,我们选择一个开发集,包含用于创建模型的语料数据。然后将这种开发集分为训练集和开发测试集。</p>
+</li>
+<li><p>Topic映射到关键词组，映射的越多，表示越切题。</p>
+</li>
+<li>不去关注词法，语法阶段的错误，做到隔离。面面俱到的效果未必好。</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">algorithm : 主题检测</div><div class="line">input: document</div><div class="line">tools: </div><div class="line">     -<span class="ruby"> 特征提取器(<span class="symbol">eg:</span>给定一些模式（词，词组，词模式)，得到对于给定document的`布尔数组`)</span></div><div class="line">     -<span class="ruby"> 训练一个文档分类器</span></div></pre></td></tr></table></figure>
+
+<ul>
+<li><p>特征提取函数的行为就像有色眼镜一样,强调我们的数据中的某些属性(颜色),并使其无法看到其他属性。分类器在决定如何标记输入时,将完全依赖它们强调的属性。</p>
+</li>
+<li><p>要不要走一条无监督学习之路，寻找不动点。</p>
+</li>
+<li><p>文本自动层级聚类<br>这种试探性的数据分析(exploratory data  analysis)来识别跑题作文,并辅以人工鉴别。这种内容评价方法的特点是不需要事先基于大规模标注训练集构建评价模型,并且有着层级聚合聚类法的突出优点,郎能够生成比较规整的类集合,聚类结果不依赖文档的初始排列或输入次序,与聚类过程的先后次序无关,聚类结果比较稳定,不易导致类的重构。并且对于作文i平价来讲,得到的结果比较容易解释。实验结果表明,该方法能比较清晰地识别与大多数作文内容不同的作文,再辅以人工鉴别,可准确识别跑题作文,从而在通用自动作文评价中实现作文内容的测量。</p>
+</li>
+</ul>
+<h2 id="3-_代码工具库">3. 代码工具库</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># -*- coding: utf-8 -*-</span></div><div class="line"><span class="string">"""</span></div><div class="line">为跑题检测储备的工具代码</div><div class="line">~/Project/NLTK-offTopic/.temp.py</div><div class="line">"""</div><div class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</div><div class="line"><span class="keyword">import</span> nltk <span class="keyword">as</span> nk</div><div class="line"><span class="keyword">import</span> re</div><div class="line"></div><div class="line">s=open(<span class="string">"nlptest.txt"</span>,<span class="string">"r"</span>)</div><div class="line"><span class="string">'''s.seek(0)'''</span></div><div class="line">m1=s.read()</div><div class="line">pattern=re.compile(<span class="string">"^A-Za-z"</span>)</div><div class="line">s1=re.split(<span class="string">"\s+"</span>,re.sub(pattern,<span class="string">" "</span>,m1.replace(<span class="string">"\n"</span>,<span class="string">" "</span>)))</div><div class="line">s2=set(s1) <span class="comment">#union作用</span></div><div class="line">s3=nk.FreqDist(s1)</div><div class="line">nk.FreqDist(s1).items()<span class="comment">#显示所有信息</span></div><div class="line">nk.FreqDist(s1).keys()[:<span class="number">50</span>]<span class="comment">#显示前50的词频为降序排列</span></div><div class="line">s4=[len(ca) <span class="keyword">for</span> ca <span class="keyword">in</span> s1]<span class="comment">#计算词频长度</span></div><div class="line">s5=nk.FreqDist(s4)</div><div class="line">max(s5)<span class="comment">#显示最大的词频</span></div><div class="line">s5.freq(s5.keys(max(s5))<span class="comment">#可显示比率</span></div><div class="line">z1=[ca <span class="keyword">for</span> ca <span class="keyword">in</span> set(s1) <span class="keyword">if</span> s3[ca]&gt;<span class="number">10</span>]<span class="comment">#可以只输出符合规则的词频</span></div><div class="line">s3.plot(<span class="number">50</span>,cumulative=<span class="keyword">True</span>)<span class="comment">#累计汇总图前50个词频的</span></div><div class="line">s3.hapaxes()<span class="comment">#输出只一次的词</span></div><div class="line">nk.bigrams(s1)<span class="comment">#形成双连词</span></div><div class="line">s3.inc(s3)<span class="comment">#可添加样本</span></div><div class="line">s3.N()可现实总量</div><div class="line">s3.tabulate(conditions=<span class="string">"表示第几个文本对应的名字"</span>,samples=<span class="string">"表示要显示的词"</span>)<span class="comment">#绘制频率分布表</span></div><div class="line"> </div><div class="line"><span class="comment">###nltk上的人机交互程序</span></div><div class="line">nk.chat.chatbots()</div><div class="line"> </div><div class="line"><span class="comment">##载入自己的语料库</span></div><div class="line"> </div><div class="line"><span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> PlaintextCorpusReader</div><div class="line">wd=<span class="string">"D:\\nlptest"</span></div><div class="line">wd1=PlaintextCorpusReader(wd,<span class="string">".*"</span>)</div><div class="line">wd1.fileids()<span class="comment">#显示语料库中的文件名</span></div><div class="line">wd1.words(<span class="string">"nlptest.txt"</span>)<span class="comment">#显示词和split效果一样</span></div><div class="line">cfd=nk.ConditionalFreqDist((genre,word) <span class="keyword">for</span> genre <span class="keyword">in</span> [<span class="string">"first"</span>,<span class="string">"second"</span>] <span class="keyword">for</span> word <span class="keyword">in</span> s1)</div><div class="line"><span class="comment">#对应的条件概率如果在word，其实就是分类汇总</span></div><div class="line">cfd.conditions()<span class="comment">#显示并按照条件字母排序</span></div><div class="line"><span class="comment">#一样可以用tabulate显示table列表</span></div><div class="line"> </div><div class="line"> </div><div class="line"><span class="comment">#英文同义词字典库</span></div><div class="line"> </div><div class="line"><span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> wordnet <span class="keyword">as</span> wn</div><div class="line">wn.synsets(<span class="string">"hell"</span>)<span class="comment">#显示出同义词类</span></div><div class="line">wn.synset(<span class="string">"hell.n.01"</span>).lemma_names<span class="comment">#可以显示出在第几种词义词性下对应的相同英文</span></div><div class="line">wn.synset(<span class="string">"hell.n.01"</span>).definition<span class="comment">#词语定义</span></div><div class="line">wn.synset(<span class="string">"hell.n.01"</span>).examples<span class="comment">#常用词义例句子</span></div><div class="line">wn.synset(<span class="string">"hell.n.01"</span>).lemmas<span class="comment">#显示所有词条</span></div><div class="line">wn.lemma(<span class="string">"hell.n.01.hell_on_earth"</span>)</div><div class="line">wn.lemma(<span class="string">"hell.n.01.hell_on_earth"</span>).synset<span class="comment">#显示上层hell.n.01</span></div><div class="line">wn.lemma(<span class="string">"hell.n.01.hell_on_earth"</span>).name<span class="comment">#显示单词'hell_on_earth'</span></div><div class="line">hell=wn.synset(<span class="string">"cat.n.01"</span>)</div><div class="line">hell1=hell.hyponyms()</div><div class="line">sorted([lemma.name <span class="keyword">for</span> synset1 <span class="keyword">in</span> hell1 <span class="keyword">for</span> lemma <span class="keyword">in</span> synset1.lemmas])</div><div class="line"><span class="comment">#Out[65]: ['Felis_catus', 'Felis_domesticus', 'domestic_cat', 'house_cat', 'wildcat']</span></div><div class="line"><span class="comment">#先进行词条分类</span></div><div class="line"><span class="comment">#通过hyponyms找到下位词如毛 可以使什么类型的猫等</span></div><div class="line">hell.root_hypernyms()<span class="comment">#可以找到最一般的上位词</span></div><div class="line">hell.hypernym_paths()<span class="comment">#可以找到层次 len测是几类</span></div><div class="line">wn.synset(<span class="string">"cat.n.01"</span>).part_meronyms()<span class="comment">#可以显示出如猫耳朵，猫毛这类词汇关系</span></div><div class="line">wn.synset(<span class="string">"cat.n.01"</span>).substance_meronyms()<span class="comment">#不理解什么叫树的实质是心材和边材</span></div><div class="line">wn.synset(<span class="string">"walk.v.01"</span>).entailments()<span class="comment">#动词的蕴含意义，如走路蕴含着抬脚，吃蕴含着咀嚼等</span></div><div class="line">wn.lemma(<span class="string">"rush.v.01"</span>).antonyms()<span class="comment">#动词的反义</span></div><div class="line">dir(wn.synset(<span class="string">"rush.v.01"</span>))<span class="comment">#可以通过此种方式再词汇挂你选等上查找</span></div><div class="line">wn.synset(<span class="string">"right_whale.n.01"</span>).lowest_common_hypernyms(wn.synset(<span class="string">"orca.n.01"</span>))<span class="comment">#可以计算出两个相似的类</span></div><div class="line">wn.synset(<span class="string">"right_whale.n.01"</span>).min_depth()<span class="comment">#可以查对应的深度量化</span></div><div class="line">wn.synset(<span class="string">"right_whale.n.01"</span>).path_similarity(wn.synset(<span class="string">"orca.n.01"</span>))<span class="comment">#直接可以计算相似度1为基本一样</span></div><div class="line"><span class="string">'''urllib urlopen urlopen().read()</span></div><div class="line">#nk.word_tokenize()可直接对文本分词</div><div class="line">#text=nk.Text(nk.word_tokenize)的list形变为nltk文本</div><div class="line">list形式可用 .find("")</div><div class="line"> </div><div class="line">#html</div><div class="line">k1=urlopen().read()</div><div class="line">#直接转换</div><div class="line">k2=nk.clean_html(k1)</div><div class="line">k3=nk.word_tokenize(k2)</div><div class="line">'''</div><div class="line"> </div><div class="line"><span class="comment">#词干提取器</span></div><div class="line">porter=nk.PorterStemmer()<span class="comment">#或者LancasterStemmer()</span></div><div class="line">[porter.stem(t) <span class="keyword">for</span> t <span class="keyword">in</span> s1]</div><div class="line"><span class="comment">#词型归并器</span></div><div class="line">l1=nk.WordNetLemmatizer()</div><div class="line">[l1.lemmatize(t) <span class="keyword">for</span> t <span class="keyword">in</span> s1]</div><div class="line"><span class="comment">#nk.regexp_tokenize(text,pattern)比re.findall快很多</span></div><div class="line"><span class="comment">#random.shuffle(sample)</span></div><div class="line"> </div><div class="line"><span class="comment">#词性标注器</span></div><div class="line">nk.pos_tag(s1)<span class="comment">#cc连词 rb副词 in介词 nn名词 jj形容词 vbp动词</span></div><div class="line"><span class="comment">#adj形容词 adv动词 cnj连词 det限定词 ex存量词 fw外来词 mod情态动词</span></div><div class="line"><span class="comment">#n 名词 np 专有名词 num数量词 pro代词 p介词 to 词投 uh感叹词 v动词</span></div><div class="line"><span class="comment">#vd过去式 vg现有分词 vn过去分词 wh wh限定词</span></div><div class="line"> </div><div class="line"><span class="comment">#读取已标注的语料库</span></div><div class="line">s1.tagged_words()</div><div class="line"><span class="comment">#朴素贝叶斯</span></div><div class="line">cla=nk.NaiveBayesClassifier.train()</div><div class="line">cla.classfiy()</div><div class="line">nk.classify.accuracy(cla,<span class="string">"测试集"</span>)</div><div class="line"><span class="comment">#决策树</span></div><div class="line">nk.DecisionTreeClassifier.tarin()</div></pre></td></tr></table></figure>
+
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/08/29/hello-world/" data-id="8gwf8k9tq1ass8en" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/02/06/nlpNote/" data-id="p74pvqmbliw4kirb" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NLP/">NLP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/note/">note</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/project/">project</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-StructHack" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/11/07/StructHack/" class="article-date">
+  <time datetime="2013-11-06T23:56:29.000Z" itemprop="datePublished">11月 7 2013</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/C/">C</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/11/07/StructHack/">Struct Hack</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在搞<strong>Compiler</strong>的<strong>CodeGenerator</strong>实验，有一部分需要把Java程序翻译成C程序，比如:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> [] <span class="built_in">array</span>;</div><div class="line"><span class="built_in">array</span> = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</div><div class="line">System.out.println(<span class="built_in">array</span>.length); <span class="comment">//10</span></div></pre></td></tr></table></figure>
+
+<p>这段代码翻译成C很自然的想法是：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="type">int</span> * <span class="type">array</span>; // <span class="type">int</span> <span class="type">array</span>[] <span class="keyword">not</span> support <span class="keyword">in</span> C</div><div class="line"><span class="type">array</span> = (<span class="type">int</span>*)malloc(sizof(<span class="type">int</span>)*<span class="number">10</span>);</div><div class="line">printf(<span class="string">"%d\n"</span>,sizof(<span class="type">array</span>)/sizeof(<span class="type">int</span>)); // <span class="number">1</span></div></pre></td></tr></table></figure>
+
+<p>但很可惜这样是错误的，因为malloc操作在堆上分配空间，不一定是连续的，sizof(array)得到的是指针本身所占的单元，和sizeof(int)相等，无法通过sizof求得数组长度。它和下面还不一样：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> <span class="built_in">array</span>[<span class="number">10</span>];</div><div class="line"><span class="built_in">printf</span>(<span class="string">"%d\n"</span>,sizof(<span class="built_in">array</span>)/<span class="keyword">sizeof</span>(<span class="keyword">int</span>)); <span class="comment">// 10</span></div></pre></td></tr></table></figure>
+
+<p>这里<code>array</code>是数组，是指向整个连续存储空间的常量，所以<code>sizeof</code>对其操作求得的是整个区域的长度。但是当数组名作为函数的参数传递时，数组就退化为指针，又回到了刚才问题。</p>
+<p>我们应该怎么做？</p>
+<p>在 <a href="http://stackoverflow.com/" target="_blank" rel="external">StackOverflow</a> 搜了一下，发现<code>ANSI C</code>根本没有直接办法通过指向内存的指针求得分配长度。但<code>Windows</code>下提供了计算指针指向的内存大小的方法[<a href="http://msdn.microsoft.com/zh-cn/library/vstudio/z2s077bc(v=vs.80).aspx#feedback" target="_blank" rel="external">malloc.h</a>]：</p>
+<blockquote>
+<p>msize: returns the size (in bytes) as an unsigned integer.</p>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">size_t _msize(</div><div class="line"><span class="keyword">void</span> *memblock</div><div class="line">);</div></pre></td></tr></table></figure>
+
+<p>但由于操作系统策略的原因，实际分配到的大小可能会比指定的大一些<a href="http://jiaqinxu.info/tag/_msize" target="_blank" rel="external">here</a>。</p>
+<p>在Linux下，指针往前偏移一个整形大小的单元也会记录实际分配的大小，我们来窥探一下那个单元的内容：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//test.c</span></div><div class="line"><span class="keyword">int</span> main(){</div><div class="line"> <span class="keyword">int</span> * p;</div><div class="line"> <span class="keyword">int</span> i;</div><div class="line"> <span class="keyword">int</span> size;</div><div class="line"> <span class="keyword">for</span> (i=<span class="number">1</span>;i&lt;<span class="number">11</span>;i++)</div><div class="line"> <span class="built_in">printf</span>(<span class="string">"%d "</span>,i);</div><div class="line"> <span class="built_in">printf</span>(<span class="string">"\n"</span>);</div><div class="line"> <span class="keyword">for</span> (i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++){</div><div class="line"> p = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>)*i);</div><div class="line"> size = *(<span class="keyword">int</span>*)((<span class="keyword">char</span>*)p-<span class="keyword">sizeof</span>(<span class="keyword">int</span>));</div><div class="line"> <span class="built_in">printf</span>(<span class="string">"size:%d "</span>,size);</div><div class="line"> <span class="built_in">free</span>(p);</div><div class="line"> }</div><div class="line"> <span class="built_in">printf</span>(<span class="string">"\n"</span>);</div><div class="line">}</div></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="variable">$gcc</span> test.c</div><div class="line"><span class="variable">$.</span>/a.out</div><div class="line"><span class="number">1</span>  <span class="number">2</span>  <span class="number">3</span>  <span class="number">4</span>  <span class="number">5</span>  <span class="number">6</span>  <span class="number">7</span>  <span class="number">8</span>  <span class="number">9</span>  <span class="number">10</span></div><div class="line"><span class="number">17</span> <span class="number">17</span> <span class="number">17</span> <span class="number">17</span> <span class="number">25</span> <span class="number">25</span> <span class="number">33</span> <span class="number">33</span> <span class="number">41</span> <span class="number">41</span></div></pre></td></tr></table></figure>
+
+<p>看来Linux的分配策略不能使得内存大小和元素个数一一对应，此法不可用。<br>后来发现在Linux下原来也有类似<code>_msize</code>的函数[<a href="http://www.linuxidc.com/Linux/2011-12/48624.htm" target="_blank" rel="external">malloc.h</a>]：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> * <span class="built_in">array</span>;</div><div class="line"><span class="keyword">int</span> size;</div><div class="line"><span class="built_in">array</span> = (<span class="keyword">int</span>*)<span class="built_in">malloc</span>(sizof(<span class="number">50</span>);</div><div class="line">size = malloc_usable_size(<span class="built_in">array</span>);</div><div class="line"><span class="built_in">printf</span>(<span class="string">"%d\n"</span>,size);<span class="comment">//50</span></div></pre></td></tr></table></figure>
+
+<p>但是malloc.h不属于标准C，我们还要继续寻找通用之法。经过大量查阅，终于发现了一种code trick,称作<a href="http://tonybai.com/2013/03/07/struct-hack-in-c/" target="_blank" rel="external"><strong>struct-hack</strong></a>. 前面提到过，在C语言中，<code>int a[]</code>是违法的，但是把它作为struct的最后一个成员却是可以的：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> <span class="built_in">array</span>{</div><div class="line"> <span class="keyword">int</span> size;</div><div class="line"> <span class="keyword">int</span> <span class="built_in">free</span>;</div><div class="line"> <span class="keyword">int</span> buf[];</div><div class="line"> }<span class="built_in">array</span>,*Tiger_array;</div></pre></td></tr></table></figure>
+
+<p>这是在C语言的后期加入的特性，目的就是为了实现<strong>flexible array</strong>， 这样每次给数组分配空间时，需要同步记录size大小。而求size的时候，直接取出来即可：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Tiger_array <span class="keyword">ta</span>;</div><div class="line"><span class="keyword">ta</span> = (<span class="keyword">int</span>*)malloc(sizeof(array)+<span class="number">100</span>);</div><div class="line"><span class="keyword">ta</span>-&gt;size = <span class="number">100</span>;</div><div class="line"><span class="keyword">ta</span>-&gt;free = <span class="number">0</span>;</div></pre></td></tr></table></figure>
+
+<p>需要注意一点，这时分配的大小应该是sizeof(struct)加上需求的数组大小。</p>
+<p>这个问题就说到这里。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/11/07/StructHack/" data-id="dh7v1rvzc78f96qk" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/struct/">struct</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-muse5minutes" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/03/16/muse5minutes/" class="article-date">
+  <time datetime="2013-03-15T23:56:29.000Z" itemprop="datePublished">3月 16 2013</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/reading/">reading</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/03/16/muse5minutes/">《冥想5分钟》学习笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是一本心灵读物，有一个很滥俗的名字：《冥想5分钟，等于熟睡一小时》。作者对于人脑，记忆的认识还是比较深刻的，但内容稍显虎头蛇尾。</p>
+<h3 id="初学冥想5分钟">初学冥想5分钟</h3>
+<hr>
+<h4 id="冥想初尝试">冥想初尝试</h4>
+<p>试着做5个深呼吸，让自己完全沉浸在呼吸的感觉之中</p>
+<ol>
+<li>吸气，比以往都深一些，数1,2,3,4,5。</li>
+<li>停顿一下，呼气，将刚才吸入的空气排出，数1,2,3,4,5。</li>
+<li>让吸气与呼气保持同样的节奏。</li>
+<li><p>停顿一下，再次深呼吸。</p>
+<p>  深呼吸可以启动你的副交感神经(PNS)的镇定机制。</p>
+</li>
+</ol>
+<h4 id="冥想准备">冥想准备</h4>
+<ol>
+<li>找一个不易被打扰的地方。</li>
+<li>利用不易被急事缠身的时间。</li>
+<li>坐直，背挺直。</li>
+<li>穿着宽松舒适。</li>
+</ol>
+<p>人的大脑重约3磅，状若豆腐，共1,1万亿个细胞，包括1000亿个神经元。平均每个神经元会连接5000个其他神经元。</p>
+<p>人的意识很奇妙，只要你产生过的想法和感觉，即使你自己遗忘了，他们也会在你的大脑里留下印记。 你的大脑就是被各种想法和感觉不断塑造出来的，正因如此，你才可以运用你的意识来改善你的大脑。</p>
+<p><strong>怀着平静的心情仰望星空，你就在体验冥想。</strong> 冥想就是大脑的觉醒。</p>
+<h4 id="佛陀的启迪">佛陀的启迪</h4>
+<ul>
+<li>道德，在行为，语言和思想上为自己和他人谋利，避害。</li>
+<li>静观(mindful)，如何技巧性地关注人类的内在世界和外界环境。</li>
+<li>智慧，首先搞清楚痛苦的根源是什么以及如何终结痛苦；然后努力摆脱那些害你的东西，加强那些对你有帮助的东西。渐渐感受和万物的紧密联系，更加平静。</li>
+</ul>
+<p>道德，静观和智慧实际由大脑的三个基本功能支撑：约束，学习和选择。</p>
+<p>对于过去和现在，全盘接受是我们唯一的选择，但对于未来，学会冥想，进而优化大脑，的确可以播撒美好的种子。<strong>生活就掌握在你自己的手中，将来会怎样，完全取决于你自己，取决于你到底有多在乎它。</strong></p>
+<pre><code> 站在自己的一边，大多数人对待自己都没有像对待他人那样细腻。
+</code></pre><p>在所有的事物中，最重要的是我们应该想一下，我们自身的发展会给这个世界带来什么。</p>
+<h3 id="“定”的冥想法：让痛苦靠边站">“定”的冥想法：让痛苦靠边站</h3>
+<hr>
+<ol>
+<li>闭上眼睛，深呼吸几分钟，把注意力集中在肚子，胸口或者嘴唇上，感受起伏。</li>
+<li>集中注意力，静观以往经历的感情色彩，看它们是愉快的，不愉快的，还是中性的。要带着一种公正无私，不偏不倚的心态去体会，并让公正无私不断壮大(<strong>旁观自我</strong>)。</li>
+<li>体会内心的自在，轻松，安宁，让意识越来越稳定，安详，冷静。</li>
+<li>倾听周遭的声音，体会各种感觉，但不要陷入。</li>
+<li>在倾听，体会，思考时，注意各种想法和感觉附带的感情色彩。你是一个旁观者，体会它们的来来去去，不要认同他们，也不要和他们混在一起。</li>
+<li>体会自己和这些想法和感觉逐渐脱离，让自己既不会试图去捕捉快乐，也不会拼命抗拒痛苦。</li>
+<li>睁开眼睛，把周围的事物都带入“定境”，不带偏好，不做任何反应。</li>
+<li>冥想结束时，体验身体各部分的感觉，同样不带偏好，不去评价。</li>
+</ol>
+<p><strong>那些在生命中经历的人和事，塑造了你的观点，人格和情感。</strong><br>     保持身体对周围环境的开放状态，并维持相对稳定，就是健康。</p>
+<h3 id="数呼吸冥想法：掌握慢生活的节奏">数呼吸冥想法：掌握慢生活的节奏</h3>
+<hr>
+<p>不强求自己，让自己舒适，关注呼吸，体会不急不缓的慢节奏。<br>     环境本身不是痛苦的，是我们自己加上去的。</p>
+<p>痛苦是通过交感神经系统(SNS)和内分泌(荷尔蒙)系统的下丘脑-垂体-性腺轴(HPAA)贯穿你的整个身体的。</p>
+<p><strong>同样的事情在心烦意乱时思考和平静下来思考，结果肯定完全不同。</strong></p>
+<h3 id="甜蜜冥想法：批量生产快乐">甜蜜冥想法：批量生产快乐</h3>
+<hr>
+<p>让正能量的事物感染你，沉浸其中，尽量长时间保持积极乐观的态度。把积极快乐的经验保存下来，成为你永久的一部分。</p>
+<pre><code>当你回想某段记忆的时候，大脑并非像电脑从硬盘里读取所有原始数据那样，而是用存储的关键特征重新构建
+内隐记忆和外显记忆，再利用大脑的模拟能力去查缺补漏，最终重现你的记忆。
+</code></pre><p>痛苦的经历通常需要刚好与之相对应的乐观情绪来治愈。</p>
+<h3 id="强化内心冥想法：改变你的弱势">强化内心冥想法：改变你的弱势</h3>
+<hr>
+<ol>
+<li>跟着感觉走，让身体处于”离线”状态，自动放松</li>
+<li>膈式呼吸法</li>
+<li>深呼吸</li>
+<li>摸嘴唇</li>
+<li>身体静观</li>
+<li>图景想象</li>
+<li>平静心跳</li>
+<li>冥想，是个天坛坚持的动作</li>
+</ol>
+<p>保持对恐惧感的客观观察者身份，缓缓退回到自己广大的识海中，同时看着恐惧感像一阵风一样消失。</p>
+<pre><code> 无论如何，只要做点什么，就能对解决问题有所帮助。
+</code></pre><p>内心强大体现在两个方面：体力和决心。</p>
+<h3 id="宇宙冥想法">宇宙冥想法</h3>
+<hr>
+<ol>
+<li>关注自己的身体感觉，在这种体察的基础上，再建立一个新的第三者身份来感受自己的体察行为本身。</li>
+<li>观察感知空间深处的各种意识客体，只是观察，不要被同化。</li>
+<li>关注当下这个时刻，不要管过去，不要管未来。抛开当下时刻和其他时刻的联结。</li>
+</ol>
+<p>在心理学上，这种在特定情况下驱使你必须做出反映的局面，我们称之为需求性特征。处于“定境”时，这种局面只有特征，没有需求。处于“定境”，大脑就会有超常理解力。</p>
+<p>能体会到愉悦，却不去追逐这种愉悦；能体会到厌烦，但不去抗拒厌烦；能体会到中性，但也不去忽视这种中性——那么，你就打断了痛苦形成的机制，至少在相当长的一段时间内你都不会受到困扰。<br>     逐渐让你的价值观和道德情操来指引你的行为，而不是让你的欲望来指引。</p>
+<p><strong>别给别人贴标签</strong></p>
+<h3 id="自我同情冥想法">自我同情冥想法</h3>
+<hr>
+<ul>
+<li>移情能力</li>
+<li>用脑就像磨刀，越磨越锋利</li>
+<li>承担责任，沟通的时候说出真实的想法</li>
+</ul>
+<h3 id="善意回归冥想法">善意回归冥想法</h3>
+<hr>
+<p>扩大“我们”的圈子，把”他们”都放进来，多关注共同点。</p>
+<h3 id="专注冥想法">专注冥想法</h3>
+<hr>
+<p>静观就是保持对注意力的良好控制。</p>
+<ul>
+<li>把信息导入意识，获取新信息</li>
+<li>调整感知内容，新信息覆盖旧信息</li>
+<li>找到合理的刺激量，保持有效的刺激<br>   让生活简单一点儿，每次只做一件事，你会获得更集中的注意力和更多的快乐。</li>
+</ul>
+<p><strong>和自己定个约，别让嘴巴唠叨个不停。</strong></p>
+<h3 id="忘我冥想法">忘我冥想法</h3>
+<hr>
+<ul>
+<li>痛苦最深层次的根源——自我。</li>
+<li>自我并不是你的长官，大部分的功能都是在没有“我”的指导下自行运转。</li>
+<li>谦卑，意味着自然，谦逊，不装腔做势。但并不意味着任人欺凌，羞辱，也不意味着自卑。</li>
+<li>不要太在意别人对你的看法。</li>
+<li>你不需要与众不同。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/03/16/muse5minutes/" data-id="tv135gocuy8qoa5k" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/muse/">muse</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reading/">reading</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-pythonNote1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/03/16/pythonNote1/" class="article-date">
+  <time datetime="2013-03-15T23:56:29.000Z" itemprop="datePublished">3月 16 2013</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/python/">python</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/03/16/pythonNote1/">《Python学习笔记》的笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这是对雨痕写的Python学习笔记的学习。</p>
+<h2 id="基本环境">基本环境</h2>
+<p>对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。<br>因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。</p>
+<h3 id="引用计数">引用计数</h3>
+<p>  除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。</p>
+<h3 id="垃圾回收">垃圾回收</h3>
+<p>Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 “Reference Cycle Garbage Collection”。</p>
+<p>能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。</p>
+<h1 id="世代回收">世代回收</h1>
+<h2 id="内置类型">内置类型</h2>
+<ol>
+<li><strong>尽量使用xrange代替range</strong>，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。</li>
+</ol>
+<h3 id="字符串">字符串</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">","</span>.join([<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>])</div><div class="line"><span class="string">'a,b,c'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a,b,c"</span>.split(<span class="string">","</span>)</div><div class="line">!</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\nb\r\nc"</span>.splitlines()</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line">&gt;&gt;&gt;<span class="string">"a\nb\r\nc"</span>.splitlines(<span class="keyword">True</span>)</div><div class="line">[<span class="string">'a\n'</span>, <span class="string">'b\r\n'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.startswith(<span class="string">"ab"</span>), <span class="string">"abc"</span>.endswith(<span class="string">"bc"</span>)</div><div class="line"><span class="keyword">True</span>, <span class="keyword">True</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.upper(), <span class="string">"Abc"</span>.lower()</div><div class="line"><span class="string">'ABC'</span>, <span class="string">'abc'</span></div><div class="line"></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>), <span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>, <span class="number">2</span>) <span class="comment"># 可指定查找起始结束位置。</span></div><div class="line"><span class="number">1</span>, <span class="number">4</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">" abc"</span>.lstrip(), <span class="string">"abc "</span>.rstrip(), <span class="string">" abc "</span>.strip() <span class="comment"># 剔除前后空格。</span></div><div class="line"><span class="string">'abc'</span>, <span class="string">'abc'</span>, <span class="string">'abc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.strip(<span class="string">"ac"</span>)  <span class="comment"># 可删除指定的前后缀字符。</span></div><div class="line"><span class="string">'b'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.replace(<span class="string">"bc"</span>, <span class="string">"BC"</span>)<span class="comment"># 可指定替换次数。</span></div><div class="line"><span class="string">'aBCaBC'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\tbc"</span>.expandtabs(<span class="number">4</span>)</div><div class="line"><span class="string">'a  bc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.ljust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"456"</span>.rjust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"abc"</span>.center(<span class="number">10</span>, <span class="string">'*'</span>) <span class="comment"># 填充</span></div><div class="line"><span class="string">'12300'</span>, <span class="string">'00456'</span>, <span class="string">'***abc****'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.zfill(<span class="number">6</span>), <span class="string">"123456"</span>.zfill(<span class="number">4</span>) <span class="comment"># 数字填充</span></div><div class="line"><span class="string">'000123'</span>, <span class="string">'123456'</span></div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>string.Template可以处理较复杂的需求</p>
+</blockquote>
+<h3 id="池化">池化</h3>
+<p>池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。</p>
+<h3 id="List">List</h3>
+<p>可用bisect 向有序列表中插入元素。</p>
+<p><strong>性能</strong></p>
+<ol>
+<li>列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。</li>
+<li>某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。</li>
+</ol>
+<h3 id="tuple">tuple</h3>
+<p>在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。</p>
+<h3 id="dict">dict</h3>
+<p>字典 (dict) 采用用开放地址法的哈希表实现。<br>• 自带元素容量为 8 的 smalltable,只有 “超出”时才到堆上额外分配元素表内存。<br>• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。<br>• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。<br>• 删除元素操作不会立立即收缩内存。</p>
+<blockquote>
+<p>对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减<br>少内存开销。</p>
+</blockquote>
+<h4 id="视图">视图</h4>
+<p>要判断两个字典间的差异,使用用视图是最简便的做法。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 = dict(a = <span class="number">1</span>, b = <span class="number">2</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d2 = dict(b = <span class="number">2</span>, c = <span class="number">3</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 & d2 <span class="comment"># 字典不支支持该操作。</span></span></div><div class="line"><span class="input"><span class="prompt">TypeError: unsupported operand type(s) for &: 'dict' and 'dict'</span></span></div><div class="line">&gt;&gt;&gt; v1 = d1.viewitems()</div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v2 = d2.viewitems()</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v1 & v2  <span class="comment"># 交集</span></span></div><div class="line"><span class="input"><span class="prompt">set([('b', 2)])</span></span></div><div class="line">&gt;&gt;&gt; v1 | v2  <span class="comment">#并</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('b', 2), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; v1 - v2  <span class="comment"># 差集 (仅 v1 有,v2 没有的)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1)])</span></span></div><div class="line">&gt;&gt;&gt; v1 ^ v2  <span class="comment">#对称差集 (不会同时出现在 v1 和 v2 中)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; (<span class="string">'a'</span>, <span class="number">1</span>) in v1</div><div class="line"><span class="constant">True</span></div></pre></td></tr></table></figure>
+
+<h3 id="set">set</h3>
+<p>集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 “值” 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。</p>
+<p>运算： ==， ！=， &gt;, |, &amp; ,-, ^</p>
+<blockquote>
+<p><strong>数据结构很重要,这几个内置类型并不足以完成全部工作。像 C、数据结构、常用算法这类基础是每个程序开发人员都应该掌握的。</strong></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/03/16/pythonNote1/" data-id="vbkkmi8c4qexq8ii" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/">python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/reading/">reading</a></li></ul>
+
     </footer>
   </div>
   
@@ -122,16 +738,37 @@
           <aside id="sidebar">
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/C/">C</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/JavaEE/">JavaEE</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/nlp/">nlp</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python/">python</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/reading/">reading</a><span class="category-list-count">1</span></li></ul>
+    </div>
+  </div>
+
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NLP/">NLP</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javaee/">javaee</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/muse/">muse</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note/">note</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/project/">project</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/struct/">struct</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tomcat/">tomcat</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 10.00px;">C</a><a href="/tags/NLP/" style="font-size: 10.00px;">NLP</a><a href="/tags/javaee/" style="font-size: 10.00px;">javaee</a><a href="/tags/muse/" style="font-size: 10.00px;">muse</a><a href="/tags/note/" style="font-size: 10.00px;">note</a><a href="/tags/project/" style="font-size: 10.00px;">project</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/reading/" style="font-size: 20.00px;">reading</a><a href="/tags/struct/" style="font-size: 10.00px;">struct</a><a href="/tags/tomcat/" style="font-size: 10.00px;">tomcat</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08">August 2014</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08">August 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02">February 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03">March 2013</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -143,7 +780,23 @@
       <ul>
         
           <li>
-            <a href="/2014/08/29/hello-world/">Hello World</a>
+            <a href="/2014/08/06/tomcat-tune/">Tomcat 并发调优</a>
+          </li>
+        
+          <li>
+            <a href="/2014/02/06/nlpNote/">NLPNote</a>
+          </li>
+        
+          <li>
+            <a href="/2013/11/07/StructHack/">Struct Hack</a>
+          </li>
+        
+          <li>
+            <a href="/2013/03/16/muse5minutes/">《冥想5分钟》学习笔记</a>
+          </li>
+        
+          <li>
+            <a href="/2013/03/16/pythonNote1/">《Python学习笔记》的笔记</a>
           </li>
         
       </ul>
@@ -158,7 +811,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2014 John Doe<br>
+      &copy; 2014 Kangkona D.Han<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
