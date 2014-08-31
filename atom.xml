@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Record the history that you will forget.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-08-31T04:40:00.587Z</updated>
+  <updated>2014-08-31T14:21:34.471Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -13,6 +13,70 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[8月工作总结]]></title>
+    <link href="http://yoursite.com/2014/08/31/plan-2014-08/"/>
+    <id>http://yoursite.com/2014/08/31/plan-2014-08/</id>
+    <published>2014-08-31T14:12:37.000Z</published>
+    <updated>2014-08-31T14:21:20.000Z</updated>
+    <content type="html"><![CDATA[<pre><code><span class="comment">我说生命的确是黑暗的，除非是有了激励；</span>
+<span class="comment">一切的激励都是盲目的，除非是有了知识；</span>
+<span class="comment">一切的知识都是徒然的，除非是有了工作；</span>
+<span class="comment">一切的工作都是虚空的，除非是有了爱；</span>
+<span class="comment">当你仁爱地工作的时候，你便与自己，与人类，与上帝联系为一。</span>
+
+                                             <span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span> <span class="comment">纪伯伦《论工作》</span>
+</code></pre><p><a id="more"></a></p>
+<h2 id="工作内容">工作内容</h2>
+<ul>
+<li>XBus 3.1 API</li>
+<li>熟悉XBus整体架构</li>
+<li>静态数据维护</li>
+</ul>
+<h3 id="Xbus_3-1_API">Xbus 3.1 API</h3>
+<ul>
+<li>加密，严格的参数检查</li>
+<li>充分利用新Backend特性  </li>
+<li>碎片信息集中(MySQL)</li>
+<li>性能优化(加Pool, 预加载内存)</li>
+</ul>
+<h3 id="熟悉XBus整体架构">熟悉XBus整体架构</h3>
+<ul>
+<li>整体设计 </li>
+<li>Storm工作方式 </li>
+<li>Backend实现细节</li>
+</ul>
+<h3 id="静态数据维护">静态数据维护</h3>
+<ul>
+<li>已有信息补充完整</li>
+<li>新增40条线路信息</li>
+</ul>
+<h3 id="下月工作计划">下月工作计划</h3>
+<p>深入熟悉后台实现细节<br>API维护<br>多看点书，少刷微博</p>
+<h3 id="关于讨论班">关于讨论班</h3>
+<ul>
+<li>每周一次，每次一个主题 </li>
+<li>自由组织，开放参与</li>
+<li>讲解时间：讨论时间 ～ 1：1</li>
+</ul>
+]]></content>
+    <summary type="html"><![CDATA[<pre><code><span class="comment">我说生命的确是黑暗的，除非是有了激励；</span>
+<span class="comment">一切的激励都是盲目的，除非是有了知识；</span>
+<span class="comment">一切的知识都是徒然的，除非是有了工作；</span>
+<span class="comment">一切的工作都是虚空的，除非是有了爱；</span>
+<span class="comment">当你仁爱地工作的时候，你便与自己，与人类，与上帝联系为一。</span>
+
+                                             <span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span> <span class="comment">纪伯伦《论工作》</span>
+</code></pre><p>]]></summary>
+    
+      <category term="job" scheme="http://yoursite.com/tags/job/"/>
+    
+      <category term="summary" scheme="http://yoursite.com/tags/summary/"/>
+    
+      <category term="Summary" scheme="http://yoursite.com/categories/Summary/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Tomcat 并发调优]]></title>
