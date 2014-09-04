@@ -3,21 +3,15 @@
 <head>
   <meta charset="utf-8">
   
-  <title>8月工作总结 | Gray Times</title>
+  <title>Storm实时处理案例(1) | Gray Times</title>
   <meta name="author" content="Kangkona D.Han">
   
-  <meta name="description" content="我说生命的确是黑暗的，除非是有了激励；
-一切的激励都是盲目的，除非是有了知识；
-一切的知识都是徒然的，除非是有了工作；
-一切的工作都是虚空的，除非是有了爱；
-当你仁爱地工作的时候，你便与自己，与人类，与上帝联系为一。
-
-                                             ------- 纪伯伦《论工作》">
+  <meta name="description" content="在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截出一个单位数据。">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="8月工作总结"/>
+  <meta property="og:title" content="Storm实时处理案例(1)"/>
   <meta property="og:site_name" content="Gray Times"/>
 
   
@@ -58,56 +52,43 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-08-31T14:12:37.000Z"><a href="/2014/08/31/plan-2014-08/">8月 31 2014</a></time>
+        <time datetime="2014-09-04T08:09:39.000Z"><a href="/2014/09/04/Storm实时处理案例1/">9月 4 2014</a></time>
       
       
   
-    <h1 class="title">8月工作总结</h1>
+    <h1 class="title">Storm实时处理案例(1)</h1>
   
 
     </header>
     <div class="entry">
       
-        <pre><code><span class="comment">我说生命的确是黑暗的，除非是有了激励；</span>
-<span class="comment">一切的激励都是盲目的，除非是有了知识；</span>
-<span class="comment">一切的知识都是徒然的，除非是有了工作；</span>
-<span class="comment">一切的工作都是虚空的，除非是有了爱；</span>
-<span class="comment">当你仁爱地工作的时候，你便与自己，与人类，与上帝联系为一。</span>
-
-                                             <span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span> <span class="comment">纪伯伦《论工作》</span>
-</code></pre><p><a id="more"></a></p>
-<h2 id="工作内容">工作内容</h2>
-<ul>
-<li>XBus 3.1 API</li>
-<li>熟悉XBus整体架构</li>
-<li>静态数据维护</li>
-</ul>
-<h3 id="Xbus_3-1_API">Xbus 3.1 API</h3>
-<ul>
-<li>加密，严格的参数检查</li>
-<li>充分利用新Backend特性  </li>
-<li>碎片信息集中(MySQL)</li>
-<li>性能优化(加Pool, 预加载内存)</li>
-</ul>
-<h3 id="熟悉XBus整体架构">熟悉XBus整体架构</h3>
-<ul>
-<li>整体设计 </li>
-<li>Storm工作方式 </li>
-<li>Backend实现细节</li>
-</ul>
-<h3 id="静态数据维护">静态数据维护</h3>
-<ul>
-<li>已有信息补充完整</li>
-<li>新增40条线路信息</li>
-</ul>
-<h3 id="下月工作计划">下月工作计划</h3>
-<p>深入熟悉后台实现细节<br>API维护<br>多看点书，少刷微博</p>
-<h3 id="关于讨论班">关于讨论班</h3>
-<ul>
-<li>每周一次，每次一个主题 </li>
-<li>自由组织，开放参与</li>
-<li>讲解时间：讨论时间 ～ 1：1</li>
-</ul>
+        <p>在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,<br>Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截<br>出一个单位数据。<br><a id="more"></a><br>通常会对流入的数据源定好协议，比如一个单位数据的header是FAFB, tail是EAEB：</p>
+<pre><code>    <span class="keyword">while</span>( <span class="constant">true</span> ) {
+        <span class="keyword">while</span>( <span class="constant">true</span> ) {
+         <span class="keyword">first</span> = <span class="keyword">is</span>.readByte();
+         <span class="keyword">if</span> (<span class="keyword">first</span> == (byte)<span class="number">0xFA</span>) {
+            <span class="keyword">second</span> = <span class="keyword">is</span>.readByte();
+            <span class="keyword">if</span> (<span class="keyword">second</span> == (byte)<span class="number">0xFB</span>) {
+                break;
+            }
+         }
+        }
+    }
+</code></pre><p>其实上段代码不够严谨，比如出现0xFA0xFA0xFB…这样的流，就可能会丢弃正常的流。<br>询问得知正文和头部是正交的, 暂时按下不表。</p>
+<p>之后对截断的流进行基础性的检查，emit出去，交给Bolt处理。</p>
+<p>Spout只管喷射出一个个截断的数据流，Bolt(螺栓)把自己拧在Spout的接口上, 对输出<br>的元组进行必要的处理。</p>
+<p>Storm的一大卖点是高度的稳定性，所以往往异常处理代码量比正常逻辑代码要多很多。</p>
+<p>BTW, 看到这样一个段子：每条原始的Unix命令，都会变成一项互联网服务:</p>
+<pre><code>    <span class="function_or_atom">find</span> <span class="arrow">-&gt;</span> <span class="function_or_atom">yahool</span><span class="exclamation_mark">!</span>,
+    <span class="function_or_atom">grep</span><span class="arrow">-&gt;</span><span class="variable">Google</span>, 
+    <span class="function_or_atom">rsync</span><span class="arrow">-&gt;</span><span class="variable">Dropbox</span>, 
+    <span class="function_or_atom">man</span><span class="arrow">-&gt;</span><span class="function_or_atom">stack</span> <span class="function_or_atom">overflow</span>, 
+    <span class="variable">MapReduce</span> = <span class="function_or_atom">grep</span>|<span class="function_or_atom">sort</span>|<span class="function_or_atom">uniq</span>,
+    <span class="function_or_atom">cron</span><span class="arrow">-&gt;</span><span class="function_or_atom">ifttt</span>，
+    <span class="function_or_atom">cp</span><span class="arrow">-&gt;</span><span class="variable">Tencent</span>, 
+    <span class="function_or_atom">trap</span><span class="arrow">-&gt;</span><span class="number">360</span>, 
+    <span class="function_or_atom">wall</span><span class="arrow">-&gt;</span><span class="function_or_atom">weibo</span>.
+</code></pre><p>其实<code>Storm</code>不正是对应着<code>Pipe</code>吗:)</p>
 
       
     </div>
@@ -116,13 +97,13 @@
         
   
   <div class="categories">
-    <a href="/categories/Summary/">Summary</a>
+    <a href="/categories/storm/">storm</a>
   </div>
 
         
   
   <div class="tags">
-    <a href="/tags/job/">job</a>, <a href="/tags/summary/">summary</a>
+    <a href="/tags/storm,-job/">storm, job</a>
   </div>
 
         
@@ -152,16 +133,14 @@
 
  <nav id="pagination" >
     
-    <a href="/2014/09/04/Storm实时处理案例1/" class="alignleft prev" >上一页</a>
     
-    
-    <a href="/2014/08/06/tomcat-tune/" class="alignright next" >下一页</a>
+    <a href="/2014/08/31/plan-2014-08/" class="alignright next" >下一页</a>
     
     <div class="clearfix"></div>
 </nav>
 <section id="comment">
 <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key="2014/08/31/plan-2014-08/" data-title="8月工作总结" data-url="http://yoursite.com/2014/08/31/plan-2014-08/"></div>
+    <div class="ds-thread" data-thread-key="2014/09/04/Storm实时处理案例1/" data-title="Storm实时处理案例(1)" data-url="http://yoursite.com/2014/09/04/Storm实时处理案例1/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
