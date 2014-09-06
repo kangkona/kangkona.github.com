@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Record the history that you never forget.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-09-04T11:14:10.471Z</updated>
+  <updated>2014-09-06T15:05:46.096Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -13,6 +13,46 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[模式匹配大法好]]></title>
+    <link href="http://yoursite.com/2014/09/06/pattern-match-is-good/"/>
+    <id>http://yoursite.com/2014/09/06/pattern-match-is-good/</id>
+    <published>2014-09-06T09:09:33.000Z</published>
+    <updated>2014-09-06T15:05:30.000Z</updated>
+    <content type="html"><![CDATA[<h2 id="if,_while,_for">if, while, for</h2>
+<p>除了Hello,world之外的任何程序，几乎都离不开控制结构。比如if-then-else, while,for，其实这三种的基础说白了还是加了一层语法塘的goto语句。不过相比直接使用goto而言，程序的流程走向更容易被程序员掌握。 for主要用于重复次数明确的情形，while在循环条件已知时很合适。由于二者完全是在做同样的事情，以至于Rob Pike在Go中统一命名为for。<br><a id="more"></a><br>如果每天只能重复地做一件事，世界会变地多么乏味。。。所以我们需要更多的选择，更多的种类。真实世界是纷繁复杂的，我们无时无刻不面临着选择。编程语言处理选择问题，最常见的就算if-then-else, 其实这个结构最早来源于lisp语言。 if-then-else是一种显式的选择方式，提醒程序员下个路口再见吧：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> A = <span class="number">1</span>:</div><div class="line">       <span class="keyword">return</span> <span class="string">"positive"</span></div><div class="line"><span class="keyword">elif</span> A = -<span class="number">1</span>:</div><div class="line">       <span class="keyword">return</span> <span class="string">"negative"</span></div><div class="line"><span class="keyword">else</span>:</div><div class="line">       <span class="keyword">return</span> <span class="string">"abnormal"</span></div></pre></td></tr></table></figure>
+
+<p>其实在做选择的时候，我们已经知道这是一个选择问题，不必在文字上在叙述这里面临着一个选择，如果……则……那么……， 即我们可以把if, then, else这样的字眼給省略掉：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">A := </div><div class="line">    <span class="number">1</span> -&gt; <span class="string">"positive"</span></div><div class="line">   -<span class="number">1</span> -&gt; <span class="string">"negative"</span></div><div class="line">    <span class="number">_</span> -&gt; <span class="string">"abnormal"</span></div></pre></td></tr></table></figure>
+
+<p>这种简洁的选择方式和if-then-else是等价的，这种表达方式来自于ML, 一般称之为<code>模式匹配</code>。简洁带来的好处一是代码上的整洁，舒适。 二是把很多dirty的细节隐匿起来，直达问题本身，这样我们就可以前进的更快，想象力就会飘的更远。。。举个快速排序的栗子:</p>
+<h3 id="命令式语言_Go实现">命令式语言 <a href="https://github.com/kangkona/1day1algorithm/blob/master/qsort2.go" target="_blank" rel="external">Go实现</a></h3>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">func</span> partition(A []<span class="typename">int</span>, low <span class="typename">int</span>, high <span class="typename">int</span>) <span class="typename">int</span> {</div><div class="line">	x := A[high]</div><div class="line">	i := low -<span class="number"> 1</span></div><div class="line">	<span class="keyword">for</span> j := low; j &lt; high; j++ {</div><div class="line">		<span class="keyword">if</span> A[j] &lt;= x {</div><div class="line">			i++</div><div class="line">			A[i], A[j] = A[j], A[i]</div><div class="line">		}</div><div class="line">	}</div><div class="line">	A[i<span class="number">+1</span>], A[high] = A[high], A[i<span class="number">+1</span>]</div><div class="line">	<span class="keyword">return</span> i +<span class="number"> 1</span></div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">func</span> quickSort(A []<span class="typename">int</span>, low <span class="typename">int</span>, high <span class="typename">int</span>) {</div><div class="line">	<span class="keyword">if</span> low &lt; high {</div><div class="line">		p := partition(A, low, high)</div><div class="line">		quickSort(A, low, p<span class="number">-1</span>)</div><div class="line">		quickSort(A, p<span class="number">+1</span>, high)</div><div class="line">	}</div><div class="line">}</div><div class="line"></div><div class="line"><span class="keyword">func</span> QuickSort(A []<span class="typename">int</span>) {</div><div class="line">	quickSort(A,<span class="number"> 0</span>, <span class="built_in">len</span>(A<span class="number">)-1</span>)</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h3 id="不带模式匹配的Lisp_Scheme实现">不带模式匹配的Lisp <a href="https://github.com/kangkona/1day1algorithm/blob/master/qsortv3.scm" target="_blank" rel="external">Scheme实现</a></h3>
+<figure class="highlight scheme"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="list">(<span class="title">define</span> <span class="list">(<span class="title">qsort</span> lst)</span></span></div><div class="line"><span class="list">(<span class="title"><span class="built_in">if</span></span> <span class="list">(<span class="title"><span class="built_in">&lt;=</span></span> <span class="list">(<span class="title">length</span> lst)</span><span class="number"> 1</span>)</span></span></div><div class="line">lst</div><div class="line"><span class="list">(<span class="title">append</span> <span class="list">(<span class="title">qsort</span> <span class="list">(<span class="title"><span class="built_in">filter</span></span> <span class="list">(<span class="title">cdr</span> lst)</span> <span class="list">(<span class="title">lambda</span> <span class="list">(<span class="title">x</span>)</span> <span class="list">(<span class="title"><span class="built_in">&lt;=</span></span> x <span class="list">(<span class="title">car</span> lst)</span>)</span>)</span>)</span>)</span></span></div><div class="line"><span class="list">(<span class="title"><span class="built_in">cons</span></span> <span class="list">(<span class="title">car</span> lst)</span> <span class="list">(<span class="title">qsort</span> <span class="list">(<span class="title"><span class="built_in">filter</span></span> <span class="list">(<span class="title">cdr</span> lst)</span> <span class="list">(<span class="title">lambda</span> <span class="list">(<span class="title">x</span>)</span> <span class="list">(<span class="title"><span class="built_in">&gt;</span></span> x <span class="list">(<span class="title">car</span> lst)</span>)</span>)</span>)</span>)</span>)</span>)))</div></pre></td></tr></table></figure>
+
+<h3 id="带模式匹配的语言_Erlang实现">带模式匹配的语言  <a href="https://github.com/kangkona/1day1algorithm/blob/master/qsortv4.erl" target="_blank" rel="external">Erlang实现</a></h3>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function">qsort</span>(<span class="attr_selector">[]</span>) -&gt; <span class="attr_selector">[]</span>;</div><div class="line"><span class="function">qsort</span>(<span class="attr_selector">[Pivot|T]</span>) -&gt;</div><div class="line">			<span class="function">qsort</span>(<span class="attr_selector">[X || X &lt;- T, X &lt; Pivot]</span>)</div><div class="line">			++ <span class="attr_selector">[Pivot]</span> ++</div><div class="line">			<span class="function">qsort</span>(<span class="attr_selector">[X || X &lt;- T, X &gt;= Pivot]</span>).</div></pre></td></tr></table></figure>
+
+<p>显而易见，自带模式匹配的语言在屏蔽了语言细节之后，直接把快速排序的本质勾勒了出来，简单粗暴且自带闪光灯！！！ 为什么仅仅是省略了选择相关的字眼，生产率以及通俗性提高那么多呢？ 我猜测的原因如下:</p>
+<pre><code>    人是一种害怕做选择的动物，尤其是意识到自己面临着一个悬(选)着(择)的问题时候。使用<span class="keyword">if</span>-<span class="keyword">then</span>-<span class="keyword">else</span>好比是在做选择
+    的时候告诉程序员：Hi,SB, you should make <span class="operator">a</span> choice!  是不是还有点细思极恐？？？！！！
+    而使用模式匹配，似乎只需要制定好一条条规则， Let <span class="operator">the</span> compiler <span class="built_in">do</span> <span class="operator">the</span> fuck choice! 对于选择困难综合症
+    的 朋友来说，真是居家旅行，杀人越货必备之良器。
+</code></pre><p>总结来说，简洁的事物之所以有时候威力更强大，是因为简洁的重点不是简，而是洁。 隐匿了冗余的细节，减轻了思想上的包袱，让程序员可以轻装上阵，专注于真正的问题，谓之“洁”。  </p>
+<p>所以， 如果存在最好的语言，她不一定是最简单的语言，但一定是最简洁的语言。 </p>
+]]></content>
+    <summary type="html"><![CDATA[<h2 id="if,_while,_for">if, while, for</h2>
+<p>除了Hello,world之外的任何程序，几乎都离不开控制结构。比如if-then-else, while,for，其实这三种的基础说白了还是加了一层语法塘的goto语句。不过相比直接使用goto而言，程序的流程走向更容易被程序员掌握。 for主要用于重复次数明确的情形，while在循环条件已知时很合适。由于二者完全是在做同样的事情，以至于Rob Pike在Go中统一命名为for。<br>]]></summary>
+    
+      <category term="pattern, fp" scheme="http://yoursite.com/tags/pattern,-fp/"/>
+    
+      <category term="FP" scheme="http://yoursite.com/categories/FP/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[Storm实时处理案例(1)]]></title>
@@ -484,6 +524,68 @@
   </entry>
   
   <entry>
+    <title><![CDATA[《Python学习笔记》的笔记]]></title>
+    <link href="http://yoursite.com/2013/03/16/pythonNote1/"/>
+    <id>http://yoursite.com/2013/03/16/pythonNote1/</id>
+    <published>2013-03-15T23:56:29.000Z</published>
+    <updated>2014-08-30T15:40:19.000Z</updated>
+    <content type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br><a id="more"></a></p>
+<h2 id="基本环境">基本环境</h2>
+<p>对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。<br>因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。</p>
+<h3 id="引用计数">引用计数</h3>
+<p>  除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。</p>
+<h3 id="垃圾回收">垃圾回收</h3>
+<p>Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 “Reference Cycle Garbage Collection”。</p>
+<p>能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。</p>
+<h1 id="世代回收">世代回收</h1>
+<h2 id="内置类型">内置类型</h2>
+<ol>
+<li><strong>尽量使用xrange代替range</strong>，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。</li>
+</ol>
+<h3 id="字符串">字符串</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">","</span>.join([<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>])</div><div class="line"><span class="string">'a,b,c'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a,b,c"</span>.split(<span class="string">","</span>)</div><div class="line">!</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\nb\r\nc"</span>.splitlines()</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line">&gt;&gt;&gt;<span class="string">"a\nb\r\nc"</span>.splitlines(<span class="keyword">True</span>)</div><div class="line">[<span class="string">'a\n'</span>, <span class="string">'b\r\n'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.startswith(<span class="string">"ab"</span>), <span class="string">"abc"</span>.endswith(<span class="string">"bc"</span>)</div><div class="line"><span class="keyword">True</span>, <span class="keyword">True</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.upper(), <span class="string">"Abc"</span>.lower()</div><div class="line"><span class="string">'ABC'</span>, <span class="string">'abc'</span></div><div class="line"></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>), <span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>, <span class="number">2</span>) <span class="comment"># 可指定查找起始结束位置。</span></div><div class="line"><span class="number">1</span>, <span class="number">4</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">" abc"</span>.lstrip(), <span class="string">"abc "</span>.rstrip(), <span class="string">" abc "</span>.strip() <span class="comment"># 剔除前后空格。</span></div><div class="line"><span class="string">'abc'</span>, <span class="string">'abc'</span>, <span class="string">'abc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.strip(<span class="string">"ac"</span>)  <span class="comment"># 可删除指定的前后缀字符。</span></div><div class="line"><span class="string">'b'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.replace(<span class="string">"bc"</span>, <span class="string">"BC"</span>)<span class="comment"># 可指定替换次数。</span></div><div class="line"><span class="string">'aBCaBC'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\tbc"</span>.expandtabs(<span class="number">4</span>)</div><div class="line"><span class="string">'a  bc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.ljust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"456"</span>.rjust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"abc"</span>.center(<span class="number">10</span>, <span class="string">'*'</span>) <span class="comment"># 填充</span></div><div class="line"><span class="string">'12300'</span>, <span class="string">'00456'</span>, <span class="string">'***abc****'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.zfill(<span class="number">6</span>), <span class="string">"123456"</span>.zfill(<span class="number">4</span>) <span class="comment"># 数字填充</span></div><div class="line"><span class="string">'000123'</span>, <span class="string">'123456'</span></div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>string.Template可以处理较复杂的需求</p>
+</blockquote>
+<h3 id="池化">池化</h3>
+<p>池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。</p>
+<h3 id="List">List</h3>
+<p>可用bisect 向有序列表中插入元素。</p>
+<p><strong>性能</strong></p>
+<ol>
+<li>列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。</li>
+<li>某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。</li>
+</ol>
+<h3 id="tuple">tuple</h3>
+<p>在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。</p>
+<h3 id="dict">dict</h3>
+<p>字典 (dict) 采用用开放地址法的哈希表实现。<br>• 自带元素容量为 8 的 smalltable,只有 “超出”时才到堆上额外分配元素表内存。<br>• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。<br>• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。<br>• 删除元素操作不会立立即收缩内存。</p>
+<blockquote>
+<p>对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减<br>少内存开销。</p>
+</blockquote>
+<h4 id="视图">视图</h4>
+<p>要判断两个字典间的差异,使用用视图是最简便的做法。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 = dict(a = <span class="number">1</span>, b = <span class="number">2</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d2 = dict(b = <span class="number">2</span>, c = <span class="number">3</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 & d2 <span class="comment"># 字典不支支持该操作。</span></span></div><div class="line"><span class="input"><span class="prompt">TypeError: unsupported operand type(s) for &: 'dict' and 'dict'</span></span></div><div class="line">&gt;&gt;&gt; v1 = d1.viewitems()</div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v2 = d2.viewitems()</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v1 & v2  <span class="comment"># 交集</span></span></div><div class="line"><span class="input"><span class="prompt">set([('b', 2)])</span></span></div><div class="line">&gt;&gt;&gt; v1 | v2  <span class="comment">#并</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('b', 2), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; v1 - v2  <span class="comment"># 差集 (仅 v1 有,v2 没有的)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1)])</span></span></div><div class="line">&gt;&gt;&gt; v1 ^ v2  <span class="comment">#对称差集 (不会同时出现在 v1 和 v2 中)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; (<span class="string">'a'</span>, <span class="number">1</span>) in v1</div><div class="line"><span class="constant">True</span></div></pre></td></tr></table></figure>
+
+<h3 id="set">set</h3>
+<p>集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 “值” 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。</p>
+<p>运算： ==， ！=， &gt;, |, &amp; ,-, ^</p>
+<blockquote>
+<p><strong>数据结构很重要,这几个内置类型并不足以完成全部工作。像 C、数据结构、常用算法这类基础是每个程序开发人员都应该掌握的。</strong></p>
+</blockquote>
+]]></content>
+    <summary type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br>]]></summary>
+    
+      <category term="reading" scheme="http://yoursite.com/tags/reading/"/>
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+      <category term="python" scheme="http://yoursite.com/categories/python/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[《冥想5分钟》学习笔记]]></title>
     <link href="http://yoursite.com/2013/03/16/muse5minutes/"/>
     <id>http://yoursite.com/2013/03/16/muse5minutes/</id>
@@ -611,68 +713,6 @@
       <category term="muse" scheme="http://yoursite.com/tags/muse/"/>
     
       <category term="reading" scheme="http://yoursite.com/categories/reading/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《Python学习笔记》的笔记]]></title>
-    <link href="http://yoursite.com/2013/03/16/pythonNote1/"/>
-    <id>http://yoursite.com/2013/03/16/pythonNote1/</id>
-    <published>2013-03-15T23:56:29.000Z</published>
-    <updated>2014-08-30T15:40:19.000Z</updated>
-    <content type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br><a id="more"></a></p>
-<h2 id="基本环境">基本环境</h2>
-<p>对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。<br>因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。</p>
-<h3 id="引用计数">引用计数</h3>
-<p>  除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。</p>
-<h3 id="垃圾回收">垃圾回收</h3>
-<p>Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 “Reference Cycle Garbage Collection”。</p>
-<p>能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。</p>
-<h1 id="世代回收">世代回收</h1>
-<h2 id="内置类型">内置类型</h2>
-<ol>
-<li><strong>尽量使用xrange代替range</strong>，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。</li>
-</ol>
-<h3 id="字符串">字符串</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">","</span>.join([<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>])</div><div class="line"><span class="string">'a,b,c'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a,b,c"</span>.split(<span class="string">","</span>)</div><div class="line">!</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\nb\r\nc"</span>.splitlines()</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line">&gt;&gt;&gt;<span class="string">"a\nb\r\nc"</span>.splitlines(<span class="keyword">True</span>)</div><div class="line">[<span class="string">'a\n'</span>, <span class="string">'b\r\n'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.startswith(<span class="string">"ab"</span>), <span class="string">"abc"</span>.endswith(<span class="string">"bc"</span>)</div><div class="line"><span class="keyword">True</span>, <span class="keyword">True</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.upper(), <span class="string">"Abc"</span>.lower()</div><div class="line"><span class="string">'ABC'</span>, <span class="string">'abc'</span></div><div class="line"></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>), <span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>, <span class="number">2</span>) <span class="comment"># 可指定查找起始结束位置。</span></div><div class="line"><span class="number">1</span>, <span class="number">4</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">" abc"</span>.lstrip(), <span class="string">"abc "</span>.rstrip(), <span class="string">" abc "</span>.strip() <span class="comment"># 剔除前后空格。</span></div><div class="line"><span class="string">'abc'</span>, <span class="string">'abc'</span>, <span class="string">'abc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.strip(<span class="string">"ac"</span>)  <span class="comment"># 可删除指定的前后缀字符。</span></div><div class="line"><span class="string">'b'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.replace(<span class="string">"bc"</span>, <span class="string">"BC"</span>)<span class="comment"># 可指定替换次数。</span></div><div class="line"><span class="string">'aBCaBC'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\tbc"</span>.expandtabs(<span class="number">4</span>)</div><div class="line"><span class="string">'a  bc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.ljust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"456"</span>.rjust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"abc"</span>.center(<span class="number">10</span>, <span class="string">'*'</span>) <span class="comment"># 填充</span></div><div class="line"><span class="string">'12300'</span>, <span class="string">'00456'</span>, <span class="string">'***abc****'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.zfill(<span class="number">6</span>), <span class="string">"123456"</span>.zfill(<span class="number">4</span>) <span class="comment"># 数字填充</span></div><div class="line"><span class="string">'000123'</span>, <span class="string">'123456'</span></div></pre></td></tr></table></figure>
-
-<blockquote>
-<p>string.Template可以处理较复杂的需求</p>
-</blockquote>
-<h3 id="池化">池化</h3>
-<p>池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。</p>
-<h3 id="List">List</h3>
-<p>可用bisect 向有序列表中插入元素。</p>
-<p><strong>性能</strong></p>
-<ol>
-<li>列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。</li>
-<li>某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。</li>
-</ol>
-<h3 id="tuple">tuple</h3>
-<p>在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。</p>
-<h3 id="dict">dict</h3>
-<p>字典 (dict) 采用用开放地址法的哈希表实现。<br>• 自带元素容量为 8 的 smalltable,只有 “超出”时才到堆上额外分配元素表内存。<br>• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。<br>• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。<br>• 删除元素操作不会立立即收缩内存。</p>
-<blockquote>
-<p>对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减<br>少内存开销。</p>
-</blockquote>
-<h4 id="视图">视图</h4>
-<p>要判断两个字典间的差异,使用用视图是最简便的做法。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 = dict(a = <span class="number">1</span>, b = <span class="number">2</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d2 = dict(b = <span class="number">2</span>, c = <span class="number">3</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 & d2 <span class="comment"># 字典不支支持该操作。</span></span></div><div class="line"><span class="input"><span class="prompt">TypeError: unsupported operand type(s) for &: 'dict' and 'dict'</span></span></div><div class="line">&gt;&gt;&gt; v1 = d1.viewitems()</div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v2 = d2.viewitems()</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v1 & v2  <span class="comment"># 交集</span></span></div><div class="line"><span class="input"><span class="prompt">set([('b', 2)])</span></span></div><div class="line">&gt;&gt;&gt; v1 | v2  <span class="comment">#并</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('b', 2), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; v1 - v2  <span class="comment"># 差集 (仅 v1 有,v2 没有的)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1)])</span></span></div><div class="line">&gt;&gt;&gt; v1 ^ v2  <span class="comment">#对称差集 (不会同时出现在 v1 和 v2 中)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; (<span class="string">'a'</span>, <span class="number">1</span>) in v1</div><div class="line"><span class="constant">True</span></div></pre></td></tr></table></figure>
-
-<h3 id="set">set</h3>
-<p>集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 “值” 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。</p>
-<p>运算： ==， ！=， &gt;, |, &amp; ,-, ^</p>
-<blockquote>
-<p><strong>数据结构很重要,这几个内置类型并不足以完成全部工作。像 C、数据结构、常用算法这类基础是每个程序开发人员都应该掌握的。</strong></p>
-</blockquote>
-]]></content>
-    <summary type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br>]]></summary>
-    
-      <category term="reading" scheme="http://yoursite.com/tags/reading/"/>
-    
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
-      <category term="python" scheme="http://yoursite.com/categories/python/"/>
     
   </entry>
   
