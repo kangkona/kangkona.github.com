@@ -2,6 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://yoursite.com/2014/09/07/the-meaning-of-blogging/</loc>
+    <lastmod>2014-09-07T16:37:37.000Z</lastmod>
+  </url>
+  
+  <url>
     <loc>http://yoursite.com/2014/09/06/pattern-match-is-good/</loc>
     <lastmod>2014-09-06T15:12:59.000Z</lastmod>
   </url>

@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Record the history that you never forget.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-09-06T15:35:13.824Z</updated>
+  <updated>2014-09-07T16:37:42.888Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -13,6 +13,29 @@
   </author>
   
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[写博客的意义]]></title>
+    <link href="http://yoursite.com/2014/09/07/the-meaning-of-blogging/"/>
+    <id>http://yoursite.com/2014/09/07/the-meaning-of-blogging/</id>
+    <published>2014-09-07T15:14:25.000Z</published>
+    <updated>2014-09-07T16:37:37.000Z</updated>
+    <content type="html"><![CDATA[<p>今天是一个传媒泛滥的时代， 不过各种渠道的传播内容基本大同小异：幽默吐槽加讽刺，惊悚暴力被河蟹，心灵鸡汤看星座，一起来骂河南人。。。。。。   信息量的大爆炸，内容制作的低营养，以及垃圾载荷的充斥，导致读者不可能有时间去细细品味每一个文字。 写者诚意不够，读者耐心不足，在这些媒介里面泡的久了，便会心生倦怠，思维麻木。</p>
+<p>与之相反，已经过时的博客是一个很有意思的事物。对一些人来说它是E时代的日记本，诉说着初心和衷肠，表达着惜爱与恶憎； 对更多的人来说是一种媒介， 分享着心得与体会，传播着盛名与骂名，  同时也不得不修饰与掩饰。我觉得最好的一点是博客相对还是安静的世界，起码控制权还在写作者的手里，而不会变成硝烟弥漫的口水战场。</p>
+<p> 不过即使这样，如果你写的东西让读者实在不爽的话，还是会招致一些是非。<a href="http://www.yinwang.org/" target="_blank" rel="external">王垠</a>与<a href="http://tianchunbinghe.blog.163.com/" target="_blank" rel="external">田春</a>就是最突出的例子。前者的博文由于作者的不开森，或者不开森的读者导致的作者不开森， 常反反复复地删除；后者不善于掩藏自己真实的想法，以致招来妻子的评论，差点毁了家庭。 BTW, 两位都是相当有个性的lisp程序员(哦，对，前者应该称为计算机科学家~~)，垠神作为PL科班出身，对scheme青睐有加，写过传说中的40行CSP变换； 伞哥是内地为数不多的common lisp专家，甚至把Lisp作为自己的精神寄托， 这不得不让人感叹伟大的Lisp是多么有助于培养逼格啊。。。</p>
+<p>于我而言，博客是用来记录那些不愿忘却的想法，作为老年痴呆时搜索算法的一个索引。 算是一种独处的方式， 能够分享交流当然也是极好的。</p>
+<pre><code>    只有当一个人独处的时候，他才可以完全成为自己。谁要是不热爱独处，那他也就是不热爱自由，
+    因为只有当一个人独处的时候，他才是自由的。完全、真正的内心平和和感觉宁静——这是在这尘
+    世间仅次于健康的至高无上的恩物，也只有在一个人孤身独处的时候才可觅到。
+                                                            ——叔本华  
+</code></pre>]]></content>
+    
+    
+      <category term="reflect, blog" scheme="http://yoursite.com/tags/reflect,-blog/"/>
+    
+      <category term="reflect" scheme="http://yoursite.com/categories/reflect/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[模式匹配大法好]]></title>
