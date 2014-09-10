@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Record the history that you never forget.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-09-07T16:37:42.888Z</updated>
+  <updated>2014-09-10T16:43:53.285Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,12 +15,77 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[八一八浏览器缓存]]></title>
+    <link href="http://yoursite.com/2014/09/10/818-browser-caching/"/>
+    <id>http://yoursite.com/2014/09/10/818-browser-caching/</id>
+    <published>2014-09-10T14:41:41.000Z</published>
+    <updated>2014-09-10T16:43:01.000Z</updated>
+    <content type="html"><![CDATA[<p>今天由于需求变更，修改了部分前端代码，测试没问题之后进行了部署。交付测试时，发现修改的代码不起作用。而且比较奇怪的是一般手机浏览器没有问题，但微信内嵌浏览器内的结果还停留在部署之前的状态。分析后得知应该是缓存机制引起的。这里总结一下关于浏览器缓存的知识。<br><a id="more"></a></p>
+<h2 id="1-_为什么需要浏览器缓存">1. 为什么需要浏览器缓存</h2>
+<p>  网络的带宽总是有限的，尤其是在并发比较高的情况下，能节约一点儿是一点儿。对于大多数网站来说，类似js, css，图片等静态文件是很少变化的。我们便可以在用户的一次请求之后在本地缓存静态文件。用户进行同样的请求(url一致)时，相应文件直接在本地读取，快速获得响应。 除了减少服务器压力和带宽外，缓存机制还可以极大提高页面的显示速度。</p>
+<h2 id="2-_缓存协商">2.  缓存协商</h2>
+<p>缓存的文件是由服务器生成，在本地保存， 但不是保存下来就万事大吉， 合理使用缓存需要双方动态沟通，这样就引入了缓存协商。下面是具体的请求过程分析：</p>
+<pre><code>   (<span class="number">1</span>) 当浏览器第一次请求某个<span class="keyword">URL</span>时，顺利访问的话，服务器返回状态<span class="number">200</span>的状态, ; 同时会返回给浏览器一些Headers集合，
+    如果只设定了<span class="keyword">Last</span>-Modified和Etag头信息，那么浏览器接收到服务器这些信息后，就会将资源缓存在本地目录中,同时
+    保存文件的上述信息.
+   (<span class="number">2</span>) 再次请求时，根据 HTTP 协议的规定，浏览器会向服务器传送 <span class="keyword">If</span>-Modified-Since 与 <span class="keyword">If</span>-<span class="keyword">None</span>-Match 报头，这
+    两个报头实际上是第一次请求时服务器返回的<span class="keyword">Last</span>-Modified,Etag。发送这两个报头目地是询问服务器，该资源在
+    时间内有没有被修改过。如 果该资源未被修改，则服务器会直接返回HTTP <span class="number">304</span> （<span class="keyword">Not</span> Changed.）状态码，内容为
+    空，此时不会下载资源，浏览器则自动从缓存目录中读取资源。
+   (<span class="number">3</span>) 只使用<span class="keyword">Last</span>-Modified和Etag 可以减少传输成本，但不会减少http请求数量。如果给文件加上关于过期时间(Expires)
+    的header报文,这样浏览器就会先检查缓存中的文件，如果没有过期，就直接使用缓存中的文件,从而不会 发送http请求。 
+</code></pre><h2 id="3-_缓存存在的问题">3. 缓存存在的问题</h2>
+<pre><code>   既然存在了本地，那么最大的问题就是一旦服务器的文件更新了，而浏览器还在使用本地的缓存，
+   会造成服务器端的修改不能生效。 我们碰到的问题刚好可以对号入座。
+</code></pre><h2 id="4-_解决之道">4. 解决之道</h2>
+<h3 id="4-1_设置html的缓存相关信息">4.1  设置html的缓存相关信息</h3>
+<p>在html的头部加入如下信息:</p>
+<pre><code>         &lt;META <span class="variable">HTTP-EQUIV=</span><span class="string">"pragma"</span> <span class="variable">CONTENT=</span><span class="string">"no-cache"</span>&gt; 
+
+        &lt;META <span class="variable">HTTP-EQUIV=</span><span class="string">"Cache-Control"</span> <span class="variable">CONTENT=</span><span class="string">"no-cache, must-revalidate"</span>&gt; 
+
+        &lt;META <span class="variable">HTTP-EQUIV=</span><span class="string">"expires"</span> <span class="variable">CONTENT=</span><span class="string">"0"</span>&gt; 
+</code></pre><p>如果是动态语言生成的页面可以类似设置：</p>
+<pre><code>        <span class="vbscript">&lt;% 
+        // 将过期日期设置为一个过去时间 
+        <span class="built_in">response</span>.setHeader(<span class="string">"Expires"</span>, <span class="string">"Sat, 6 May 1995 12:00:00 GMT"</span>); 
+        // 设置 HTTP/<span class="number">1.1</span> no-cache 头 
+        <span class="built_in">response</span>.setHeader(<span class="string">"Cache-Control"</span>, <span class="string">"no-store,no-cache,must-revalidate"</span>); 
+        // 设置 IE 扩展 HTTP/<span class="number">1.1</span> no-cache headers， 用户自己添加 
+        <span class="built_in">response</span>.addHeader(<span class="string">"Cache-Control"</span>, <span class="string">"post-check=0, pre-check=0"</span>); 
+        // 设置标准 HTTP/<span class="number">1.0</span> no-cache header. 
+        <span class="built_in">response</span>.setHeader(<span class="string">"Pragma"</span>, <span class="string">"no-cache"</span>); 
+        %&gt;</span> 
+</code></pre><h3 id="4-2_使用POST代替GET">4.2 使用POST代替GET</h3>
+<p>根据 HTTP 规范，GET 用于信息获取，是幂等操作。也就是说，当使用相同的URL重复GET请求会返回预期的相同结果时，GET方法才是适用的。当对一个请求有副作用的时候（例如，提交数据注册新用户时），应该使用POST请求而不是GET。 所以浏览器会对GET请求做缓存处理。 不会对POST做缓存。</p>
+<h3 id="4-3_在url后加随机参数">4.3 在url后加随机参数</h3>
+<p>在一次请求的URL后加随机数，服务器就会认为是不同的请求，就会传回最新的文件覆盖旧的文件。但这种方法仅限于动态语言。</p>
+<pre><code>    &lt;%@ page import=<span class="string">"java.util.Random"</span>%&gt;
+    &lt;html&gt;    
+    &lt;head&gt;
+        &lt;script src=<span class="string">"js/fuck.js?&lt;%=new Random().nextInt(1000);%&gt;"</span>&gt;&lt;/script&gt;
+    &lt;/head&gt;
+    <span class="keyword">...</span>
+    &lt;/html&gt;
+</code></pre><h3 id="4-4_给修改后的文件换个名字">4.4  给修改后的文件换个名字</h3>
+<p>上面的三种方法都是完全舍弃缓存优点的做法，如果既想使修改生效，又想继续使用缓存机制应该怎么办呢？  其实最简单的做法就是将修改过的文件换个名称，比如加个时间戳之类的东西。这是的文件就变成了新鲜出炉的文件，本地压根儿就没有，只得乖乖从服务器端获取。<br>这种方法理论上是行的通的，有时间我会试试，可惜我没有时间了。 你有时间不妨一试？</p>
+<p>参考:<br><a href="http://alicsd.iteye.com/blog/814276" target="_blank" rel="external">浅谈浏览器缓存</a><br><a href="http://java-xp.iteye.com/blog/1518510" target="_blank" rel="external">浏览器缓存url请求</a><br><a href="http://www.360doc.com/content/10/0826/18/2905268_48986231.shtml" target="_blank" rel="external">浏览器缓存</a><br><a href="http://baike.baidu.com/view/1246381.htm?fr=aladdin" target="_blank" rel="external">百科</a></p>
+]]></content>
+    <summary type="html"><![CDATA[<p>今天由于需求变更，修改了部分前端代码，测试没问题之后进行了部署。交付测试时，发现修改的代码不起作用。而且比较奇怪的是一般手机浏览器没有问题，但微信内嵌浏览器内的结果还停留在部署之前的状态。分析后得知应该是缓存机制引起的。这里总结一下关于浏览器缓存的知识。<br>]]></summary>
+    
+      <category term="frontend, caching, web" scheme="http://yoursite.com/tags/frontend,-caching,-web/"/>
+    
+      <category term="Web前端" scheme="http://yoursite.com/categories/Web%E5%89%8D%E7%AB%AF/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[写博客的意义]]></title>
     <link href="http://yoursite.com/2014/09/07/the-meaning-of-blogging/"/>
     <id>http://yoursite.com/2014/09/07/the-meaning-of-blogging/</id>
     <published>2014-09-07T15:14:25.000Z</published>
-    <updated>2014-09-07T16:37:37.000Z</updated>
-    <content type="html"><![CDATA[<p>今天是一个传媒泛滥的时代， 不过各种渠道的传播内容基本大同小异：幽默吐槽加讽刺，惊悚暴力被河蟹，心灵鸡汤看星座，一起来骂河南人。。。。。。   信息量的大爆炸，内容制作的低营养，以及垃圾载荷的充斥，导致读者不可能有时间去细细品味每一个文字。 写者诚意不够，读者耐心不足，在这些媒介里面泡的久了，便会心生倦怠，思维麻木。</p>
+    <updated>2014-09-10T16:43:34.000Z</updated>
+    <content type="html"><![CDATA[<p>今天是一个传媒泛滥的时代， 不过各种渠道的传播内容基本大同小异：幽默吐槽加讽刺，惊悚暴力被河蟹，心灵鸡汤看星座，一起来骂河南人。。。。。。<a id="more"></a>   信息量的大爆炸，内容制作的低营养，以及垃圾载荷的充斥，导致读者不可能有时间去细细品味每一个文字。 写者诚意不够，读者耐心不足，在这些媒介里面泡的久了，便会心生倦怠，思维麻木。</p>
 <p>与之相反，已经过时的博客是一个很有意思的事物。对一些人来说它是E时代的日记本，诉说着初心和衷肠，表达着惜爱与恶憎； 对更多的人来说是一种媒介， 分享着心得与体会，传播着盛名与骂名，  同时也不得不修饰与掩饰。我觉得最好的一点是博客相对还是安静的世界，起码控制权还在写作者的手里，而不会变成硝烟弥漫的口水战场。</p>
 <p> 不过即使这样，如果你写的东西让读者实在不爽的话，还是会招致一些是非。<a href="http://www.yinwang.org/" target="_blank" rel="external">王垠</a>与<a href="http://tianchunbinghe.blog.163.com/" target="_blank" rel="external">田春</a>就是最突出的例子。前者的博文由于作者的不开森，或者不开森的读者导致的作者不开森， 常反反复复地删除；后者不善于掩藏自己真实的想法，以致招来妻子的评论，差点毁了家庭。 BTW, 两位都是相当有个性的lisp程序员(哦，对，前者应该称为计算机科学家~~)，垠神作为PL科班出身，对scheme青睐有加，写过传说中的40行CSP变换； 伞哥是内地为数不多的common lisp专家，甚至把Lisp作为自己的精神寄托， 这不得不让人感叹伟大的Lisp是多么有助于培养逼格啊。。。</p>
 <p>于我而言，博客是用来记录那些不愿忘却的想法，作为老年痴呆时搜索算法的一个索引。 算是一种独处的方式， 能够分享交流当然也是极好的。</p>
@@ -29,7 +94,7 @@
     世间仅次于健康的至高无上的恩物，也只有在一个人孤身独处的时候才可觅到。
                                                             ——叔本华  
 </code></pre>]]></content>
-    
+    <summary type="html"><![CDATA[<p>今天是一个传媒泛滥的时代， 不过各种渠道的传播内容基本大同小异：幽默吐槽加讽刺，惊悚暴力被河蟹，心灵鸡汤看星座，一起来骂河南人。。。。。。]]></summary>
     
       <category term="reflect, blog" scheme="http://yoursite.com/tags/reflect,-blog/"/>
     
