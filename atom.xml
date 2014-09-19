@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Record the history that you never forget.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-09-18T17:09:42.512Z</updated>
+  <updated>2014-09-19T13:54:42.031Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -19,7 +19,7 @@
     <link href="http://yoursite.com/2014/09/18/about-design/"/>
     <id>http://yoursite.com/2014/09/18/about-design/</id>
     <published>2014-09-18T09:45:22.000Z</published>
-    <updated>2014-09-18T17:09:36.000Z</updated>
+    <updated>2014-09-19T13:54:35.000Z</updated>
     <content type="html"><![CDATA[<p>做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:</p>
 <h2 id="位置计算">位置计算</h2>
 <pre><code><span class="title">S1</span>         S2        S3             S4                 S5            S6            S7 
@@ -58,9 +58,12 @@
 
 <p>由于站点也是轨迹集合的一员，位置计算时就不存在是否跨站问题了，  时间预测时到两站的距离也只需要计算两部分。</p>
 <p>本来为了使轨迹信息不致于受到站点的干扰，采用了第一种设计。但实现位置计算以及时间预测时，明显感觉各种计算都要围绕站点来进行，即使轨迹序列里不加站点，在其他地方还是会受到钳制。改用第二种设计之后，很多计算就变得自然许多，简洁许多，省了很多不必要的弯路。 借用《The Design of Design》的一句话就是：</p>
-<pre><code> The viewpoint <span class="keyword">is</span> <span class="keyword">that</span> <span class="keyword">of</span> an engineer, focused <span class="function_start"><span class="keyword">on</span></span> utility <span class="keyword">and</span> effctiveness 
- <span class="keyword">but</span> also efficiency <span class="keyword">and</span> elegance.
-</code></pre>]]></content>
+<p></p><p></p><p></p>
+<div style="background-color:black; font:bold 17px italic red;padding-left:50px"><br>     The viewpoint is that of an engineer, focused on utility and effctiveness<br>      but also efficiency and elegance.<br><br></div>
+
+
+
+]]></content>
     
     
       <category term="design" scheme="http://yoursite.com/tags/design/"/>
@@ -74,8 +77,8 @@
     <link href="http://yoursite.com/2014/09/13/the-story-of-aaron-swartz/"/>
     <id>http://yoursite.com/2014/09/13/the-story-of-aaron-swartz/</id>
     <published>2014-09-12T16:36:38.000Z</published>
-    <updated>2014-09-13T07:58:47.000Z</updated>
-    <content type="html"><![CDATA[<p>今天看了<a href="http://movie.douban.com/subject/25785114/" target="_blank" rel="external">The Internet’s Own Boy: The Story of Aaron Swartz</a>，主人公<a href="https://en.wikipedia.org/wiki/Aaron_Swartz" target="_blank" rel="external">Aaron Swartz</a>是一个英年早逝的天才黑客，或者可以称其为一个致力于推动世界进步的人。<br>Aaron做过很多非凡的事：不到14岁就和互联网之父蒂姆·伯纳斯-李这些互联网大佬们一起工作，参与基础互联网协议RSS的制定，之后创办过TheInfo.org，一个比维基百科还早的知识创建平台。Aaron年幼时就对版权问题感兴趣，以致于飞到华盛顿参与最高法院关于版权的听证会。之后参与Creative-Commons项目，致力于提供一种互联网知识共享的解决方案。你一定听说过Reddit这个网站，没错，这个游走在恶趣味与严肃议题之间的神奇网站也是这个家伙创办的。哦，对了，我正在使用的<code>Markdown</code>同样也是出自Aaron之手。</p>
+    <updated>2014-09-19T13:14:58.000Z</updated>
+    <content type="html"><![CDATA[<p>今天看了<a href="http://movie.douban.com/subject/25785114/" target="_blank" rel="external">The Internet’s Own Boy: The Story of Aaron Swartz</a>，主人公<a href="https://en.wikipedia.org/wiki/Aaron_Swartz" target="_blank" rel="external">Aaron Swartz</a>是一个英年早逝的天才黑客，或者可以称其为一个致力于推动世界进步的人。<br>Aaron做过很多非凡的事：不到14岁就和互联网之父蒂姆·伯纳斯-<a id="more"></a>李这些互联网大佬们一起工作，参与基础互联网协议RSS的制定，之后创办过TheInfo.org，一个比维基百科还早的知识创建平台。Aaron年幼时就对版权问题感兴趣，以致于飞到华盛顿参与最高法院关于版权的听证会。之后参与Creative-Commons项目，致力于提供一种互联网知识共享的解决方案。你一定听说过Reddit这个网站，没错，这个游走在恶趣味与严肃议题之间的神奇网站也是这个家伙创办的。哦，对了，我正在使用的<code>Markdown</code>同样也是出自Aaron之手。</p>
 <p>Aaron在技术方面很有成就，但他绝不止是一个只会写代码的人。他是一个理想主义式的人物，他在接受采访时如是说:</p>
 <pre><code>I thing deeply about things <span class="keyword">and</span> want others <span class="keyword">to</span> <span class="keyword">do</span> likewise. I work <span class="keyword">for</span> ideas <span class="keyword">and</span> learn <span class="keyword">from</span> 
 people. I don<span class="comment">'t like excluding people.</span>
@@ -94,7 +97,7 @@ people. I don<span class="comment">'t like excluding people.</span>
 <div>
 
 </div></div>]]></content>
-    
+    <summary type="html"><![CDATA[<p>今天看了<a href="http://movie.douban.com/subject/25785114/" target="_blank" rel="external">The Internet’s Own Boy: The Story of Aaron Swartz</a>，主人公<a href="https://en.wikipedia.org/wiki/Aaron_Swartz" target="_blank" rel="external">Aaron Swartz</a>是一个英年早逝的天才黑客，或者可以称其为一个致力于推动世界进步的人。<br>Aaron做过很多非凡的事：不到14岁就和互联网之父蒂姆·伯纳斯-]]></summary>
     
       <category term="movie" scheme="http://yoursite.com/tags/movie/"/>
     
@@ -232,8 +235,8 @@ people. I don<span class="comment">'t like excluding people.</span>
   
   <entry>
     <title><![CDATA[Storm实时处理案例(1)]]></title>
-    <link href="http://yoursite.com/2014/09/04/Storm%E5%AE%9E%E6%97%B6%E5%A4%84%E7%90%86%E6%A1%88%E4%BE%8B1/"/>
-    <id>http://yoursite.com/2014/09/04/Storm实时处理案例1/</id>
+    <link href="http://yoursite.com/2014/09/04/storm-real-time-case1/"/>
+    <id>http://yoursite.com/2014/09/04/storm-real-time-case1/</id>
     <published>2014-09-04T08:09:39.000Z</published>
     <updated>2014-09-04T11:13:51.000Z</updated>
     <content type="html"><![CDATA[<p>在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,<br>Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截<br>出一个单位数据。<br><a id="more"></a><br>通常会对流入的数据源定好协议，比如一个单位数据的header是FAFB, tail是EAEB：</p>
