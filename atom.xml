@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Record the history that you never forget.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-09-19T13:54:42.031Z</updated>
+  <updated>2014-10-02T16:08:05.250Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,11 +15,63 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[9月工作总结]]></title>
+    <link href="http://yoursite.com/2014/10/02/summary-2014-09/"/>
+    <id>http://yoursite.com/2014/10/02/summary-2014-09/</id>
+    <published>2014-10-02T13:23:35.000Z</published>
+    <updated>2014-10-02T16:07:18.000Z</updated>
+    <content type="html"><![CDATA[<h1 id="工作方面：">工作方面：</h1>
+<h2 id="Done">Done</h2>
+<ol>
+<li><p>利用其他公司提供的数据补足线路信息<br>由于存在线路名称不一致，站点名称不一致，经纬度不一致等问题，为了最大化利用资料，同时又不致于降低数据质量，采取了名称优先，经纬度范围逐渐扩大的匹配方式，最终使资料的利用率达90%以上，减少了200量以上无法确定目标的车。</p>
+</li>
+<li><p>微信版本客户端升级，网页客户端升级<br>微信版本升级只是了解了微信公众平台的运作方式，并没有太多技术细节；网页客户端参与也很少。</p>
+</li>
+<li><p>轨迹平滑处理<br>由于存在包重传，GPS漂移，站点信息不准，并车等问题，得到的轨迹点存在很多迂回交叉的现象，这部分的处理花了一些心思。先是仿照受力分析搞了个走向分析：如果一个点与前后点的lat变化，lng都不同，则认为其是一个迂回点，将其删除，从头开始迭代。 后来发现会处理连续的迂回点，走向分析是无法处理的，进而想到车行驶时角度不会很陡峭，便根据线路的角度来发现迂回点，角度分析可以可以解决连续迂回点的问题，但有时迂回点引起的角度并不是很陡峭。所以最后综合走向分析和角度分析，发现效果不错。</p>
+</li>
+<li><p>利用轨迹计算<br>这里最大的体会是设计真的很重要！ 由于开始设计不合理，在实现时发现特别繁琐。后来经过一番冥思苦想， 只保留了最简单的数据结构，把大量需要进行计算的常值预计算，加载到内存。由于设计的数据结构简单，便有了很强的兼容性，原本需要一大堆if…else的地方都变成了统一的逻辑。真庆幸没有在扔掉烂代码时犹豫：)</p>
+</li>
+</ol>
+<h2 id="TODO">TODO</h2>
+<ol>
+<li>测试轨迹计算实现，对比和旧后台的变化;</li>
+<li>实现数据源热切换；</li>
+<li>去MySQL, 将频繁使用的数据迁移到内存中去；</li>
+<li>GPS数据延迟时的推移估算。</li>
+</ol>
+<h1 id="学习方面：">学习方面：</h1>
+<h2 id="Done-1">Done</h2>
+<p>一篇论文也没有看，还真是惭愧。。。。。。开始跟Coursera上的《机器学习基石》和《机器学习》课程，时间比较紧，希望能坚持到课程完结。</p>
+<h2 id="TODO-1">TODO</h2>
+<ol>
+<li>看三篇分布式/并行计算/ML领域的经典论文；</li>
+<li>跟上Coursera上的课程；</li>
+<li>完整看完两本书，无论何种类型</li>
+</ol>
+<h1 id="生活方面">生活方面</h1>
+<h2 id="出游">出游</h2>
+<p>出去玩了一次，海边踏浪，真人CS，悬崖餐厅，山顶小木屋。。。。。。发现这些并不怎么吸引我，感觉最好玩的还是捡贝壳，最后还带了好多回来，哈哈。</p>
+<h2 id="娱乐">娱乐</h2>
+<p>八月看完了《冰与火之歌》，补得过了头，这个月看的很好的影片有： 黑色幽默的《Frank》,  看完真心觉得自己和音乐无缘了。。。。 关于民主的《辩护人》，据说是以韩国已故总统卢武铉为原型的，韩国大叔的演技和《杀人回忆》一样棒。看完这部电影，真有一种去香港中环看看的冲动。 国产片《绣春刀》情节很紧凑，三兄弟各有所执，虽然讲的是明朝的那些事儿，不过仍然有很强的现实讽刺感。</p>
+<h2 id="计划">计划</h2>
+<p>说好的跑步一直没有进行，健身也是玩了两下就坚持不下了。目标是每周运动三次，不求减肥，但求健康。</p>
+]]></content>
+    
+    
+      <category term="job" scheme="http://yoursite.com/tags/job/"/>
+    
+      <category term="summary" scheme="http://yoursite.com/tags/summary/"/>
+    
+      <category term="Summary" scheme="http://yoursite.com/categories/Summary/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[一次设计总结]]></title>
     <link href="http://yoursite.com/2014/09/18/about-design/"/>
     <id>http://yoursite.com/2014/09/18/about-design/</id>
     <published>2014-09-18T09:45:22.000Z</published>
-    <updated>2014-09-19T13:54:35.000Z</updated>
+    <updated>2014-10-02T16:04:15.000Z</updated>
     <content type="html"><![CDATA[<p>做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:</p>
 <h2 id="位置计算">位置计算</h2>
 <pre><code><span class="title">S1</span>         S2        S3             S4                 S5            S6            S7 
@@ -51,7 +103,7 @@
 //     <span class="keyword">case</span>2:  S1  . . .   pre   S2   cur  next  . . . . S3
 </code></pre></li>
 </ul>
-<p>为了区分这两种情况，还要利用上面的Cost函数，计算cur到底在pre-S2，还是S2-next，计算过程十分繁琐。 时间预测的计算有过之而无不及。</p>
+<p>为了区分这两种情况，还要利用上面的Cost函数，计算cur到底在pre-S2，还是S2-next，计算过程十分繁琐。 时间预测的计算有过之而无不及。<br><a id="more"></a></p>
 <h2 id="2-_把站点插入轨迹集合里面">2. 把站点插入轨迹集合里面</h2>
 <p>如果把站点插入轨迹集合里面，计算位置以及预测时间的过程就会简化许多，这时就需要给TrackPoint增加类型信息进行区分(将来可能会加入红绿灯，拐点等类型) :</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> ( </div><div class="line">    Ordinary =  <span class="constant">iota</span></div><div class="line">    TurnPoint</div><div class="line">    Station</div><div class="line">    TrafficLight </div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> Kind <span class="typename">int</span></div><div class="line"></div><div class="line"><span class="keyword">type</span> TrackPoint <span class="keyword">struct</span> {</div><div class="line">	GeoPoint</div><div class="line">	preStationIndex	<span class="typename">int</span>  <span class="comment">//前一站</span></div><div class="line">	nextStationIndex	<span class="typename">int</span>  <span class="comment">//后一站</span></div><div class="line">	index	<span class="typename">int</span>   <span class="comment">//在点集中的次序</span></div><div class="line">	kind	Kind <span class="comment">//点类型</span></div><div class="line">}</div></pre></td></tr></table></figure>
@@ -64,7 +116,38 @@
 
 
 ]]></content>
-    
+    <summary type="html"><![CDATA[<p>做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:</p>
+<h2 id="位置计算">位置计算</h2>
+<pre><code><span class="title">S1</span>         S2        S3             S4                 S5            S6            S7 
+                               P
+</code></pre><p>为了得到P的位置，需要利用一个评价公式: 假设P到前一站距离Pre, 到后一站距离Next，两站之间距离Between，有如下公式：</p>
+<pre><code><span class="attribute">   Cost </span>=<span class="string">  Pre + Next - Between</span>
+</code></pre><p>我们认为使Cost取值最小的两个站即为P所在位置的前后站。</p>
+<h2 id="时间预测">时间预测</h2>
+<p>比如我们要估算P到S7站点的到站时间，可以取该车次所有车最近5趟S3到S7的时间 T_AVG，所以预估时间公式为：</p>
+<pre><code>T_ESTIMATE = Distance(P-&gt;S4-&gt; <span class="keyword">...</span> -&gt;S7) / Distance(S3-&gt;S4-&gt; .... -&gt; S7)   *  T_AVG
+</code></pre><p>BUT，现在通过历史数据分析，提取出了线路的轨迹信息，就是除了站点以外，还有很多有序的轨迹点可以代表线路。这些点带来的好处是： 两个站之间的轨迹是曲线(甚至环形都是很常见的)的话，如果只有站点，连出的轨迹就是一条直线段，模拟效果很差；而点多了以后，几乎就可以还原出真实的线路轨迹。</p>
+<p>在考虑如何利用这些点的时候，就碰到一个设计权衡的问题：</p>
+<h2 id="1-_不把站点插入轨迹点集里面">1.  不把站点插入轨迹点集里面</h2>
+<p>得到的轨迹点集合已经可以很好模拟真实情况了，而站点信息(主要是经纬度)由于是人工采集的，会存在一些偏差，把站点插入轨迹点集之后的模拟效果反而会变差(抽样发现会出现迂回的情况)。但是仍然需要记录每个轨迹点的位置信息(位于哪两站)，设计轨迹点数据结构如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">type GeoPoint  <span class="keyword">struct</span> {</div><div class="line">	lat	<span class="keyword">float</span></div><div class="line">	lng	<span class="keyword">float</span></div><div class="line">}</div><div class="line"></div><div class="line">type TrackPoint <span class="keyword">struct</span> {</div><div class="line">	GeoPoint</div><div class="line">	preStationIndex	<span class="keyword">int</span>  <span class="comment">//前一站</span></div><div class="line">	nextStationIndex	<span class="keyword">int</span>  <span class="comment">//后一站</span></div><div class="line">	index	<span class="keyword">int</span>   <span class="comment">//在点集中的次序</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>这时进行位置计算，就需要用轨迹点去计算:  先算出在哪两个点之间，然后根据前后点的关系，计算出在哪两个站点之间，这时计算比较复杂，可以分成如下情况：</p>
+<ul>
+<li><p>前后点没有跨站</p>
+<pre><code>   <span class="javadoc">/**
+     *    S1  p1 . . .   pre  cur  next   . .  p2  S2 . . . S3
+     *  
+     *  Path(S1, cur) =  Dis(cur, pre) + Σ PointDis(p1-pre) + Dis(S1, p1)
+     *  Path(S2, cur) =  Dis(cur, next) + Σ PointDis(next-p2) + Dis(p2, S2)
+     */</span>
+</code></pre></li>
+<li><p>前后点跨站</p>
+<pre><code> //    <span class="keyword">case</span>1:  S1  . . .   pre   cur  S2   next  . . . . S3
+//     <span class="keyword">case</span>2:  S1  . . .   pre   S2   cur  next  . . . . S3
+</code></pre></li>
+</ul>
+<p>为了区分这两种情况，还要利用上面的Cost函数，计算cur到底在pre-S2，还是S2-next，计算过程十分繁琐。 时间预测的计算有过之而无不及。<br>]]></summary>
     
       <category term="design" scheme="http://yoursite.com/tags/design/"/>
     
@@ -277,8 +360,8 @@ people. I don<span class="comment">'t like excluding people.</span>
   
   <entry>
     <title><![CDATA[8月工作总结]]></title>
-    <link href="http://yoursite.com/2014/08/31/plan-2014-08/"/>
-    <id>http://yoursite.com/2014/08/31/plan-2014-08/</id>
+    <link href="http://yoursite.com/2014/08/31/summary-2014-08/"/>
+    <id>http://yoursite.com/2014/08/31/summary-2014-08/</id>
     <published>2014-08-31T14:12:37.000Z</published>
     <updated>2014-08-31T14:21:20.000Z</updated>
     <content type="html"><![CDATA[<pre><code><span class="comment">我说生命的确是黑暗的，除非是有了激励；</span>
@@ -703,6 +786,68 @@ people. I don<span class="comment">'t like excluding people.</span>
   </entry>
   
   <entry>
+    <title><![CDATA[《Python学习笔记》的笔记]]></title>
+    <link href="http://yoursite.com/2013/03/16/pythonNote1/"/>
+    <id>http://yoursite.com/2013/03/16/pythonNote1/</id>
+    <published>2013-03-15T23:56:29.000Z</published>
+    <updated>2014-08-30T15:40:19.000Z</updated>
+    <content type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br><a id="more"></a></p>
+<h2 id="基本环境">基本环境</h2>
+<p>对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。<br>因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。</p>
+<h3 id="引用计数">引用计数</h3>
+<p>  除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。</p>
+<h3 id="垃圾回收">垃圾回收</h3>
+<p>Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 “Reference Cycle Garbage Collection”。</p>
+<p>能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。</p>
+<h1 id="世代回收">世代回收</h1>
+<h2 id="内置类型">内置类型</h2>
+<ol>
+<li><strong>尽量使用xrange代替range</strong>，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。</li>
+</ol>
+<h3 id="字符串">字符串</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">","</span>.join([<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>])</div><div class="line"><span class="string">'a,b,c'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a,b,c"</span>.split(<span class="string">","</span>)</div><div class="line">!</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\nb\r\nc"</span>.splitlines()</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line">&gt;&gt;&gt;<span class="string">"a\nb\r\nc"</span>.splitlines(<span class="keyword">True</span>)</div><div class="line">[<span class="string">'a\n'</span>, <span class="string">'b\r\n'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.startswith(<span class="string">"ab"</span>), <span class="string">"abc"</span>.endswith(<span class="string">"bc"</span>)</div><div class="line"><span class="keyword">True</span>, <span class="keyword">True</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.upper(), <span class="string">"Abc"</span>.lower()</div><div class="line"><span class="string">'ABC'</span>, <span class="string">'abc'</span></div><div class="line"></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>), <span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>, <span class="number">2</span>) <span class="comment"># 可指定查找起始结束位置。</span></div><div class="line"><span class="number">1</span>, <span class="number">4</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">" abc"</span>.lstrip(), <span class="string">"abc "</span>.rstrip(), <span class="string">" abc "</span>.strip() <span class="comment"># 剔除前后空格。</span></div><div class="line"><span class="string">'abc'</span>, <span class="string">'abc'</span>, <span class="string">'abc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.strip(<span class="string">"ac"</span>)  <span class="comment"># 可删除指定的前后缀字符。</span></div><div class="line"><span class="string">'b'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.replace(<span class="string">"bc"</span>, <span class="string">"BC"</span>)<span class="comment"># 可指定替换次数。</span></div><div class="line"><span class="string">'aBCaBC'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\tbc"</span>.expandtabs(<span class="number">4</span>)</div><div class="line"><span class="string">'a  bc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.ljust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"456"</span>.rjust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"abc"</span>.center(<span class="number">10</span>, <span class="string">'*'</span>) <span class="comment"># 填充</span></div><div class="line"><span class="string">'12300'</span>, <span class="string">'00456'</span>, <span class="string">'***abc****'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.zfill(<span class="number">6</span>), <span class="string">"123456"</span>.zfill(<span class="number">4</span>) <span class="comment"># 数字填充</span></div><div class="line"><span class="string">'000123'</span>, <span class="string">'123456'</span></div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>string.Template可以处理较复杂的需求</p>
+</blockquote>
+<h3 id="池化">池化</h3>
+<p>池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。</p>
+<h3 id="List">List</h3>
+<p>可用bisect 向有序列表中插入元素。</p>
+<p><strong>性能</strong></p>
+<ol>
+<li>列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。</li>
+<li>某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。</li>
+</ol>
+<h3 id="tuple">tuple</h3>
+<p>在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。</p>
+<h3 id="dict">dict</h3>
+<p>字典 (dict) 采用用开放地址法的哈希表实现。<br>• 自带元素容量为 8 的 smalltable,只有 “超出”时才到堆上额外分配元素表内存。<br>• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。<br>• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。<br>• 删除元素操作不会立立即收缩内存。</p>
+<blockquote>
+<p>对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减<br>少内存开销。</p>
+</blockquote>
+<h4 id="视图">视图</h4>
+<p>要判断两个字典间的差异,使用用视图是最简便的做法。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 = dict(a = <span class="number">1</span>, b = <span class="number">2</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d2 = dict(b = <span class="number">2</span>, c = <span class="number">3</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 & d2 <span class="comment"># 字典不支支持该操作。</span></span></div><div class="line"><span class="input"><span class="prompt">TypeError: unsupported operand type(s) for &: 'dict' and 'dict'</span></span></div><div class="line">&gt;&gt;&gt; v1 = d1.viewitems()</div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v2 = d2.viewitems()</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v1 & v2  <span class="comment"># 交集</span></span></div><div class="line"><span class="input"><span class="prompt">set([('b', 2)])</span></span></div><div class="line">&gt;&gt;&gt; v1 | v2  <span class="comment">#并</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('b', 2), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; v1 - v2  <span class="comment"># 差集 (仅 v1 有,v2 没有的)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1)])</span></span></div><div class="line">&gt;&gt;&gt; v1 ^ v2  <span class="comment">#对称差集 (不会同时出现在 v1 和 v2 中)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; (<span class="string">'a'</span>, <span class="number">1</span>) in v1</div><div class="line"><span class="constant">True</span></div></pre></td></tr></table></figure>
+
+<h3 id="set">set</h3>
+<p>集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 “值” 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。</p>
+<p>运算： ==， ！=， &gt;, |, &amp; ,-, ^</p>
+<blockquote>
+<p><strong>数据结构很重要,这几个内置类型并不足以完成全部工作。像 C、数据结构、常用算法这类基础是每个程序开发人员都应该掌握的。</strong></p>
+</blockquote>
+]]></content>
+    <summary type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br>]]></summary>
+    
+      <category term="reading" scheme="http://yoursite.com/tags/reading/"/>
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+      <category term="python" scheme="http://yoursite.com/categories/python/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[《冥想5分钟》学习笔记]]></title>
     <link href="http://yoursite.com/2013/03/16/muse5minutes/"/>
     <id>http://yoursite.com/2013/03/16/muse5minutes/</id>
@@ -830,68 +975,6 @@ people. I don<span class="comment">'t like excluding people.</span>
       <category term="muse" scheme="http://yoursite.com/tags/muse/"/>
     
       <category term="reading" scheme="http://yoursite.com/categories/reading/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《Python学习笔记》的笔记]]></title>
-    <link href="http://yoursite.com/2013/03/16/pythonNote1/"/>
-    <id>http://yoursite.com/2013/03/16/pythonNote1/</id>
-    <published>2013-03-15T23:56:29.000Z</published>
-    <updated>2014-08-30T15:40:19.000Z</updated>
-    <content type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br><a id="more"></a></p>
-<h2 id="基本环境">基本环境</h2>
-<p>对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。<br>因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。</p>
-<h3 id="引用计数">引用计数</h3>
-<p>  除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。</p>
-<h3 id="垃圾回收">垃圾回收</h3>
-<p>Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 “Reference Cycle Garbage Collection”。</p>
-<p>能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。</p>
-<h1 id="世代回收">世代回收</h1>
-<h2 id="内置类型">内置类型</h2>
-<ol>
-<li><strong>尽量使用xrange代替range</strong>，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。</li>
-</ol>
-<h3 id="字符串">字符串</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">","</span>.join([<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>])</div><div class="line"><span class="string">'a,b,c'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a,b,c"</span>.split(<span class="string">","</span>)</div><div class="line">!</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\nb\r\nc"</span>.splitlines()</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line">&gt;&gt;&gt;<span class="string">"a\nb\r\nc"</span>.splitlines(<span class="keyword">True</span>)</div><div class="line">[<span class="string">'a\n'</span>, <span class="string">'b\r\n'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.startswith(<span class="string">"ab"</span>), <span class="string">"abc"</span>.endswith(<span class="string">"bc"</span>)</div><div class="line"><span class="keyword">True</span>, <span class="keyword">True</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.upper(), <span class="string">"Abc"</span>.lower()</div><div class="line"><span class="string">'ABC'</span>, <span class="string">'abc'</span></div><div class="line"></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>), <span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>, <span class="number">2</span>) <span class="comment"># 可指定查找起始结束位置。</span></div><div class="line"><span class="number">1</span>, <span class="number">4</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">" abc"</span>.lstrip(), <span class="string">"abc "</span>.rstrip(), <span class="string">" abc "</span>.strip() <span class="comment"># 剔除前后空格。</span></div><div class="line"><span class="string">'abc'</span>, <span class="string">'abc'</span>, <span class="string">'abc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.strip(<span class="string">"ac"</span>)  <span class="comment"># 可删除指定的前后缀字符。</span></div><div class="line"><span class="string">'b'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.replace(<span class="string">"bc"</span>, <span class="string">"BC"</span>)<span class="comment"># 可指定替换次数。</span></div><div class="line"><span class="string">'aBCaBC'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\tbc"</span>.expandtabs(<span class="number">4</span>)</div><div class="line"><span class="string">'a  bc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.ljust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"456"</span>.rjust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"abc"</span>.center(<span class="number">10</span>, <span class="string">'*'</span>) <span class="comment"># 填充</span></div><div class="line"><span class="string">'12300'</span>, <span class="string">'00456'</span>, <span class="string">'***abc****'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.zfill(<span class="number">6</span>), <span class="string">"123456"</span>.zfill(<span class="number">4</span>) <span class="comment"># 数字填充</span></div><div class="line"><span class="string">'000123'</span>, <span class="string">'123456'</span></div></pre></td></tr></table></figure>
-
-<blockquote>
-<p>string.Template可以处理较复杂的需求</p>
-</blockquote>
-<h3 id="池化">池化</h3>
-<p>池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。</p>
-<h3 id="List">List</h3>
-<p>可用bisect 向有序列表中插入元素。</p>
-<p><strong>性能</strong></p>
-<ol>
-<li>列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。</li>
-<li>某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。</li>
-</ol>
-<h3 id="tuple">tuple</h3>
-<p>在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。</p>
-<h3 id="dict">dict</h3>
-<p>字典 (dict) 采用用开放地址法的哈希表实现。<br>• 自带元素容量为 8 的 smalltable,只有 “超出”时才到堆上额外分配元素表内存。<br>• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。<br>• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。<br>• 删除元素操作不会立立即收缩内存。</p>
-<blockquote>
-<p>对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减<br>少内存开销。</p>
-</blockquote>
-<h4 id="视图">视图</h4>
-<p>要判断两个字典间的差异,使用用视图是最简便的做法。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 = dict(a = <span class="number">1</span>, b = <span class="number">2</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d2 = dict(b = <span class="number">2</span>, c = <span class="number">3</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 & d2 <span class="comment"># 字典不支支持该操作。</span></span></div><div class="line"><span class="input"><span class="prompt">TypeError: unsupported operand type(s) for &: 'dict' and 'dict'</span></span></div><div class="line">&gt;&gt;&gt; v1 = d1.viewitems()</div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v2 = d2.viewitems()</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v1 & v2  <span class="comment"># 交集</span></span></div><div class="line"><span class="input"><span class="prompt">set([('b', 2)])</span></span></div><div class="line">&gt;&gt;&gt; v1 | v2  <span class="comment">#并</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('b', 2), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; v1 - v2  <span class="comment"># 差集 (仅 v1 有,v2 没有的)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1)])</span></span></div><div class="line">&gt;&gt;&gt; v1 ^ v2  <span class="comment">#对称差集 (不会同时出现在 v1 和 v2 中)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; (<span class="string">'a'</span>, <span class="number">1</span>) in v1</div><div class="line"><span class="constant">True</span></div></pre></td></tr></table></figure>
-
-<h3 id="set">set</h3>
-<p>集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 “值” 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。</p>
-<p>运算： ==， ！=， &gt;, |, &amp; ,-, ^</p>
-<blockquote>
-<p><strong>数据结构很重要,这几个内置类型并不足以完成全部工作。像 C、数据结构、常用算法这类基础是每个程序开发人员都应该掌握的。</strong></p>
-</blockquote>
-]]></content>
-    <summary type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br>]]></summary>
-    
-      <category term="reading" scheme="http://yoursite.com/tags/reading/"/>
-    
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
-      <category term="python" scheme="http://yoursite.com/categories/python/"/>
     
   </entry>
   

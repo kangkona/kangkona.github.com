@@ -51,6 +51,73 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-10-02T13:23:35.000Z"><a href="/2014/10/02/summary-2014-09/">10月 2 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/10/02/summary-2014-09/">9月工作总结</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="工作方面：">工作方面：</h1>
+<h2 id="Done">Done</h2>
+<ol>
+<li><p>利用其他公司提供的数据补足线路信息<br>由于存在线路名称不一致，站点名称不一致，经纬度不一致等问题，为了最大化利用资料，同时又不致于降低数据质量，采取了名称优先，经纬度范围逐渐扩大的匹配方式，最终使资料的利用率达90%以上，减少了200量以上无法确定目标的车。</p>
+</li>
+<li><p>微信版本客户端升级，网页客户端升级<br>微信版本升级只是了解了微信公众平台的运作方式，并没有太多技术细节；网页客户端参与也很少。</p>
+</li>
+<li><p>轨迹平滑处理<br>由于存在包重传，GPS漂移，站点信息不准，并车等问题，得到的轨迹点存在很多迂回交叉的现象，这部分的处理花了一些心思。先是仿照受力分析搞了个走向分析：如果一个点与前后点的lat变化，lng都不同，则认为其是一个迂回点，将其删除，从头开始迭代。 后来发现会处理连续的迂回点，走向分析是无法处理的，进而想到车行驶时角度不会很陡峭，便根据线路的角度来发现迂回点，角度分析可以可以解决连续迂回点的问题，但有时迂回点引起的角度并不是很陡峭。所以最后综合走向分析和角度分析，发现效果不错。</p>
+</li>
+<li><p>利用轨迹计算<br>这里最大的体会是设计真的很重要！ 由于开始设计不合理，在实现时发现特别繁琐。后来经过一番冥思苦想， 只保留了最简单的数据结构，把大量需要进行计算的常值预计算，加载到内存。由于设计的数据结构简单，便有了很强的兼容性，原本需要一大堆if…else的地方都变成了统一的逻辑。真庆幸没有在扔掉烂代码时犹豫：)</p>
+</li>
+</ol>
+<h2 id="TODO">TODO</h2>
+<ol>
+<li>测试轨迹计算实现，对比和旧后台的变化;</li>
+<li>实现数据源热切换；</li>
+<li>去MySQL, 将频繁使用的数据迁移到内存中去；</li>
+<li>GPS数据延迟时的推移估算。</li>
+</ol>
+<h1 id="学习方面：">学习方面：</h1>
+<h2 id="Done-1">Done</h2>
+<p>一篇论文也没有看，还真是惭愧。。。。。。开始跟Coursera上的《机器学习基石》和《机器学习》课程，时间比较紧，希望能坚持到课程完结。</p>
+<h2 id="TODO-1">TODO</h2>
+<ol>
+<li>看三篇分布式/并行计算/ML领域的经典论文；</li>
+<li>跟上Coursera上的课程；</li>
+<li>完整看完两本书，无论何种类型</li>
+</ol>
+<h1 id="生活方面">生活方面</h1>
+<h2 id="出游">出游</h2>
+<p>出去玩了一次，海边踏浪，真人CS，悬崖餐厅，山顶小木屋。。。。。。发现这些并不怎么吸引我，感觉最好玩的还是捡贝壳，最后还带了好多回来，哈哈。</p>
+<h2 id="娱乐">娱乐</h2>
+<p>八月看完了《冰与火之歌》，补得过了头，这个月看的很好的影片有： 黑色幽默的《Frank》,  看完真心觉得自己和音乐无缘了。。。。 关于民主的《辩护人》，据说是以韩国已故总统卢武铉为原型的，韩国大叔的演技和《杀人回忆》一样棒。看完这部电影，真有一种去香港中环看看的冲动。 国产片《绣春刀》情节很紧凑，三兄弟各有所执，虽然讲的是明朝的那些事儿，不过仍然有很强的现实讽刺感。</p>
+<h2 id="计划">计划</h2>
+<p>说好的跑步一直没有进行，健身也是玩了两下就坚持不下了。目标是每周运动三次，不求减肥，但求健康。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-09-18T09:45:22.000Z"><a href="/2014/09/18/about-design/">9月 18 2014</a></time>
       
       
@@ -92,23 +159,15 @@
 //     <span class="keyword">case</span>2:  S1  . . .   pre   S2   cur  next  . . . . S3
 </code></pre></li>
 </ul>
-<p>为了区分这两种情况，还要利用上面的Cost函数，计算cur到底在pre-S2，还是S2-next，计算过程十分繁琐。 时间预测的计算有过之而无不及。</p>
-<h2 id="2-_把站点插入轨迹集合里面">2. 把站点插入轨迹集合里面</h2>
-<p>如果把站点插入轨迹集合里面，计算位置以及预测时间的过程就会简化许多，这时就需要给TrackPoint增加类型信息进行区分(将来可能会加入红绿灯，拐点等类型) :</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> ( </div><div class="line">    Ordinary =  <span class="constant">iota</span></div><div class="line">    TurnPoint</div><div class="line">    Station</div><div class="line">    TrafficLight </div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> Kind <span class="typename">int</span></div><div class="line"></div><div class="line"><span class="keyword">type</span> TrackPoint <span class="keyword">struct</span> {</div><div class="line">	GeoPoint</div><div class="line">	preStationIndex	<span class="typename">int</span>  <span class="comment">//前一站</span></div><div class="line">	nextStationIndex	<span class="typename">int</span>  <span class="comment">//后一站</span></div><div class="line">	index	<span class="typename">int</span>   <span class="comment">//在点集中的次序</span></div><div class="line">	kind	Kind <span class="comment">//点类型</span></div><div class="line">}</div></pre></td></tr></table></figure>
-
-<p>由于站点也是轨迹集合的一员，位置计算时就不存在是否跨站问题了，  时间预测时到两站的距离也只需要计算两部分。</p>
-<p>本来为了使轨迹信息不致于受到站点的干扰，采用了第一种设计。但实现位置计算以及时间预测时，明显感觉各种计算都要围绕站点来进行，即使轨迹序列里不加站点，在其他地方还是会受到钳制。改用第二种设计之后，很多计算就变得自然许多，简洁许多，省了很多不必要的弯路。 借用《The Design of Design》的一句话就是：</p>
-<p></p><p></p><p></p>
-<div style="background-color:black; font:bold 17px italic red;padding-left:50px"><br>     The viewpoint is that of an engineer, focused on utility and effctiveness<br>      but also efficiency and elegance.<br><br></div>
-
-
-
-
+<p>为了区分这两种情况，还要利用上面的Cost函数，计算cur到底在pre-S2，还是S2-next，计算过程十分繁琐。 时间预测的计算有过之而无不及。<br>
       
     </div>
     <footer>
       
+        
+          <div class="alignleft">
+            <a href="/2014/09/18/about-design/#more" class="more-link">阅读全文</a>
+          </div>
         
         
       
@@ -228,43 +287,6 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-09-06T09:09:33.000Z"><a href="/2014/09/06/pattern-match-is-good/">9月 6 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/09/06/pattern-match-is-good/">模式匹配大法好</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h2 id="if,_while,_for">if, while, for</h2>
-<p>除了Hello,world之外的任何程序，几乎都离不开控制结构。比如if-then-else, while,for，其实这三种的基础说白了还是加了一层语法塘的goto语句。不过相比直接使用goto而言，程序的流程走向更容易被程序员掌握。 for主要用于重复次数明确的情形，while在循环条件已知时很合适。由于二者完全是在做同样的事情，以至于Rob Pike在Go中统一命名为for。<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/09/06/pattern-match-is-good/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -294,7 +316,7 @@
   
     <li><a href="/categories/JavaEE/">JavaEE</a><small>1</small></li>
   
-    <li><a href="/categories/Summary/">Summary</a><small>1</small></li>
+    <li><a href="/categories/Summary/">Summary</a><small>2</small></li>
   
     <li><a href="/categories/Web前端/">Web前端</a><small>1</small></li>
   
@@ -318,7 +340,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/C/" style="font-size: 10.00px;">C</a><a href="/tags/NLP/" style="font-size: 10.00px;">NLP</a><a href="/tags/design/" style="font-size: 10.00px;">design</a><a href="/tags/frontend,-caching,-web/" style="font-size: 10.00px;">frontend, caching, web</a><a href="/tags/javaee/" style="font-size: 10.00px;">javaee</a><a href="/tags/job/" style="font-size: 10.00px;">job</a><a href="/tags/movie/" style="font-size: 10.00px;">movie</a><a href="/tags/muse/" style="font-size: 10.00px;">muse</a><a href="/tags/note/" style="font-size: 10.00px;">note</a><a href="/tags/pattern,-fp/" style="font-size: 10.00px;">pattern, fp</a><a href="/tags/project/" style="font-size: 10.00px;">project</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/reading/" style="font-size: 20.00px;">reading</a><a href="/tags/reflect,-blog/" style="font-size: 10.00px;">reflect, blog</a><a href="/tags/storm,-job/" style="font-size: 10.00px;">storm, job</a><a href="/tags/struct/" style="font-size: 10.00px;">struct</a><a href="/tags/summary/" style="font-size: 10.00px;">summary</a><a href="/tags/tomcat/" style="font-size: 10.00px;">tomcat</a>
+    <a href="/tags/C/" style="font-size: 10.00px;">C</a><a href="/tags/NLP/" style="font-size: 10.00px;">NLP</a><a href="/tags/design/" style="font-size: 10.00px;">design</a><a href="/tags/frontend,-caching,-web/" style="font-size: 10.00px;">frontend, caching, web</a><a href="/tags/javaee/" style="font-size: 10.00px;">javaee</a><a href="/tags/job/" style="font-size: 20.00px;">job</a><a href="/tags/movie/" style="font-size: 10.00px;">movie</a><a href="/tags/muse/" style="font-size: 10.00px;">muse</a><a href="/tags/note/" style="font-size: 10.00px;">note</a><a href="/tags/pattern,-fp/" style="font-size: 10.00px;">pattern, fp</a><a href="/tags/project/" style="font-size: 10.00px;">project</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/reading/" style="font-size: 20.00px;">reading</a><a href="/tags/reflect,-blog/" style="font-size: 10.00px;">reflect, blog</a><a href="/tags/storm,-job/" style="font-size: 10.00px;">storm, job</a><a href="/tags/struct/" style="font-size: 10.00px;">struct</a><a href="/tags/summary/" style="font-size: 20.00px;">summary</a><a href="/tags/tomcat/" style="font-size: 10.00px;">tomcat</a>
   </div>
 </div>
 

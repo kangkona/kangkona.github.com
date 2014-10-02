@@ -3,21 +3,20 @@
 <head>
   <meta charset="utf-8">
   
-  <title>8月工作总结 | Gray Times</title>
+  <title>9月工作总结 | Gray Times</title>
   <meta name="author" content="Kangkona D.Han">
   
-  <meta name="description" content="我说生命的确是黑暗的，除非是有了激励；
-一切的激励都是盲目的，除非是有了知识；
-一切的知识都是徒然的，除非是有了工作；
-一切的工作都是虚空的，除非是有了爱；
-当你仁爱地工作的时候，你便与自己，与人类，与上帝联系为一。
+  <meta name="description" content="工作方面：
+Done
 
-                                             ------- 纪伯伦《论工作》">
+利用其他公司提供的数据补足线路信息由于存在线路名称不一致，站点名称不一致，经纬度不一致等问题，为了最大化利用资料，同时又不致于降低数据质量，采取了名称优先，经纬度范围逐渐扩大的匹配方式，最终使资料的利用率达90%以上，减少了200量以上无法确定目标的车。
+
+微信版本客户端升级">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="8月工作总结"/>
+  <meta property="og:title" content="9月工作总结"/>
   <meta property="og:site_name" content="Gray Times"/>
 
   
@@ -58,56 +57,51 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-08-31T14:12:37.000Z"><a href="/2014/08/31/plan-2014-08/">8月 31 2014</a></time>
+        <time datetime="2014-10-02T13:23:35.000Z"><a href="/2014/10/02/summary-2014-09/">10月 2 2014</a></time>
       
       
   
-    <h1 class="title">8月工作总结</h1>
+    <h1 class="title">9月工作总结</h1>
   
 
     </header>
     <div class="entry">
       
-        <pre><code><span class="comment">我说生命的确是黑暗的，除非是有了激励；</span>
-<span class="comment">一切的激励都是盲目的，除非是有了知识；</span>
-<span class="comment">一切的知识都是徒然的，除非是有了工作；</span>
-<span class="comment">一切的工作都是虚空的，除非是有了爱；</span>
-<span class="comment">当你仁爱地工作的时候，你便与自己，与人类，与上帝联系为一。</span>
-
-                                             <span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span> <span class="comment">纪伯伦《论工作》</span>
-</code></pre><p><a id="more"></a></p>
-<h2 id="工作内容">工作内容</h2>
-<ul>
-<li>XBus 3.1 API</li>
-<li>熟悉XBus整体架构</li>
-<li>静态数据维护</li>
-</ul>
-<h3 id="Xbus_3-1_API">Xbus 3.1 API</h3>
-<ul>
-<li>加密，严格的参数检查</li>
-<li>充分利用新Backend特性  </li>
-<li>碎片信息集中(MySQL)</li>
-<li>性能优化(加Pool, 预加载内存)</li>
-</ul>
-<h3 id="熟悉XBus整体架构">熟悉XBus整体架构</h3>
-<ul>
-<li>整体设计 </li>
-<li>Storm工作方式 </li>
-<li>Backend实现细节</li>
-</ul>
-<h3 id="静态数据维护">静态数据维护</h3>
-<ul>
-<li>已有信息补充完整</li>
-<li>新增40条线路信息</li>
-</ul>
-<h3 id="下月工作计划">下月工作计划</h3>
-<p>深入熟悉后台实现细节<br>API维护<br>多看点书，少刷微博</p>
-<h3 id="关于讨论班">关于讨论班</h3>
-<ul>
-<li>每周一次，每次一个主题 </li>
-<li>自由组织，开放参与</li>
-<li>讲解时间：讨论时间 ～ 1：1</li>
-</ul>
+        <h1 id="工作方面：">工作方面：</h1>
+<h2 id="Done">Done</h2>
+<ol>
+<li><p>利用其他公司提供的数据补足线路信息<br>由于存在线路名称不一致，站点名称不一致，经纬度不一致等问题，为了最大化利用资料，同时又不致于降低数据质量，采取了名称优先，经纬度范围逐渐扩大的匹配方式，最终使资料的利用率达90%以上，减少了200量以上无法确定目标的车。</p>
+</li>
+<li><p>微信版本客户端升级，网页客户端升级<br>微信版本升级只是了解了微信公众平台的运作方式，并没有太多技术细节；网页客户端参与也很少。</p>
+</li>
+<li><p>轨迹平滑处理<br>由于存在包重传，GPS漂移，站点信息不准，并车等问题，得到的轨迹点存在很多迂回交叉的现象，这部分的处理花了一些心思。先是仿照受力分析搞了个走向分析：如果一个点与前后点的lat变化，lng都不同，则认为其是一个迂回点，将其删除，从头开始迭代。 后来发现会处理连续的迂回点，走向分析是无法处理的，进而想到车行驶时角度不会很陡峭，便根据线路的角度来发现迂回点，角度分析可以可以解决连续迂回点的问题，但有时迂回点引起的角度并不是很陡峭。所以最后综合走向分析和角度分析，发现效果不错。</p>
+</li>
+<li><p>利用轨迹计算<br>这里最大的体会是设计真的很重要！ 由于开始设计不合理，在实现时发现特别繁琐。后来经过一番冥思苦想， 只保留了最简单的数据结构，把大量需要进行计算的常值预计算，加载到内存。由于设计的数据结构简单，便有了很强的兼容性，原本需要一大堆if…else的地方都变成了统一的逻辑。真庆幸没有在扔掉烂代码时犹豫：)</p>
+</li>
+</ol>
+<h2 id="TODO">TODO</h2>
+<ol>
+<li>测试轨迹计算实现，对比和旧后台的变化;</li>
+<li>实现数据源热切换；</li>
+<li>去MySQL, 将频繁使用的数据迁移到内存中去；</li>
+<li>GPS数据延迟时的推移估算。</li>
+</ol>
+<h1 id="学习方面：">学习方面：</h1>
+<h2 id="Done-1">Done</h2>
+<p>一篇论文也没有看，还真是惭愧。。。。。。开始跟Coursera上的《机器学习基石》和《机器学习》课程，时间比较紧，希望能坚持到课程完结。</p>
+<h2 id="TODO-1">TODO</h2>
+<ol>
+<li>看三篇分布式/并行计算/ML领域的经典论文；</li>
+<li>跟上Coursera上的课程；</li>
+<li>完整看完两本书，无论何种类型</li>
+</ol>
+<h1 id="生活方面">生活方面</h1>
+<h2 id="出游">出游</h2>
+<p>出去玩了一次，海边踏浪，真人CS，悬崖餐厅，山顶小木屋。。。。。。发现这些并不怎么吸引我，感觉最好玩的还是捡贝壳，最后还带了好多回来，哈哈。</p>
+<h2 id="娱乐">娱乐</h2>
+<p>八月看完了《冰与火之歌》，补得过了头，这个月看的很好的影片有： 黑色幽默的《Frank》,  看完真心觉得自己和音乐无缘了。。。。 关于民主的《辩护人》，据说是以韩国已故总统卢武铉为原型的，韩国大叔的演技和《杀人回忆》一样棒。看完这部电影，真有一种去香港中环看看的冲动。 国产片《绣春刀》情节很紧凑，三兄弟各有所执，虽然讲的是明朝的那些事儿，不过仍然有很强的现实讽刺感。</p>
+<h2 id="计划">计划</h2>
+<p>说好的跑步一直没有进行，健身也是玩了两下就坚持不下了。目标是每周运动三次，不求减肥，但求健康。</p>
 
       
     </div>
@@ -152,16 +146,14 @@
 
  <nav id="pagination" >
     
-    <a href="/2014/09/04/storm-real-time-case1/" class="alignleft prev" >上一页</a>
     
-    
-    <a href="/2014/08/06/tomcat-tune/" class="alignright next" >下一页</a>
+    <a href="/2014/09/18/about-design/" class="alignright next" >下一页</a>
     
     <div class="clearfix"></div>
 </nav>
 <section id="comment">
 <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key="2014/08/31/plan-2014-08/" data-title="8月工作总结" data-url="http://yoursite.com/2014/08/31/plan-2014-08/"></div>
+    <div class="ds-thread" data-thread-key="2014/10/02/summary-2014-09/" data-title="9月工作总结" data-url="http://yoursite.com/2014/10/02/summary-2014-09/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
@@ -200,7 +192,7 @@ var duoshuoQuery = {short_name:"kangkona"};
   
     <li><a href="/categories/JavaEE/">JavaEE</a><small>1</small></li>
   
-    <li><a href="/categories/Summary/">Summary</a><small>1</small></li>
+    <li><a href="/categories/Summary/">Summary</a><small>2</small></li>
   
     <li><a href="/categories/Web前端/">Web前端</a><small>1</small></li>
   
@@ -224,7 +216,7 @@ var duoshuoQuery = {short_name:"kangkona"};
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/C/" style="font-size: 10.00px;">C</a><a href="/tags/NLP/" style="font-size: 10.00px;">NLP</a><a href="/tags/design/" style="font-size: 10.00px;">design</a><a href="/tags/frontend,-caching,-web/" style="font-size: 10.00px;">frontend, caching, web</a><a href="/tags/javaee/" style="font-size: 10.00px;">javaee</a><a href="/tags/job/" style="font-size: 10.00px;">job</a><a href="/tags/movie/" style="font-size: 10.00px;">movie</a><a href="/tags/muse/" style="font-size: 10.00px;">muse</a><a href="/tags/note/" style="font-size: 10.00px;">note</a><a href="/tags/pattern,-fp/" style="font-size: 10.00px;">pattern, fp</a><a href="/tags/project/" style="font-size: 10.00px;">project</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/reading/" style="font-size: 20.00px;">reading</a><a href="/tags/reflect,-blog/" style="font-size: 10.00px;">reflect, blog</a><a href="/tags/storm,-job/" style="font-size: 10.00px;">storm, job</a><a href="/tags/struct/" style="font-size: 10.00px;">struct</a><a href="/tags/summary/" style="font-size: 10.00px;">summary</a><a href="/tags/tomcat/" style="font-size: 10.00px;">tomcat</a>
+    <a href="/tags/C/" style="font-size: 10.00px;">C</a><a href="/tags/NLP/" style="font-size: 10.00px;">NLP</a><a href="/tags/design/" style="font-size: 10.00px;">design</a><a href="/tags/frontend,-caching,-web/" style="font-size: 10.00px;">frontend, caching, web</a><a href="/tags/javaee/" style="font-size: 10.00px;">javaee</a><a href="/tags/job/" style="font-size: 20.00px;">job</a><a href="/tags/movie/" style="font-size: 10.00px;">movie</a><a href="/tags/muse/" style="font-size: 10.00px;">muse</a><a href="/tags/note/" style="font-size: 10.00px;">note</a><a href="/tags/pattern,-fp/" style="font-size: 10.00px;">pattern, fp</a><a href="/tags/project/" style="font-size: 10.00px;">project</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/reading/" style="font-size: 20.00px;">reading</a><a href="/tags/reflect,-blog/" style="font-size: 10.00px;">reflect, blog</a><a href="/tags/storm,-job/" style="font-size: 10.00px;">storm, job</a><a href="/tags/struct/" style="font-size: 10.00px;">struct</a><a href="/tags/summary/" style="font-size: 20.00px;">summary</a><a href="/tags/tomcat/" style="font-size: 10.00px;">tomcat</a>
   </div>
 </div>
 
