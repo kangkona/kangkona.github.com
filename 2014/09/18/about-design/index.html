@@ -6,38 +6,7 @@
   <title>一次设计总结 | Gray Times</title>
   <meta name="author" content="Kangkona D.Han">
   
-  <meta name="description" content="做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:
-位置计算
-S1         S2        S3             S4                 S5            S6            S7 
-                               P
-为了得到P的位置，需要利用一个评价公式: 假设P到前一站距离Pre, 到后一站距离Next，两站之间距离Between，有如下公式：
-   Cost =  Pre + Next - Between
-我们认为使Cost取值最小的两个站即为P所在位置的前后站。
-时间预测
-比如我们要估算P到S7站点的到站时间，可以取该车次所有车最近5趟S3到S7的时间 T_AVG，所以预估时间公式为：
-T_ESTIMATE = Distance(P-&amp;gt;S4-&amp;gt; ... -&amp;gt;S7) / Distance(S3-&amp;gt;S4-&amp;gt; .... -&amp;gt; S7)   *  T_AVG
-BUT，现在通过历史数据分析，提取出了线路的轨迹信息，就是除了站点以外，还有很多有序的轨迹点可以代表线路。这些点带来的好处是： 两个站之间的轨迹是曲线(甚至环形都是很常见的)的话，如果只有站点，连出的轨迹就是一条直线段，模拟效果很差；而点多了以后，几乎就可以还原出真实的线路轨迹。
-在考虑如何利用这些点的时候，就碰到一个设计权衡的问题：
-1.  不把站点插入轨迹点集里面
-得到的轨迹点集合已经可以很好模拟真实情况了，而站点信息(主要是经纬度)由于是人工采集的，会存在一些偏差，把站点插入轨迹点集之后的模拟效果反而会变差(抽样发现会出现迂回的情况)。但是仍然需要记录每个轨迹点的位置信息(位于哪两站)，设计轨迹点数据结构如下：
-1234567891011type GeoPoint  struct {	lat	float	lng	float}type TrackPoint struct {	GeoPoint	preStationIndex	int  //前一站	nextStationIndex	int  //后一站	index	int   //在点集中的次序}
-
-这时进行位置计算，就需要用轨迹点去计算:  先算出在哪两个点之间，然后根据前后点的关系，计算出在哪两个站点之间，这时计算比较复杂，可以分成如下情况：
-
-前后点没有跨站
-   /**
-     *    S1  p1 . . .   pre  cur  next   . .  p2  S2 . . . S3
-     *  
-     *  Path(S1, cur) =  Dis(cur, pre) + Σ PointDis(p1-pre) + Dis(S1, p1)
-     *  Path(S2, cur) =  Dis(cur, next) + Σ PointDis(next-p2) + Dis(p2, S2)
-     */
-
-前后点跨站
- //    case1:  S1  . . .   pre   cur  S2   next  . . . . S3
-//     case2:  S1  . . .   pre   S2   cur  next  . . . . S3
-
-
-为了区分这两种情况，还要利用上面的Cost函数，计算cur到底在pre-S2，还是S2-next，计算过程十分繁琐。 时间预测的计算有过之而无不及。">
+  <meta name="description" content="做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -93,7 +62,7 @@ BUT，现在通过历史数据分析，提取出了线路的轨迹信息，就�
     </header>
     <div class="entry">
       
-        <p>做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:</p>
+        <p>做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:<br><a id="more"></a></p>
 <h2 id="位置计算">位置计算</h2>
 <pre><code><span class="title">S1</span>         S2        S3             S4                 S5            S6            S7 
                                P
@@ -124,7 +93,7 @@ BUT，现在通过历史数据分析，提取出了线路的轨迹信息，就�
 //     <span class="keyword">case</span>2:  S1  . . .   pre   S2   cur  next  . . . . S3
 </code></pre></li>
 </ul>
-<p>为了区分这两种情况，还要利用上面的Cost函数，计算cur到底在pre-S2，还是S2-next，计算过程十分繁琐。 时间预测的计算有过之而无不及。<br><a id="more"></a></p>
+<p>为了区分这两种情况，还要利用上面的Cost函数，计算cur到底在pre-S2，还是S2-next，计算过程十分繁琐。 时间预测的计算有过之而无不及。</p>
 <h2 id="2-_把站点插入轨迹集合里面">2. 把站点插入轨迹集合里面</h2>
 <p>如果把站点插入轨迹集合里面，计算位置以及预测时间的过程就会简化许多，这时就需要给TrackPoint增加类型信息进行区分(将来可能会加入红绿灯，拐点等类型) :</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> ( </div><div class="line">    Ordinary =  <span class="constant">iota</span></div><div class="line">    TurnPoint</div><div class="line">    Station</div><div class="line">    TrafficLight </div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> Kind <span class="typename">int</span></div><div class="line"></div><div class="line"><span class="keyword">type</span> TrackPoint <span class="keyword">struct</span> {</div><div class="line">	GeoPoint</div><div class="line">	preStationIndex	<span class="typename">int</span>  <span class="comment">//前一站</span></div><div class="line">	nextStationIndex	<span class="typename">int</span>  <span class="comment">//后一站</span></div><div class="line">	index	<span class="typename">int</span>   <span class="comment">//在点集中的次序</span></div><div class="line">	kind	Kind <span class="comment">//点类型</span></div><div class="line">}</div></pre></td></tr></table></figure>
