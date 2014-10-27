@@ -3,21 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>8月工作总结 | Gray Times</title>
+  <title>人性化排序 | Gray Times</title>
   <meta name="author" content="Kangkona D.Han">
   
-  <meta name="description" content="我说生命的确是黑暗的，除非是有了激励；
-一切的激励都是盲目的，除非是有了知识；
-一切的知识都是徒然的，除非是有了工作；
-一切的工作都是虚空的，除非是有了爱；
-当你仁爱地工作的时候，你便与自己，与人类，与上帝联系为一。
-
-                                             ------- 纪伯伦《论工作》">
+  <meta name="description" content="对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：
+    1. 按自然顺序排列；
+    2. 按相似度由高至低排列；
+    3. 按信息的活性(热度)进行排列。
+当然，最糟糕也最常见的是下面这种方式">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="8月工作总结"/>
+  <meta property="og:title" content="人性化排序"/>
   <meta property="og:site_name" content="Gray Times"/>
 
   
@@ -58,56 +56,32 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-08-31T14:12:37.000Z"><a href="/2014/08/31/summary-2014-08/">8月 31 2014</a></time>
+        <time datetime="2014-10-27T14:43:29.000Z"><a href="/2014/10/27/friendly-sort/">10月 27 2014</a></time>
       
       
   
-    <h1 class="title">8月工作总结</h1>
+    <h1 class="title">人性化排序</h1>
   
 
     </header>
     <div class="entry">
       
-        <pre><code><span class="comment">我说生命的确是黑暗的，除非是有了激励；</span>
-<span class="comment">一切的激励都是盲目的，除非是有了知识；</span>
-<span class="comment">一切的知识都是徒然的，除非是有了工作；</span>
-<span class="comment">一切的工作都是虚空的，除非是有了爱；</span>
-<span class="comment">当你仁爱地工作的时候，你便与自己，与人类，与上帝联系为一。</span>
+        <p>对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：</p>
+<pre><code>    1. 按自然顺序排列；
+    2. 按相似度由高至低排列；
+    3. 按信息的活性(热度)进行排列。
+</code></pre><p>当然，最糟糕也最常见的是下面这种方式：完全不做任何排序。</p>
+<p>最近碰到的一个应用场景让我对此进行了反思。我们的实时公交查询系统为其他App开发者提供了这样的一个API：根据用户的搜索内容返回线路名称。现在不妨假设用户输入了一个 “1”，后台进行查询，找到所有与 “1” 有关的线路，最开始我们的输出是无序的:<br>                  81,  17, 201路， 快线1号, 11, 1路, 168 , 高快巴士1号线 ….</p>
+<p>结果竟然返回了221个与1有关的线路，这样的展示结果显然是会让用户骂人的。后来决定先返回所有 “1” 开头的线路，其余自然排序:<br>               11, 17, 168, 1路，201路， 81, 高快巴士1号线，快线1号 …<br>这次结果好了很多，但是1路竟然排在168后面，仍然会让人不爽，所以按照相似度进行排序:<br>               11，17，81，1路，168，201路，…. 快线1号，高快巴士1号线</p>
+<p>这次达到了预想的效果，但把快线1号，高快巴士1号线这样比较难记，难输入的线路放到了最后，实际上用户如果只输入 “1” 进行查询，很可能要找的就是 “快线1号” 或者 “高快巴士1号线”，所以把这种输入成本高的线路挪到了前面:<br>            11, 17, 1路，168，快线1号，高快巴士1号线，201路，81 ….</p>
+<p>实现代码：</p>
+<figure class="highlight Java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">Arrays.sort(sortedLineNames, <span class="keyword">new</span> Comparator&lt;Object&gt;(){  </div><div class="line">          <span class="annotation">@Override</span>  </div><div class="line">          <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span>(Object b1, Object b2) {  </div><div class="line">          	String s1 = (String)b1;</div><div class="line">          	String s2 = (String)b2;</div><div class="line">          	</div><div class="line">          	<span class="keyword">if</span> (s1.startsWith(searchString) && !s2.startsWith(searchString)) {</div><div class="line">          		<span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">          	} </div><div class="line">          	<span class="keyword">else</span> <span class="keyword">if</span>(!s1.startsWith(searchString) && s2.startsWith(searchString)) {</div><div class="line">          		<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">          	} </div><div class="line">          	<span class="keyword">else</span> <span class="keyword">if</span> (! s1.startsWith(searchString) && !s2.startsWith(searchString)) {</div><div class="line">          			<span class="keyword">return</span> s2.compareTo(s1);</div><div class="line">          	}</div><div class="line">          	<span class="keyword">else</span> {</div><div class="line">          		<span class="keyword">return</span> s1.compareTo(s2);</div><div class="line">          	}</div><div class="line">          }             </div><div class="line">      });</div></pre></td></tr></table></figure>
 
-                                             <span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span> <span class="comment">纪伯伦《论工作》</span>
-</code></pre><p><a id="more"></a></p>
-<h2 id="工作内容">工作内容</h2>
-<ul>
-<li>XBus 3.1 API</li>
-<li>熟悉XBus整体架构</li>
-<li>静态数据维护</li>
-</ul>
-<h3 id="Xbus_3-1_API">Xbus 3.1 API</h3>
-<ul>
-<li>加密，严格的参数检查</li>
-<li>充分利用新Backend特性  </li>
-<li>碎片信息集中(MySQL)</li>
-<li>性能优化(加Pool, 预加载内存)</li>
-</ul>
-<h3 id="熟悉XBus整体架构">熟悉XBus整体架构</h3>
-<ul>
-<li>整体设计 </li>
-<li>Storm工作方式 </li>
-<li>Backend实现细节</li>
-</ul>
-<h3 id="静态数据维护">静态数据维护</h3>
-<ul>
-<li>已有信息补充完整</li>
-<li>新增40条线路信息</li>
-</ul>
-<h3 id="下月工作计划">下月工作计划</h3>
-<p>深入熟悉后台实现细节<br>API维护<br>多看点书，少刷微博</p>
-<h3 id="关于讨论班">关于讨论班</h3>
-<ul>
-<li>每周一次，每次一个主题 </li>
-<li>自由组织，开放参与</li>
-<li>讲解时间：讨论时间 ～ 1：1</li>
-</ul>
+<p>当然，Java 8引入lambda之后，可以简写为：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Arrays.sort<span class="function"><span class="params">(sortedLineNames, (s1, s2) -&gt;  s1.startsWith(searchString) && !s2.startsWith(searchString) ? -<span class="number">1</span> :</span></span></div><div class="line">                                                                                 !s1.startsWith(searchString) && s2.startsWith(searchString) ?  <span class="number">1</span> :</div><div class="line">                                                                                 !s1.startsWith(searchString) && !s2.startsWith(searchString) ? s2.compareTo(s1) :s1.compareTo(s2));</div></pre></td></tr></table></figure>
+
+<p>在多数情况下，这些策略已经可以组合出不错的效果了，但这就足够了么？ 用户搜索的目的是希望找到对自己有价值的信息，而排序最终是为了讨好用户：在信息呈现之前，猜测一下用户的心理，认为用户最想要什么，就把什么放在前面，让用户用最少的时间成本获取最有价值的信息。所以为了更懂用户，可能还需要对日志进行分析，统计每条线路的搜索频率，得出线路的活跃程度，每次尽可能把活性比较大的线路放置在返回结果的前面。更进一步，可以看看线路活性的分布情况和规律，得出更有指导性的结论。</p>
+<p>写到这里，突然感觉排序分明就是一种人工智能的东东，这也无怪乎那些做搜索的公司都铆足了劲儿搞深度学习。 在这样一个时代，不懂人心就得死啊。</p>
 
       
     </div>
@@ -116,13 +90,13 @@
         
   
   <div class="categories">
-    <a href="/categories/Summary/">Summary</a>
+    <a href="/categories/Experience/">Experience</a>
   </div>
 
         
   
   <div class="tags">
-    <a href="/tags/job/">job</a>, <a href="/tags/summary/">summary</a>
+    <a href="/tags/用户体验,-Sort,-Search/">用户体验, Sort, Search</a>
   </div>
 
         
@@ -152,16 +126,14 @@
 
  <nav id="pagination" >
     
-    <a href="/2014/09/04/storm-real-time-case1/" class="alignleft prev" >上一页</a>
     
-    
-    <a href="/2014/08/06/tomcat-tune/" class="alignright next" >下一页</a>
+    <a href="/2014/10/02/summary-2014-09/" class="alignright next" >下一页</a>
     
     <div class="clearfix"></div>
 </nav>
 <section id="comment">
 <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key="2014/08/31/summary-2014-08/" data-title="8月工作总结" data-url="http://yoursite.com/2014/08/31/summary-2014-08/"></div>
+    <div class="ds-thread" data-thread-key="2014/10/27/friendly-sort/" data-title="人性化排序" data-url="http://yoursite.com/2014/10/27/friendly-sort/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">

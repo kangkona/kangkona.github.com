@@ -51,6 +51,54 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2014-10-27T14:43:29.000Z"><a href="/2014/10/27/friendly-sort/">10月 27 2014</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2014/10/27/friendly-sort/">人性化排序</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：</p>
+<pre><code>    1. 按自然顺序排列；
+    2. 按相似度由高至低排列；
+    3. 按信息的活性(热度)进行排列。
+</code></pre><p>当然，最糟糕也最常见的是下面这种方式：完全不做任何排序。</p>
+<p>最近碰到的一个应用场景让我对此进行了反思。我们的实时公交查询系统为其他App开发者提供了这样的一个API：根据用户的搜索内容返回线路名称。现在不妨假设用户输入了一个 “1”，后台进行查询，找到所有与 “1” 有关的线路，最开始我们的输出是无序的:<br>                  81,  17, 201路， 快线1号, 11, 1路, 168 , 高快巴士1号线 ….</p>
+<p>结果竟然返回了221个与1有关的线路，这样的展示结果显然是会让用户骂人的。后来决定先返回所有 “1” 开头的线路，其余自然排序:<br>               11, 17, 168, 1路，201路， 81, 高快巴士1号线，快线1号 …<br>这次结果好了很多，但是1路竟然排在168后面，仍然会让人不爽，所以按照相似度进行排序:<br>               11，17，81，1路，168，201路，…. 快线1号，高快巴士1号线</p>
+<p>这次达到了预想的效果，但把快线1号，高快巴士1号线这样比较难记，难输入的线路放到了最后，实际上用户如果只输入 “1” 进行查询，很可能要找的就是 “快线1号” 或者 “高快巴士1号线”，所以把这种输入成本高的线路挪到了前面:<br>            11, 17, 1路，168，快线1号，高快巴士1号线，201路，81 ….</p>
+<p>实现代码：</p>
+<figure class="highlight Java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">Arrays.sort(sortedLineNames, <span class="keyword">new</span> Comparator&lt;Object&gt;(){  </div><div class="line">          <span class="annotation">@Override</span>  </div><div class="line">          <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span>(Object b1, Object b2) {  </div><div class="line">          	String s1 = (String)b1;</div><div class="line">          	String s2 = (String)b2;</div><div class="line">          	</div><div class="line">          	<span class="keyword">if</span> (s1.startsWith(searchString) && !s2.startsWith(searchString)) {</div><div class="line">          		<span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">          	} </div><div class="line">          	<span class="keyword">else</span> <span class="keyword">if</span>(!s1.startsWith(searchString) && s2.startsWith(searchString)) {</div><div class="line">          		<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">          	} </div><div class="line">          	<span class="keyword">else</span> <span class="keyword">if</span> (! s1.startsWith(searchString) && !s2.startsWith(searchString)) {</div><div class="line">          			<span class="keyword">return</span> s2.compareTo(s1);</div><div class="line">          	}</div><div class="line">          	<span class="keyword">else</span> {</div><div class="line">          		<span class="keyword">return</span> s1.compareTo(s2);</div><div class="line">          	}</div><div class="line">          }             </div><div class="line">      });</div></pre></td></tr></table></figure>
+
+<p>当然，Java 8引入lambda之后，可以简写为：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Arrays.sort<span class="function"><span class="params">(sortedLineNames, (s1, s2) -&gt;  s1.startsWith(searchString) && !s2.startsWith(searchString) ? -<span class="number">1</span> :</span></span></div><div class="line">                                                                                 !s1.startsWith(searchString) && s2.startsWith(searchString) ?  <span class="number">1</span> :</div><div class="line">                                                                                 !s1.startsWith(searchString) && !s2.startsWith(searchString) ? s2.compareTo(s1) :s1.compareTo(s2));</div></pre></td></tr></table></figure>
+
+<p>在多数情况下，这些策略已经可以组合出不错的效果了，但这就足够了么？ 用户搜索的目的是希望找到对自己有价值的信息，而排序最终是为了讨好用户：在信息呈现之前，猜测一下用户的心理，认为用户最想要什么，就把什么放在前面，让用户用最少的时间成本获取最有价值的信息。所以为了更懂用户，可能还需要对日志进行分析，统计每条线路的搜索频率，得出线路的活跃程度，每次尽可能把活性比较大的线路放置在返回结果的前面。更进一步，可以看看线路活性的分布情况和规律，得出更有指导性的结论。</p>
+<p>写到这里，突然感觉排序分明就是一种人工智能的东东，这也无怪乎那些做搜索的公司都铆足了劲儿搞深度学习。 在这样一个时代，不懂人心就得死啊。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2014-10-02T13:23:35.000Z"><a href="/2014/10/02/summary-2014-09/">10月 2 2014</a></time>
       
       
@@ -220,42 +268,6 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-09-07T15:14:25.000Z"><a href="/2014/09/07/the-meaning-of-blogging/">9月 7 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/09/07/the-meaning-of-blogging/">写博客的意义</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>今天是一个传媒泛滥的时代， 不过各种渠道的传播内容基本大同小异：幽默吐槽加讽刺，惊悚暴力被河蟹，心灵鸡汤看星座，一起来骂河南人。。。。。。
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/09/07/the-meaning-of-blogging/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
@@ -280,6 +292,8 @@
     <li><a href="/categories/C/">C</a><small>1</small></li>
   
     <li><a href="/categories/Design/">Design</a><small>1</small></li>
+  
+    <li><a href="/categories/Experience/">Experience</a><small>1</small></li>
   
     <li><a href="/categories/FP/">FP</a><small>1</small></li>
   
@@ -309,7 +323,7 @@
 <div class="widget tagcloud">
   <h3 class="title">标签云</h3>
   <div class="entry">
-    <a href="/tags/C/" style="font-size: 10.00px;">C</a><a href="/tags/NLP/" style="font-size: 10.00px;">NLP</a><a href="/tags/design/" style="font-size: 10.00px;">design</a><a href="/tags/frontend,-caching,-web/" style="font-size: 10.00px;">frontend, caching, web</a><a href="/tags/javaee/" style="font-size: 10.00px;">javaee</a><a href="/tags/job/" style="font-size: 20.00px;">job</a><a href="/tags/movie/" style="font-size: 10.00px;">movie</a><a href="/tags/muse/" style="font-size: 10.00px;">muse</a><a href="/tags/note/" style="font-size: 10.00px;">note</a><a href="/tags/pattern,-fp/" style="font-size: 10.00px;">pattern, fp</a><a href="/tags/project/" style="font-size: 10.00px;">project</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/reading/" style="font-size: 20.00px;">reading</a><a href="/tags/reflect,-blog/" style="font-size: 10.00px;">reflect, blog</a><a href="/tags/storm,-job/" style="font-size: 10.00px;">storm, job</a><a href="/tags/struct/" style="font-size: 10.00px;">struct</a><a href="/tags/summary/" style="font-size: 20.00px;">summary</a><a href="/tags/tomcat/" style="font-size: 10.00px;">tomcat</a>
+    <a href="/tags/C/" style="font-size: 10.00px;">C</a><a href="/tags/NLP/" style="font-size: 10.00px;">NLP</a><a href="/tags/design/" style="font-size: 10.00px;">design</a><a href="/tags/frontend,-caching,-web/" style="font-size: 10.00px;">frontend, caching, web</a><a href="/tags/javaee/" style="font-size: 10.00px;">javaee</a><a href="/tags/job/" style="font-size: 20.00px;">job</a><a href="/tags/movie/" style="font-size: 10.00px;">movie</a><a href="/tags/muse/" style="font-size: 10.00px;">muse</a><a href="/tags/note/" style="font-size: 10.00px;">note</a><a href="/tags/pattern,-fp/" style="font-size: 10.00px;">pattern, fp</a><a href="/tags/project/" style="font-size: 10.00px;">project</a><a href="/tags/python/" style="font-size: 10.00px;">python</a><a href="/tags/reading/" style="font-size: 20.00px;">reading</a><a href="/tags/reflect,-blog/" style="font-size: 10.00px;">reflect, blog</a><a href="/tags/storm,-job/" style="font-size: 10.00px;">storm, job</a><a href="/tags/struct/" style="font-size: 10.00px;">struct</a><a href="/tags/summary/" style="font-size: 20.00px;">summary</a><a href="/tags/tomcat/" style="font-size: 10.00px;">tomcat</a><a href="/tags/用户体验,-Sort,-Search/" style="font-size: 10.00px;">用户体验, Sort, Search</a>
   </div>
 </div>
 
