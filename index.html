@@ -66,17 +66,22 @@
     2. 按相似度由高至低排列；
     3. 按信息的活性(热度)进行排列。
 </code></pre><p>当然，最糟糕也最常见的是下面这种方式：完全不做任何排序。</p>
-<p>最近碰到的一个应用场景让我对此进行了反思。我们的实时公交查询系统为其他App开发者提供了这样的一个API：根据用户的搜索内容返回线路名称。现在不妨假设用户输入了一个 “1”，后台进行查询，找到所有与 “1” 有关的线路，最开始我们的输出是无序的:<br>                  81,  17, 201路， 快线1号, 11, 1路, 168 , 高快巴士1号线 ….</p>
-<p>结果竟然返回了221个与1有关的线路，这样的展示结果显然是会让用户骂人的。后来决定先返回所有 “1” 开头的线路，其余自然排序:<br>               11, 17, 168, 1路，201路， 81, 高快巴士1号线，快线1号 …<br>这次结果好了很多，但是1路竟然排在168后面，仍然会让人不爽，所以按照相似度进行排序:<br>               11，17，81，1路，168，201路，…. 快线1号，高快巴士1号线</p>
-<p>这次达到了预想的效果，但把快线1号，高快巴士1号线这样比较难记，难输入的线路放到了最后，实际上用户如果只输入 “1” 进行查询，很可能要找的就是 “快线1号” 或者 “高快巴士1号线”，所以把这种输入成本高的线路挪到了前面:<br>            11, 17, 1路，168，快线1号，高快巴士1号线，201路，81 ….</p>
-<p>实现代码：</p>
+<p>最近碰到的一个应用场景让我对此进行了反思。我们的实时公交查询系统为其他App开发者提供了这样的一个API：根据用户的搜索内容返回线路名称。现在不妨假设用户输入了一个 “1”，后台进行查询，找到所有与 “1” 有关的线路，最开始我们的输出是无序的:</p>
+<pre><code>               <span class="number">81</span>,  <span class="number">17</span>, <span class="number">201</span>路， 快线<span class="number">1</span>号, <span class="number">11</span>, <span class="number">1</span>路, <span class="number">168</span> , 高快巴士<span class="number">1</span>号线 ....
+</code></pre><p>结果竟然返回了221个与1有关的线路，这样的展示结果显然是会让用户骂人的。后来决定先返回所有 “1” 开头的线路，其余自然排序:</p>
+<pre><code>              <span class="number">11</span>, <span class="number">17</span>, <span class="number">168</span>, <span class="number">1</span>路，<span class="number">201</span>路， <span class="number">81</span>, 高快巴士<span class="number">1</span>号线，快线<span class="number">1</span>号 <span class="keyword">...</span>
+</code></pre><p>这次结果好了很多，但是1路竟然排在168后面，仍然会让人不爽，所以按照相似度进行排序:</p>
+<pre><code>              <span class="number">11</span>，<span class="number">17</span>，<span class="number">81</span>，<span class="number">1</span>路，<span class="number">168</span>，<span class="number">201</span>路，<span class="attribute">...</span><span class="built_in">.</span> 快线<span class="number">1</span>号，高快巴士<span class="number">1</span>号线
+</code></pre><p>这次达到了预想的效果，但把快线1号，高快巴士1号线这样比较难记，难输入的线路放到了最后，实际上用户如果只输入 “1” 进行查询，很可能要找的就是 “快线1号” 或者 “高快巴士1号线”，所以把这种输入成本高的线路挪到了前面:</p>
+<pre><code>              <span class="number">11</span>, <span class="number">17</span>, <span class="number">1</span>路，<span class="number">168</span>，快线<span class="number">1</span>号，高快巴士<span class="number">1</span>号线，<span class="number">201</span>路，<span class="number">81</span> ....
+</code></pre><p>实现代码：</p>
 <figure class="highlight Java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">Arrays.sort(sortedLineNames, <span class="keyword">new</span> Comparator&lt;Object&gt;(){  </div><div class="line">          <span class="annotation">@Override</span>  </div><div class="line">          <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span>(Object b1, Object b2) {  </div><div class="line">          	String s1 = (String)b1;</div><div class="line">          	String s2 = (String)b2;</div><div class="line">          	</div><div class="line">          	<span class="keyword">if</span> (s1.startsWith(searchString) && !s2.startsWith(searchString)) {</div><div class="line">          		<span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">          	} </div><div class="line">          	<span class="keyword">else</span> <span class="keyword">if</span>(!s1.startsWith(searchString) && s2.startsWith(searchString)) {</div><div class="line">          		<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">          	} </div><div class="line">          	<span class="keyword">else</span> <span class="keyword">if</span> (! s1.startsWith(searchString) && !s2.startsWith(searchString)) {</div><div class="line">          			<span class="keyword">return</span> s2.compareTo(s1);</div><div class="line">          	}</div><div class="line">          	<span class="keyword">else</span> {</div><div class="line">          		<span class="keyword">return</span> s1.compareTo(s2);</div><div class="line">          	}</div><div class="line">          }             </div><div class="line">      });</div></pre></td></tr></table></figure>
 
 <p>当然，Java 8引入lambda之后，可以简写为：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Arrays.sort<span class="function"><span class="params">(sortedLineNames, (s1, s2) -&gt;  s1.startsWith(searchString) && !s2.startsWith(searchString) ? -<span class="number">1</span> :</span></span></div><div class="line">                                                                                 !s1.startsWith(searchString) && s2.startsWith(searchString) ?  <span class="number">1</span> :</div><div class="line">                                                                                 !s1.startsWith(searchString) && !s2.startsWith(searchString) ? s2.compareTo(s1) :s1.compareTo(s2));</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Arrays.sort<span class="function"><span class="params">(sortedLineNames, (s1, s2) -&gt;  </span></span></div><div class="line">                              s1.startsWith(searchString) && !s2.startsWith(searchString) ? -<span class="number">1</span> :</div><div class="line">                              !s1.startsWith(searchString) && s2.startsWith(searchString) ?  <span class="number">1</span> :</div><div class="line">                              !s1.startsWith(searchString) && !s2.startsWith(searchString) ? s2.compareTo(s1) : </div><div class="line">                              s1.compareTo(s2));</div></pre></td></tr></table></figure>
 
 <p>在多数情况下，这些策略已经可以组合出不错的效果了，但这就足够了么？ 用户搜索的目的是希望找到对自己有价值的信息，而排序最终是为了讨好用户：在信息呈现之前，猜测一下用户的心理，认为用户最想要什么，就把什么放在前面，让用户用最少的时间成本获取最有价值的信息。所以为了更懂用户，可能还需要对日志进行分析，统计每条线路的搜索频率，得出线路的活跃程度，每次尽可能把活性比较大的线路放置在返回结果的前面。更进一步，可以看看线路活性的分布情况和规律，得出更有指导性的结论。</p>
-<p>写到这里，突然感觉排序分明就是一种人工智能的东东，这也无怪乎那些做搜索的公司都铆足了劲儿搞深度学习。 在这样一个时代，不懂人心就得死啊。</p>
+<p>写到这里，突然感觉排序分明就是一种人工智能，这也无怪乎那些做搜索的公司都铆足了劲儿搞深度学习。 在这样一个时代，不懂人心估计就得死吧。</p>
 
       
     </div>
@@ -112,43 +117,15 @@
         <h1 id="工作方面：">工作方面：</h1>
 <h2 id="Done">Done</h2>
 <ol>
-<li><p>利用其他公司提供的数据补足线路信息<br>由于存在线路名称不一致，站点名称不一致，经纬度不一致等问题，为了最大化利用资料，同时又不致于降低数据质量，采取了名称优先，经纬度范围逐渐扩大的匹配方式，最终使资料的利用率达90%以上，减少了200辆以上无法确定目标的车。</p>
-</li>
-<li><p>微信版本客户端升级，网页客户端升级<br>微信版本升级只是了解了微信公众平台的运作方式，并没有太多技术细节；网页客户端参与也很少。</p>
-</li>
-<li><p>轨迹平滑处理<br>由于存在包重传，GPS漂移，站点信息不准，并车等问题，得到的轨迹点存在很多迂回交叉的现象，这部分的处理花了一些心思。先是仿照受力分析搞了个走向分析：如果一个点与前后点的lat变化，lng都不同，则认为其是一个迂回点，将其删除，从头开始迭代。 后来发现会处理连续的迂回点，走向分析是无法处理的，进而想到车行驶时角度不会很陡峭，便根据线路的角度来发现迂回点，角度分析可以可以解决连续迂回点的问题，但有时迂回点引起的角度并不是很陡峭。所以最后综合走向分析和角度分析，发现效果不错。</p>
-</li>
-<li><p>利用轨迹计算<br>这里最大的体会是设计真的很重要！ 由于开始设计不合理，在实现时发现特别繁琐。后来经过一番冥思苦想， 只保留了最简单的数据结构，把大量需要进行计算的常值预计算，加载到内存。由于设计的数据结构简单，便有了很强的兼容性，原本需要一大堆if…else的地方都变成了统一的逻辑。真庆幸没有在扔掉烂代码时犹豫：)</p>
-</li>
-</ol>
-<h2 id="TODO">TODO</h2>
-<ol>
-<li>测试轨迹计算实现，对比和旧后台的变化;</li>
-<li>实现数据源热切换；</li>
-<li>去MySQL, 完全使用Redis, 将频繁使用的数据迁移到内存中去；</li>
-<li>GPS数据延迟时的推移估算。</li>
-</ol>
-<h1 id="学习方面：">学习方面：</h1>
-<h2 id="Done-1">Done</h2>
-<p>一篇论文也没有看，还真是惭愧。。。。。。开始跟Coursera上的《机器学习基石》和《机器学习》课程，时间比较紧，希望能坚持到课程完结。</p>
-<h2 id="TODO-1">TODO</h2>
-<ol>
-<li>看三篇分布式/并行计算/ML领域的经典论文；</li>
-<li>跟上Coursera上的课程；</li>
-<li>完整看完两本书，无论何种类型</li>
-</ol>
-<h1 id="生活方面">生活方面</h1>
-<h2 id="出游">出游</h2>
-<p>出去玩了一次，海边踏浪，真人CS，悬崖餐厅，山顶小木屋。。。。。。发现这些并不怎么吸引我，感觉最好玩的还是捡贝壳，最后还带了好多回来，哈哈。</p>
-<h2 id="娱乐">娱乐</h2>
-<p>八月看完了《冰与火之歌》，补得过了头，这个月看的很好的影片有： 黑色幽默的《Frank》,  看完真心觉得自己和音乐无缘了。。。。 关于民主的《辩护人》，据说是以韩国已故总统卢武铉为原型的，韩国大叔的演技和《杀人回忆》一样棒。看完这部电影，真有一种去香港中环看看的冲动。 国产片《绣春刀》情节很紧凑，三兄弟各有所执，虽然讲的是明朝的那些事儿，不过仍然有很强的现实讽刺感。</p>
-<h2 id="计划">计划</h2>
-<p>说好的跑步一直没有进行，健身也是玩了两下就坚持不下了。目标是每周运动三次，不求减肥，但求健康。</p>
-
+<li>利用其他公司提供的数据补足线路信息<br>由于存在线路名称不一致，站点名称不一致，经纬度不一致等问题，为了最大化利用资料，同时又不致于降低数据质量，采取了名称优先，经纬度范围逐渐扩大的匹配方式，最终使资料的利用率达90%以上，减少了200辆以上无法确定目标的车。
       
     </div>
     <footer>
       
+        
+          <div class="alignleft">
+            <a href="/2014/10/02/summary-2014-09/#more" class="more-link">阅读全文</a>
+          </div>
         
         
       
