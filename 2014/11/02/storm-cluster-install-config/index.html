@@ -3,13 +3,27 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Gray Times</title>
+  <title>Storm集群的安装与配置 | Gray Times</title>
   <meta name="author" content="Kangkona D.Han">
+  
+  <meta name="description" content="1. Infrastructure
+3台流处理Server
+
+CPU : 3 Core 
+Memory : 3G
+Disk : 300G
+OS : Ubuntu Server 12.04 64bit
+
+2. Depended Software
+
+built-essential
+Python 2.7
+">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="Storm集群的安装与配置"/>
   <meta property="og:site_name" content="Gray Times"/>
 
   
@@ -44,8 +58,7 @@
 </nav>
 <div class="clearfix"></div></header>
   <div id="content" class="inner">
-    <div id="main-col" class="alignleft"><div id="wrapper">
-  <article class="post">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
   
   <div class="post-content">
     <header>
@@ -55,7 +68,7 @@
       
       
   
-    <h1 class="title"><a href="/2014/11/02/storm-cluster-install-config/">Storm集群的安装与配置</a></h1>
+    <h1 class="title">Storm集群的安装与配置</h1>
   
 
     </header>
@@ -233,7 +246,35 @@
     <footer>
       
         
+  
+  <div class="categories">
+    <a href="/categories/storm/">storm</a>
+  </div>
+
         
+  
+  <div class="tags">
+    <a href="/tags/storm,-job/">storm, job</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
       
       <div class="clearfix"></div>
     </footer>
@@ -241,180 +282,33 @@
 </article>
 
 
+ <nav id="pagination" >
+    
+    
+    <a href="/2014/10/27/friendly-sort/" class="alignright next" >下一页</a>
+    
+    <div class="clearfix"></div>
+</nav>
+<section id="comment">
+<!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2014/11/02/storm-cluster-install-config/" data-title="Storm集群的安装与配置" data-url="http://yoursite.com/2014/11/02/storm-cluster-install-config/"></div>
+<!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"kangkona"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0] 
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共JS代码 end -->
+</section>
 
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-10-27T14:43:29.000Z"><a href="/2014/10/27/friendly-sort/">10月 27 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/10/27/friendly-sort/">人性化排序</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：</p>
-<pre><code>    1. 按自然顺序排列；
-    2. 按相似度由高至低排列；
-    3. 按信息的活性(热度)进行排列。
-</code></pre><p>当然，最糟糕也最常见的是下面这种方式：完全不做任何排序。</p>
-<p>最近碰到的一个应用场景让我对此进行了反思。我们的实时公交查询系统为其他App开发者提供了这样的一个API：根据用户的搜索内容返回线路名称。现在不妨假设用户输入了一个 “1”，后台进行查询，找到所有与 “1” 有关的线路，最开始我们的输出是无序的:</p>
-<pre><code>               <span class="number">81</span>,  <span class="number">17</span>, <span class="number">201</span>路， 快线<span class="number">1</span>号, <span class="number">11</span>, <span class="number">1</span>路, <span class="number">168</span> , 高快巴士<span class="number">1</span>号线 ....
-</code></pre><p>结果竟然返回了221个与1有关的线路，这样的展示结果显然是会让用户骂人的。后来决定先返回所有 “1” 开头的线路，其余自然排序:</p>
-<pre><code>              <span class="number">11</span>, <span class="number">17</span>, <span class="number">168</span>, <span class="number">1</span>路，<span class="number">201</span>路， <span class="number">81</span>, 高快巴士<span class="number">1</span>号线，快线<span class="number">1</span>号 <span class="keyword">...</span>
-</code></pre><p>这次结果好了很多，但是1路竟然排在168后面，仍然会让人不爽，所以按照相似度进行排序:</p>
-<pre><code>              <span class="number">11</span>，<span class="number">17</span>，<span class="number">81</span>，<span class="number">1</span>路，<span class="number">168</span>，<span class="number">201</span>路，<span class="attribute">...</span><span class="built_in">.</span> 快线<span class="number">1</span>号，高快巴士<span class="number">1</span>号线
-</code></pre><p>这次达到了预想的效果，但把快线1号，高快巴士1号线这样比较难记，难输入的线路放到了最后，实际上用户如果只输入 “1” 进行查询，很可能要找的就是 “快线1号” 或者 “高快巴士1号线”，所以把这种输入成本高的线路挪到了前面:</p>
-<pre><code>              <span class="number">11</span>, <span class="number">17</span>, <span class="number">1</span>路，<span class="number">168</span>，快线<span class="number">1</span>号，高快巴士<span class="number">1</span>号线，<span class="number">201</span>路，<span class="number">81</span> ....
-</code></pre><p>实现代码：</p>
-<figure class="highlight Java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">Arrays.sort(sortedLineNames, <span class="keyword">new</span> Comparator&lt;Object&gt;(){  </div><div class="line">          <span class="annotation">@Override</span>  </div><div class="line">          <span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span>(Object b1, Object b2) {  </div><div class="line">          	String s1 = (String)b1;</div><div class="line">          	String s2 = (String)b2;</div><div class="line">          	</div><div class="line">          	<span class="keyword">if</span> (s1.startsWith(searchString) && !s2.startsWith(searchString)) {</div><div class="line">          		<span class="keyword">return</span> -<span class="number">1</span>;</div><div class="line">          	} </div><div class="line">          	<span class="keyword">else</span> <span class="keyword">if</span>(!s1.startsWith(searchString) && s2.startsWith(searchString)) {</div><div class="line">          		<span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">          	} </div><div class="line">          	<span class="keyword">else</span> <span class="keyword">if</span> (! s1.startsWith(searchString) && !s2.startsWith(searchString)) {</div><div class="line">          	       <span class="keyword">return</span> s2.compareTo(s1);</div><div class="line">          	}</div><div class="line">          	<span class="keyword">else</span> {</div><div class="line">          	       <span class="keyword">return</span> s1.compareTo(s2);</div><div class="line">          	}</div><div class="line">          }             </div><div class="line">      });</div></pre></td></tr></table></figure>
-
-<p>当然，Java 8引入lambda之后，可以简写为：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="type">Arrays</span>.<span class="built_in">sort</span>(sortedLineNames, </div><div class="line">            (s1, s2) -&gt;  </div><div class="line">              s1.<span class="built_in">startsWith</span>(searchString) && !s2.<span class="built_in">startsWith</span>(searchString) ? -<span class="number">1</span> :</div><div class="line">             !s1.<span class="built_in">startsWith</span>(searchString) &&  s2.<span class="built_in">startsWith</span>(searchString) ?  <span class="number">1</span> :</div><div class="line">             !s1.<span class="built_in">startsWith</span>(searchString) && !s2.<span class="built_in">startsWith</span>(searchString) ?  s2.compareTo(s1) : </div><div class="line">              s1.compareTo(s2));</div></pre></td></tr></table></figure>
-
-<p>在多数情况下，这些策略已经可以组合出不错的效果了，但这就足够了么？ 用户搜索的目的是希望找到对自己有价值的信息，而排序最终是为了讨好用户：在信息呈现之前，猜测一下用户的心理，认为用户最想要什么，就把什么放在前面，让用户用最少的时间成本获取最有价值的信息。所以为了更懂用户，可能还需要对日志进行分析，统计每条线路的搜索频率，得出线路的活跃程度，每次尽可能把活性比较大的线路放置在返回结果的前面。更进一步，可以看看线路活性的分布情况和规律，得出更有指导性的结论。</p>
-<p>写到这里，突然感觉排序分明就是一种人工智能的东东，这也无怪乎那些做搜索的公司都铆足了劲儿搞深度学习。 在这样一个时代，不懂人心估计就得死吧。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-10-02T13:23:35.000Z"><a href="/2014/10/02/summary-2014-09/">10月 2 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/10/02/summary-2014-09/">9月工作总结</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="工作方面：">工作方面：</h1>
-<h2 id="Done">Done</h2>
-<ol>
-<li>利用其他公司提供的数据补足线路信息<br>由于存在线路名称不一致，站点名称不一致，经纬度不一致等问题，为了最大化利用资料，同时又不致于降低数据质量，采取了名称优先，经纬度范围逐渐扩大的匹配方式，最终使资料的利用率达90%以上，减少了200辆以上无法确定目标的车。
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/10/02/summary-2014-09/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-09-18T09:45:22.000Z"><a href="/2014/09/18/about-design/">9月 18 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/09/18/about-design/">一次设计总结</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:<br>
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/09/18/about-design/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2014-09-12T16:36:38.000Z"><a href="/2014/09/13/the-story-of-aaron-swartz/">9月 13 2014</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2014/09/13/the-story-of-aaron-swartz/">《互联网之子：亚伦·斯沃茨的故事》观后感</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>今天看了<a href="http://movie.douban.com/subject/25785114/" target="_blank" rel="external">The Internet’s Own Boy: The Story of Aaron Swartz</a>，主人公<a href="https://en.wikipedia.org/wiki/Aaron_Swartz" target="_blank" rel="external">Aaron Swartz</a>是一个英年早逝的天才黑客，或者可以称其为一个致力于推动世界进步的人。<br>Aaron做过很多非凡的事：不到14岁就和互联网之父蒂姆·伯纳斯-
-      
-    </div>
-    <footer>
-      
-        
-          <div class="alignleft">
-            <a href="/2014/09/13/the-story-of-aaron-swartz/#more" class="more-link">阅读全文</a>
-          </div>
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-
-<nav id="pagination">
-  
-  
-    <a href="/page/2/" class="alignright next">下一页</a>
-  
-  <div class="clearfix"></div>
-</nav></div></div>
+</div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
