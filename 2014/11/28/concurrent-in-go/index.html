@@ -74,8 +74,8 @@
 <p>以上共享变量的方式我们称之为Share，要解决这个问题，只能把main的i通过消息传递的方式Communicate给每个gorountines <a href="http://play.golang.org/p/lppU7mFsRh" target="_blank" rel="external">例子</a>：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; times; i++ {</div><div class="line">	go <span class="func"><span class="keyword">func</span><span class="params">(v int)</span></span> {</div><div class="line">		messages &lt;- v</div><div class="line">		done &lt;- <span class="built_in">true</span></div><div class="line">	}(i)</div><div class="line">}</div></pre></td></tr></table></figure>
 
-<p>运行一下，结果是正确的。这时候才真正体会到那句著名的话：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Don’t communicate <span class="keyword">by</span> <span class="keyword">shared</span> memory. Instead, share memory <span class="keyword">by</span> communicating. </div><div class="line"></div><div class="line">	                                                                                                           —— Rob Pike</div></pre></td></tr></table></figure>
+<p>运行一下，结果是正确的。这时候才真正体会到那句话的奥妙：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Don’t communicate <span class="keyword">by</span> <span class="keyword">shared</span> memory. Instead, share memory <span class="keyword">by</span> communicating. </div><div class="line"></div><div class="line">	                                                                             —— Rob Pike</div></pre></td></tr></table></figure>
 
 <h2 id="Synchronization">Synchronization</h2>
 <p>golang没有join，无法直接在程序中设置等待点。实现同步通常有两种做法：</p>
