@@ -4,7 +4,7 @@
   <subtitle><![CDATA[Record the history that you never forget.]]></subtitle>
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com/"/>
-  <updated>2014-11-02T08:52:58.294Z</updated>
+  <updated>2014-11-28T15:19:15.002Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,21 +15,101 @@
   <generator uri="http://zespia.tw/hexo/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[Go实践之并发初体验]]></title>
+    <link href="http://yoursite.com/2014/11/28/concurrent-in-go/"/>
+    <id>http://yoursite.com/2014/11/28/concurrent-in-go/</id>
+    <published>2014-11-28T02:56:08.000Z</published>
+    <updated>2014-11-28T09:48:54.000Z</updated>
+    <content type="html"><![CDATA[<p>golang的一大卖点是并发模型基于CPS(continuation passing style)，使用起来比较简单。刚开始我也觉得比较简单，但使用之后发现，你必须很清楚golang的并发机制才能使用自如，在需要同步尤甚，一不小心就会陷入罪恶的渊薮。<br> <a id="more"></a></p>
+<h2 id="Sharing_VS_Communicating">Sharing VS Communicating</h2>
+<p>如何我们想从1顺序打印到10000，可能会<a href="http://play.golang.org/p/ZG5EihF4PU" target="_blank" rel="external">这样</a>写：</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">var</span> messages <span class="keyword">chan</span> <span class="typename">int</span></div><div class="line"><span class="keyword">var</span> done <span class="keyword">chan</span> <span class="typename">bool</span></div><div class="line"></div><div class="line"><span class="keyword">func</span> main() {</div><div class="line">	messages = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="typename">int</span>)</div><div class="line">	done = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="typename">bool</span>)</div><div class="line">	times :=<span class="number"> 10000</span></div><div class="line">	<span class="keyword">for</span> i :=<span class="number"> 0</span>; i &lt; times; i++ {</div><div class="line">		<span class="keyword">go</span> <span class="keyword">func</span>() {</div><div class="line">			messages &lt;- i</div><div class="line">			done &lt;- <span class="constant">true</span></div><div class="line">		}()</div><div class="line">	}</div><div class="line"></div><div class="line">	<span class="keyword">go</span> <span class="keyword">func</span>() {</div><div class="line">		<span class="keyword">for</span> i := <span class="keyword">range</span> messages {</div><div class="line">			fmt.Println(i)</div><div class="line">		}</div><div class="line">	}()</div><div class="line"></div><div class="line">	<span class="keyword">for</span> i :=<span class="number"> 0</span>; i &lt; times; i++ {</div><div class="line">		&lt;-done</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>但事实上，打印的结果的是</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="number">10000</span></div><div class="line"><span class="number">10000</span></div><div class="line">....</div></pre></td></tr></table></figure>
+
+<p>由于10000个for循环执行地相当快， 很可能在for已经循环结束， i的值增长到10000时， gorountines的调度才完成，i此时作为逃逸变量为goroutines共享，所以gorountines看到的i都是10000,打印的也都是10000。</p>
+<p>以上共享变量的方式我们称之为Share，要解决这个问题，只能把main的i通过消息传递的方式Communicate给每个gorountines <a href="http://play.golang.org/p/lppU7mFsRh" target="_blank" rel="external">例子</a>：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; times; i++ {</div><div class="line">	go <span class="func"><span class="keyword">func</span><span class="params">(v int)</span></span> {</div><div class="line">		messages &lt;- v</div><div class="line">		done &lt;- <span class="built_in">true</span></div><div class="line">	}(i)</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>运行一下，结果是正确的。这时候才真正体会到那句著名的话：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Don’t communicate <span class="keyword">by</span> <span class="keyword">shared</span> memory. Instead, share memory <span class="keyword">by</span> communicating. </div><div class="line"></div><div class="line">	                                                                                                           —— Rob Pike</div></pre></td></tr></table></figure>
+
+<h2 id="Synchronization">Synchronization</h2>
+<p>golang没有join，无法直接在程序中设置等待点。实现同步通常有两种做法：</p>
+<h3 id="使用channel">使用channel</h3>
+<p>由于channel分为阻塞和非阻塞的，使用阻塞的channel时就能达到同步的目的。上面两个例子都使用了channel进行同步。</p>
+<h3 id="使用WaitGroup">使用WaitGroup</h3>
+<p><a href="http://play.golang.org/p/k440dqN3Ai" target="_blank" rel="external">示例如下</a></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">func main() {</div><div class="line">	var wg sync.WaitGroup</div><div class="line">	wg.Add(1000)</div><div class="line"></div><div class="line">	for i := 0; i &lt; 1000; i++ {</div><div class="line">		go func(v int) {</div><div class="line">			defer wg.Done()</div><div class="line">			fmt.Println(v)</div><div class="line">		}(i)</div><div class="line">	}</div><div class="line">	wg.Wait()</div><div class="line">	fmt.Println(<span class="string">"exit"</span>)</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>Add操作设置要等待的gorountine个数，每执行一次Done，waitgroup就会减1, 执行Wait的地方就相当于join。</p>
+<p>两种操作的本质都是设置一个计数器，每个gorountine执行完都会通知一下主程序，直到所以gorountine完全dead，main才会往下走。</p>
+<p>当不清楚gorountines的数目时，在<a href="http://segmentfault.com/q/1010000000487990" target="_blank" rel="external">网上</a>看到的一种做法是可以设置一个远大于gorountines的数目的<a href="http://play.golang.org/p/jb1wJaQJZ0" target="_blank" rel="external">阈值</a>：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">L: <span class="keyword">for</span> { </div><div class="line">           select { </div><div class="line">               <span class="keyword">case</span> &lt;- <span class="keyword">done</span>:</div><div class="line">                   i++ </div><div class="line">                   <span class="keyword">if</span> i &gt; <span class="number">10000</span> {</div><div class="line">                         <span class="keyword">break</span> L</div><div class="line">                            }</div><div class="line">                   }</div><div class="line">            }</div></pre></td></tr></table></figure>
+
+<h2 id="Concurrent_Data_Structure">Concurrent Data Structure</h2>
+<p>在并发环境下，数据结构往往也需要设计成并发的，比如一个并发的Map可以这样设计：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">type <span class="type">CorrMap</span> <span class="class"><span class="keyword">struct</span> </span>{</div><div class="line">	line2BusId  <span class="built_in">map</span>[string][]string</div><div class="line">	sync.<span class="type">RWMutex</span></div><div class="line">}</div><div class="line"></div><div class="line"><span class="func"><span class="keyword">func</span></span> <span class="type">NewCorrMap</span>() *<span class="type">CorrMap</span> {</div><div class="line">	<span class="keyword">return</span> &<span class="type">CorrMap</span>{line2BusId :  <span class="built_in">map</span>[string][]string{}}</div><div class="line">}</div><div class="line"></div><div class="line"><span class="func"><span class="keyword">func</span></span> (<span class="built_in">c</span> *<span class="type">CorrMap</span>) <span class="type">Add</span>(line string, busId string) {</div><div class="line">	<span class="built_in">c</span>.<span class="type">Lock</span>()</div><div class="line">	defer <span class="built_in">c</span>.<span class="type">Unlock</span>()</div><div class="line">	busIds, exists := <span class="built_in">c</span>.line2BusId[line]</div><div class="line">	<span class="keyword">if</span> exists {</div><div class="line">		<span class="built_in">c</span>.line2BusId[line] = append(busIds, busId)</div><div class="line">	} <span class="keyword">else</span> {</div><div class="line">		<span class="keyword">var</span> tmp []string</div><div class="line">		<span class="built_in">c</span>.line2BusId[line] = append(tmp, busId)</div><div class="line">	}</div><div class="line">}</div><div class="line"></div><div class="line"><span class="func"><span class="keyword">func</span></span> (<span class="built_in">c</span> <span class="type">CorrMap</span>) <span class="type">Size</span>() int {</div><div class="line">	<span class="built_in">count</span> := <span class="number">0</span></div><div class="line">	<span class="keyword">for</span> <span class="number">_</span>, v := range <span class="built_in">c</span>.line2BusId {</div><div class="line">		<span class="built_in">count</span>+= len(v)</div><div class="line">	}</div><div class="line">	<span class="keyword">return</span> <span class="built_in">count</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>不过利用Lock可能没有充分发挥golang的优势，更好的方法可以参考<a href="http://se77en.cc/2014/04/08/share-by-communicating-the-concurrency-slogan-in-golang/" target="_blank" rel="external">这篇博客</a>。</p>
+]]></content>
+    <summary type="html"><![CDATA[<p>golang的一大卖点是并发模型基于CPS(continuation passing style)，使用起来比较简单。刚开始我也觉得比较简单，但使用之后发现，你必须很清楚golang的并发机制才能使用自如，在需要同步尤甚，一不小心就会陷入罪恶的渊薮。<br> ]]></summary>
+    
+      <category term="concurrent, golang" scheme="http://yoursite.com/tags/concurrent,-golang/"/>
+    
+      <category term="golang" scheme="http://yoursite.com/categories/golang/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Go实践之JSON解析]]></title>
+    <link href="http://yoursite.com/2014/11/28/json-and-go/"/>
+    <id>http://yoursite.com/2014/11/28/json-and-go/</id>
+    <published>2014-11-28T01:38:23.000Z</published>
+    <updated>2014-11-28T15:18:27.000Z</updated>
+    <content type="html"><![CDATA[<p>当我们开发了一个新版本的软件时，通常需要和稳定版进行对比，进行QoS评估。对实时性网络服务而言，比较客观的做法是同时请求相同的服务，然后对比返回结果。</p>
+<p>首先，我们对一些常用的函数进行包裹，简化操作：<br><a id="more"></a></p>
+<h2 id="发送Http请求">发送Http请求</h2>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">func</span> sendHttpRequest(url <span class="typename">string</span>) <span class="typename">string</span> {</div><div class="line">	response, _ := http.Get(url)</div><div class="line">	<span class="keyword">defer</span> response.Body.Close()</div><div class="line">	<span class="keyword">var</span> bodystr <span class="typename">string</span></div><div class="line">             <span class="keyword">if</span> response.StatusCode ==<span class="number"> 200</span> {</div><div class="line">             	body, _ := ioutil.ReadAll(response.Body)</div><div class="line">             	bodystr = <span class="typename">string</span>(body)</div><div class="line">             } <span class="keyword">else</span> {</div><div class="line">                          <span class="keyword">return</span> <span class="string">""</span></div><div class="line">             }</div><div class="line">             <span class="keyword">return</span> bodystr</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h2 id="获取Json数据">获取Json数据</h2>
+<p>如果你知道返回的json数据的格式，可以事先定义好对应的数据结构。例如json返回内容为</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">{</div><div class="line">  "<span class="attribute">name</span>":<span class="value"><span class="string">"Monica"</span></span>,</div><div class="line">  "<span class="attribute">age</span>": <span class="value"><span class="number">10</span></span>, </div><div class="line">  "<span class="attribute">hobby</span>" : <span class="value">[<span class="string">"music"</span>, <span class="string">"dance"</span>]</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>对应的数据结构和操作：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> {</div><div class="line">  name <span class="typename">string</span> <span class="string">`json:"name"`</span></div><div class="line">  age <span class="typename">string</span> <span class="string">`json:"age"`</span></div><div class="line">  hobby []<span class="typename">string</span> <span class="string">`json:"hobby"`</span></div><div class="line">}</div><div class="line"></div><div class="line">bodystr := sendHttpRequest(url)</div><div class="line"></div><div class="line"><span class="keyword">var</span> person Person</div><div class="line">err := json.Unmarshal([]<span class="typename">byte</span>(bodystr), &person)</div></pre></td></tr></table></figure>
+
+<p>这样json内容就会变成一个实例化的Person对象，所有的json成员都会对应类型化。</p>
+<p>如果我们不知道json数据格式怎么办?  json的最外层肯定是一个map, 所以可以把json数据反序列化为一个通用的 <code>interface{}</code> :</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">func</span> getJson(url <span class="typename">string</span>) <span class="keyword">map</span>[<span class="typename">string</span>]<span class="keyword">interface</span>{} {</div><div class="line">	bodystr := sendHttpRequest(url)</div><div class="line">        <span class="keyword">var</span>  object <span class="keyword">interface</span>{}</div><div class="line">        err := json.Unmarshal([]<span class="typename">byte</span>(bodystr), &object)</div><div class="line">	<span class="keyword">if</span> err != <span class="constant">nil</span> {</div><div class="line">	      <span class="keyword">return</span> <span class="constant">nil</span>	</div><div class="line">	} <span class="keyword">else</span> {</div><div class="line">	      <span class="keyword">return</span> object.(<span class="keyword">map</span>[<span class="typename">string</span>]<span class="keyword">interface</span>{})</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>好处是通用，可以解析任意的json，但由于不知内层数据的类型，因此只作了最外层map的解析，返回数据的类型为<code>map[string]interface{}</code>。之后可能会根据需要进行类型断言，转换等。</p>
+<p>感觉json目前已经成了网络数据传输格式的事实标准，有很多人总结过<a href="http://www.cnblogs.com/SanMaoSpace/p/3139186.html" target="_blank" rel="external">JSON与XML的区别比较</a>，我觉得json最大的优势是:程序员友好。json中的map, array, set, string, num都能完美地对应到某一编程语言中，即表示的不仅仅是文本，还是带类型的数据。而xml本质还是文本，要借助于xslt，scheme，属性等一堆东西实现json的类型化，表示成本高，解析成本也高。可能的好处是比较体系化，有成套的解决方案，用户可视化方便。</p>
+]]></content>
+    <summary type="html"><![CDATA[<p>当我们开发了一个新版本的软件时，通常需要和稳定版进行对比，进行QoS评估。对实时性网络服务而言，比较客观的做法是同时请求相同的服务，然后对比返回结果。</p>
+<p>首先，我们对一些常用的函数进行包裹，简化操作：<br>]]></summary>
+    
+      <category term="json, golang, networking" scheme="http://yoursite.com/tags/json,-golang,-networking/"/>
+    
+      <category term="golang" scheme="http://yoursite.com/categories/golang/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Storm集群的安装与配置]]></title>
     <link href="http://yoursite.com/2014/11/02/storm-cluster-install-config/"/>
     <id>http://yoursite.com/2014/11/02/storm-cluster-install-config/</id>
     <published>2014-11-02T08:30:37.000Z</published>
-    <updated>2014-11-02T08:52:32.000Z</updated>
+    <updated>2014-11-28T02:51:41.000Z</updated>
     <content type="html"><![CDATA[<h2 id="1-_Infrastructure">1. Infrastructure</h2>
 <p>3台流处理Server</p>
 <ul>
 <li>CPU : 3 Core </li>
 <li>Memory : 3G</li>
 <li>Disk : 300G</li>
-<li>OS : Ubuntu Server 12.04 64bit</li>
-</ul>
-<h2 id="2-_Depended_Software">2. Depended Software</h2>
-<ul>
+<li>OS : Ubuntu Server 12.04 64bit<br><a id="more"></a><h2 id="2-_Depended_Software">2. Depended Software</h2>
+</li>
 <li>built-essential</li>
 <li>Python 2.7</li>
 <li>Java 1.7.0_71(最低要求1.6)</li>
@@ -187,7 +267,13 @@
 </li>
 </ul>
 ]]></content>
-    
+    <summary type="html"><![CDATA[<h2 id="1-_Infrastructure">1. Infrastructure</h2>
+<p>3台流处理Server</p>
+<ul>
+<li>CPU : 3 Core </li>
+<li>Memory : 3G</li>
+<li>Disk : 300G</li>
+<li>OS : Ubuntu Server 12.04 64bit<br>]]></summary>
     
       <category term="storm, job" scheme="http://yoursite.com/tags/storm,-job/"/>
     
@@ -200,8 +286,8 @@
     <link href="http://yoursite.com/2014/10/27/friendly-sort/"/>
     <id>http://yoursite.com/2014/10/27/friendly-sort/</id>
     <published>2014-10-27T14:43:29.000Z</published>
-    <updated>2014-10-28T01:42:24.000Z</updated>
-    <content type="html"><![CDATA[<p>对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：</p>
+    <updated>2014-11-28T02:53:00.000Z</updated>
+    <content type="html"><![CDATA[<p>对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：<br><a id="more"></a></p>
 <pre><code>    1. 按自然顺序排列；
     2. 按相似度由高至低排列；
     3. 按信息的活性(热度)进行排列。
@@ -223,7 +309,7 @@
 <p>在多数情况下，这些策略已经可以组合出不错的效果了，但这就足够了么？ 用户搜索的目的是希望找到对自己有价值的信息，而排序最终是为了讨好用户：在信息呈现之前，猜测一下用户的心理，认为用户最想要什么，就把什么放在前面，让用户用最少的时间成本获取最有价值的信息。所以为了更懂用户，可能还需要对日志进行分析，统计每条线路的搜索频率，得出线路的活跃程度，每次尽可能把活性比较大的线路放置在返回结果的前面。更进一步，可以看看线路活性的分布情况和规律，得出更有指导性的结论。</p>
 <p>写到这里，突然感觉排序分明就是一种人工智能的东东，这也无怪乎那些做搜索的公司都铆足了劲儿搞深度学习。 在这样一个时代，不懂人心估计就得死吧。</p>
 ]]></content>
-    
+    <summary type="html"><![CDATA[<p>对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：<br>]]></summary>
     
       <category term="用户体验, Sort, Search" scheme="http://yoursite.com/tags/%E7%94%A8%E6%88%B7%E4%BD%93%E9%AA%8C,-Sort,-Search/"/>
     
@@ -974,6 +1060,68 @@ people. I don<span class="comment">'t like excluding people.</span>
   </entry>
   
   <entry>
+    <title><![CDATA[《Python学习笔记》的笔记]]></title>
+    <link href="http://yoursite.com/2013/03/16/pythonNote1/"/>
+    <id>http://yoursite.com/2013/03/16/pythonNote1/</id>
+    <published>2013-03-15T23:56:29.000Z</published>
+    <updated>2014-08-30T15:40:19.000Z</updated>
+    <content type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br><a id="more"></a></p>
+<h2 id="基本环境">基本环境</h2>
+<p>对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。<br>因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。</p>
+<h3 id="引用计数">引用计数</h3>
+<p>  除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。</p>
+<h3 id="垃圾回收">垃圾回收</h3>
+<p>Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 “Reference Cycle Garbage Collection”。</p>
+<p>能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。</p>
+<h1 id="世代回收">世代回收</h1>
+<h2 id="内置类型">内置类型</h2>
+<ol>
+<li><strong>尽量使用xrange代替range</strong>，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。</li>
+</ol>
+<h3 id="字符串">字符串</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">","</span>.join([<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>])</div><div class="line"><span class="string">'a,b,c'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a,b,c"</span>.split(<span class="string">","</span>)</div><div class="line">!</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\nb\r\nc"</span>.splitlines()</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line">&gt;&gt;&gt;<span class="string">"a\nb\r\nc"</span>.splitlines(<span class="keyword">True</span>)</div><div class="line">[<span class="string">'a\n'</span>, <span class="string">'b\r\n'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.startswith(<span class="string">"ab"</span>), <span class="string">"abc"</span>.endswith(<span class="string">"bc"</span>)</div><div class="line"><span class="keyword">True</span>, <span class="keyword">True</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.upper(), <span class="string">"Abc"</span>.lower()</div><div class="line"><span class="string">'ABC'</span>, <span class="string">'abc'</span></div><div class="line"></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>), <span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>, <span class="number">2</span>) <span class="comment"># 可指定查找起始结束位置。</span></div><div class="line"><span class="number">1</span>, <span class="number">4</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">" abc"</span>.lstrip(), <span class="string">"abc "</span>.rstrip(), <span class="string">" abc "</span>.strip() <span class="comment"># 剔除前后空格。</span></div><div class="line"><span class="string">'abc'</span>, <span class="string">'abc'</span>, <span class="string">'abc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.strip(<span class="string">"ac"</span>)  <span class="comment"># 可删除指定的前后缀字符。</span></div><div class="line"><span class="string">'b'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.replace(<span class="string">"bc"</span>, <span class="string">"BC"</span>)<span class="comment"># 可指定替换次数。</span></div><div class="line"><span class="string">'aBCaBC'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\tbc"</span>.expandtabs(<span class="number">4</span>)</div><div class="line"><span class="string">'a  bc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.ljust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"456"</span>.rjust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"abc"</span>.center(<span class="number">10</span>, <span class="string">'*'</span>) <span class="comment"># 填充</span></div><div class="line"><span class="string">'12300'</span>, <span class="string">'00456'</span>, <span class="string">'***abc****'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.zfill(<span class="number">6</span>), <span class="string">"123456"</span>.zfill(<span class="number">4</span>) <span class="comment"># 数字填充</span></div><div class="line"><span class="string">'000123'</span>, <span class="string">'123456'</span></div></pre></td></tr></table></figure>
+
+<blockquote>
+<p>string.Template可以处理较复杂的需求</p>
+</blockquote>
+<h3 id="池化">池化</h3>
+<p>池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。</p>
+<h3 id="List">List</h3>
+<p>可用bisect 向有序列表中插入元素。</p>
+<p><strong>性能</strong></p>
+<ol>
+<li>列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。</li>
+<li>某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。</li>
+</ol>
+<h3 id="tuple">tuple</h3>
+<p>在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。</p>
+<h3 id="dict">dict</h3>
+<p>字典 (dict) 采用用开放地址法的哈希表实现。<br>• 自带元素容量为 8 的 smalltable,只有 “超出”时才到堆上额外分配元素表内存。<br>• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。<br>• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。<br>• 删除元素操作不会立立即收缩内存。</p>
+<blockquote>
+<p>对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减<br>少内存开销。</p>
+</blockquote>
+<h4 id="视图">视图</h4>
+<p>要判断两个字典间的差异,使用用视图是最简便的做法。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 = dict(a = <span class="number">1</span>, b = <span class="number">2</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d2 = dict(b = <span class="number">2</span>, c = <span class="number">3</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 & d2 <span class="comment"># 字典不支支持该操作。</span></span></div><div class="line"><span class="input"><span class="prompt">TypeError: unsupported operand type(s) for &: 'dict' and 'dict'</span></span></div><div class="line">&gt;&gt;&gt; v1 = d1.viewitems()</div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v2 = d2.viewitems()</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v1 & v2  <span class="comment"># 交集</span></span></div><div class="line"><span class="input"><span class="prompt">set([('b', 2)])</span></span></div><div class="line">&gt;&gt;&gt; v1 | v2  <span class="comment">#并</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('b', 2), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; v1 - v2  <span class="comment"># 差集 (仅 v1 有,v2 没有的)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1)])</span></span></div><div class="line">&gt;&gt;&gt; v1 ^ v2  <span class="comment">#对称差集 (不会同时出现在 v1 和 v2 中)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; (<span class="string">'a'</span>, <span class="number">1</span>) in v1</div><div class="line"><span class="constant">True</span></div></pre></td></tr></table></figure>
+
+<h3 id="set">set</h3>
+<p>集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 “值” 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。</p>
+<p>运算： ==， ！=， &gt;, |, &amp; ,-, ^</p>
+<blockquote>
+<p><strong>数据结构很重要,这几个内置类型并不足以完成全部工作。像 C、数据结构、常用算法这类基础是每个程序开发人员都应该掌握的。</strong></p>
+</blockquote>
+]]></content>
+    <summary type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br>]]></summary>
+    
+      <category term="reading" scheme="http://yoursite.com/tags/reading/"/>
+    
+      <category term="python" scheme="http://yoursite.com/tags/python/"/>
+    
+      <category term="python" scheme="http://yoursite.com/categories/python/"/>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[《冥想5分钟》学习笔记]]></title>
     <link href="http://yoursite.com/2013/03/16/muse5minutes/"/>
     <id>http://yoursite.com/2013/03/16/muse5minutes/</id>
@@ -1101,68 +1249,6 @@ people. I don<span class="comment">'t like excluding people.</span>
       <category term="muse" scheme="http://yoursite.com/tags/muse/"/>
     
       <category term="reading" scheme="http://yoursite.com/categories/reading/"/>
-    
-  </entry>
-  
-  <entry>
-    <title><![CDATA[《Python学习笔记》的笔记]]></title>
-    <link href="http://yoursite.com/2013/03/16/pythonNote1/"/>
-    <id>http://yoursite.com/2013/03/16/pythonNote1/</id>
-    <published>2013-03-15T23:56:29.000Z</published>
-    <updated>2014-08-30T15:40:19.000Z</updated>
-    <content type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br><a id="more"></a></p>
-<h2 id="基本环境">基本环境</h2>
-<p>对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。<br>因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。</p>
-<h3 id="引用计数">引用计数</h3>
-<p>  除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。</p>
-<h3 id="垃圾回收">垃圾回收</h3>
-<p>Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 “Reference Cycle Garbage Collection”。</p>
-<p>能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。</p>
-<h1 id="世代回收">世代回收</h1>
-<h2 id="内置类型">内置类型</h2>
-<ol>
-<li><strong>尽量使用xrange代替range</strong>，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。</li>
-</ol>
-<h3 id="字符串">字符串</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">","</span>.join([<span class="string">"a"</span>, <span class="string">"b"</span>, <span class="string">"c"</span>])</div><div class="line"><span class="string">'a,b,c'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a,b,c"</span>.split(<span class="string">","</span>)</div><div class="line">!</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\nb\r\nc"</span>.splitlines()</div><div class="line">[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>]</div><div class="line">&gt;&gt;&gt;<span class="string">"a\nb\r\nc"</span>.splitlines(<span class="keyword">True</span>)</div><div class="line">[<span class="string">'a\n'</span>, <span class="string">'b\r\n'</span>, <span class="string">'c'</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.startswith(<span class="string">"ab"</span>), <span class="string">"abc"</span>.endswith(<span class="string">"bc"</span>)</div><div class="line"><span class="keyword">True</span>, <span class="keyword">True</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.upper(), <span class="string">"Abc"</span>.lower()</div><div class="line"><span class="string">'ABC'</span>, <span class="string">'abc'</span></div><div class="line"></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>), <span class="string">"abcabc"</span>.find(<span class="string">"bc"</span>, <span class="number">2</span>) <span class="comment"># 可指定查找起始结束位置。</span></div><div class="line"><span class="number">1</span>, <span class="number">4</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">" abc"</span>.lstrip(), <span class="string">"abc "</span>.rstrip(), <span class="string">" abc "</span>.strip() <span class="comment"># 剔除前后空格。</span></div><div class="line"><span class="string">'abc'</span>, <span class="string">'abc'</span>, <span class="string">'abc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abc"</span>.strip(<span class="string">"ac"</span>)  <span class="comment"># 可删除指定的前后缀字符。</span></div><div class="line"><span class="string">'b'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"abcabc"</span>.replace(<span class="string">"bc"</span>, <span class="string">"BC"</span>)<span class="comment"># 可指定替换次数。</span></div><div class="line"><span class="string">'aBCaBC'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"a\tbc"</span>.expandtabs(<span class="number">4</span>)</div><div class="line"><span class="string">'a  bc'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.ljust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"456"</span>.rjust(<span class="number">5</span>, <span class="string">'0'</span>), <span class="string">"abc"</span>.center(<span class="number">10</span>, <span class="string">'*'</span>) <span class="comment"># 填充</span></div><div class="line"><span class="string">'12300'</span>, <span class="string">'00456'</span>, <span class="string">'***abc****'</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="string">"123"</span>.zfill(<span class="number">6</span>), <span class="string">"123456"</span>.zfill(<span class="number">4</span>) <span class="comment"># 数字填充</span></div><div class="line"><span class="string">'000123'</span>, <span class="string">'123456'</span></div></pre></td></tr></table></figure>
-
-<blockquote>
-<p>string.Template可以处理较复杂的需求</p>
-</blockquote>
-<h3 id="池化">池化</h3>
-<p>池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。</p>
-<h3 id="List">List</h3>
-<p>可用bisect 向有序列表中插入元素。</p>
-<p><strong>性能</strong></p>
-<ol>
-<li>列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。</li>
-<li>某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。</li>
-</ol>
-<h3 id="tuple">tuple</h3>
-<p>在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。</p>
-<h3 id="dict">dict</h3>
-<p>字典 (dict) 采用用开放地址法的哈希表实现。<br>• 自带元素容量为 8 的 smalltable,只有 “超出”时才到堆上额外分配元素表内存。<br>• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。<br>• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。<br>• 删除元素操作不会立立即收缩内存。</p>
-<blockquote>
-<p>对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减<br>少内存开销。</p>
-</blockquote>
-<h4 id="视图">视图</h4>
-<p>要判断两个字典间的差异,使用用视图是最简便的做法。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 = dict(a = <span class="number">1</span>, b = <span class="number">2</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d2 = dict(b = <span class="number">2</span>, c = <span class="number">3</span>)</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> d1 & d2 <span class="comment"># 字典不支支持该操作。</span></span></div><div class="line"><span class="input"><span class="prompt">TypeError: unsupported operand type(s) for &: 'dict' and 'dict'</span></span></div><div class="line">&gt;&gt;&gt; v1 = d1.viewitems()</div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v2 = d2.viewitems()</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> v1 & v2  <span class="comment"># 交集</span></span></div><div class="line"><span class="input"><span class="prompt">set([('b', 2)])</span></span></div><div class="line">&gt;&gt;&gt; v1 | v2  <span class="comment">#并</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('b', 2), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; v1 - v2  <span class="comment"># 差集 (仅 v1 有,v2 没有的)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1)])</span></span></div><div class="line">&gt;&gt;&gt; v1 ^ v2  <span class="comment">#对称差集 (不会同时出现在 v1 和 v2 中)</span></div><div class="line"><span class="input"><span class="prompt">set([('a', 1), ('c', 3)])</span></span></div><div class="line">&gt;&gt;&gt; (<span class="string">'a'</span>, <span class="number">1</span>) in v1</div><div class="line"><span class="constant">True</span></div></pre></td></tr></table></figure>
-
-<h3 id="set">set</h3>
-<p>集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 “值” 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。</p>
-<p>运算： ==， ！=， &gt;, |, &amp; ,-, ^</p>
-<blockquote>
-<p><strong>数据结构很重要,这几个内置类型并不足以完成全部工作。像 C、数据结构、常用算法这类基础是每个程序开发人员都应该掌握的。</strong></p>
-</blockquote>
-]]></content>
-    <summary type="html"><![CDATA[<p>这是对雨痕写的Python学习笔记的学习。<br>]]></summary>
-    
-      <category term="reading" scheme="http://yoursite.com/tags/reading/"/>
-    
-      <category term="python" scheme="http://yoursite.com/tags/python/"/>
-    
-      <category term="python" scheme="http://yoursite.com/categories/python/"/>
     
   </entry>
   

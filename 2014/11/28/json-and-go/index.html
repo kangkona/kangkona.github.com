@@ -3,15 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Storm实时处理案例(1) | Gray Times</title>
+  <title>Go实践之JSON解析 | Gray Times</title>
   <meta name="author" content="Kangkona D.Han">
   
-  <meta name="description" content="在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截出一个单位数据。">
+  <meta name="description" content="当我们开发了一个新版本的软件时，通常需要和稳定版进行对比，进行QoS评估。对实时性网络服务而言，比较客观的做法是同时请求相同的服务，然后对比返回结果。
+首先，我们对一些常用的函数进行包裹，简化操作：">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Storm实时处理案例(1)"/>
+  <meta property="og:title" content="Go实践之JSON解析"/>
   <meta property="og:site_name" content="Gray Times"/>
 
   
@@ -52,43 +53,34 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2014-09-04T08:09:39.000Z"><a href="/2014/09/04/storm-real-time-case1/">9月 4 2014</a></time>
+        <time datetime="2014-11-28T01:38:23.000Z"><a href="/2014/11/28/json-and-go/">11月 28 2014</a></time>
       
       
   
-    <h1 class="title">Storm实时处理案例(1)</h1>
+    <h1 class="title">Go实践之JSON解析</h1>
   
 
     </header>
     <div class="entry">
       
-        <p>在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,<br>Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截<br>出一个单位数据。<br><a id="more"></a><br>通常会对流入的数据源定好协议，比如一个单位数据的header是FAFB, tail是EAEB：</p>
-<pre><code>    <span class="keyword">while</span>( <span class="constant">true</span> ) {
-        <span class="keyword">while</span>( <span class="constant">true</span> ) {
-         <span class="keyword">first</span> = <span class="keyword">is</span>.readByte();
-         <span class="keyword">if</span> (<span class="keyword">first</span> == (byte)<span class="number">0xFA</span>) {
-            <span class="keyword">second</span> = <span class="keyword">is</span>.readByte();
-            <span class="keyword">if</span> (<span class="keyword">second</span> == (byte)<span class="number">0xFB</span>) {
-                break;
-            }
-         }
-        }
-    }
-</code></pre><p>其实上段代码不够严谨，比如出现0xFA0xFA0xFB…这样的流，就可能会丢弃正常的流。<br>询问得知正文和头部是正交的, 暂时按下不表。</p>
-<p>之后对截断的流进行基础性的检查，emit出去，交给Bolt处理。</p>
-<p>Spout只管喷射出一个个截断的数据流，Bolt(螺栓)把自己拧在Spout的接口上, 对输出<br>的元组进行必要的处理。</p>
-<p>Storm的一大卖点是高度的稳定性，所以往往异常处理代码量比正常逻辑代码要多很多。</p>
-<p>BTW, 看到这样一个段子：每条原始的Unix命令，都会变成一项互联网服务:</p>
-<pre><code>    <span class="function_or_atom">find</span> <span class="arrow">-&gt;</span> <span class="function_or_atom">yahool</span><span class="exclamation_mark">!</span>,
-    <span class="function_or_atom">grep</span><span class="arrow">-&gt;</span><span class="variable">Google</span>, 
-    <span class="function_or_atom">rsync</span><span class="arrow">-&gt;</span><span class="variable">Dropbox</span>, 
-    <span class="function_or_atom">man</span><span class="arrow">-&gt;</span><span class="function_or_atom">stack</span> <span class="function_or_atom">overflow</span>, 
-    <span class="variable">MapReduce</span> = <span class="function_or_atom">grep</span>|<span class="function_or_atom">sort</span>|<span class="function_or_atom">uniq</span>,
-    <span class="function_or_atom">cron</span><span class="arrow">-&gt;</span><span class="function_or_atom">ifttt</span>，
-    <span class="function_or_atom">cp</span><span class="arrow">-&gt;</span><span class="variable">Tencent</span>, 
-    <span class="function_or_atom">trap</span><span class="arrow">-&gt;</span><span class="number">360</span>, 
-    <span class="function_or_atom">wall</span><span class="arrow">-&gt;</span><span class="function_or_atom">weibo</span>.
-</code></pre><p>其实<code>Storm</code>不正是对应着<code>Pipe</code>吗:)</p>
+        <p>当我们开发了一个新版本的软件时，通常需要和稳定版进行对比，进行QoS评估。对实时性网络服务而言，比较客观的做法是同时请求相同的服务，然后对比返回结果。</p>
+<p>首先，我们对一些常用的函数进行包裹，简化操作：<br><a id="more"></a></p>
+<h2 id="发送Http请求">发送Http请求</h2>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">func</span> sendHttpRequest(url <span class="typename">string</span>) <span class="typename">string</span> {</div><div class="line">	response, _ := http.Get(url)</div><div class="line">	<span class="keyword">defer</span> response.Body.Close()</div><div class="line">	<span class="keyword">var</span> bodystr <span class="typename">string</span></div><div class="line">             <span class="keyword">if</span> response.StatusCode ==<span class="number"> 200</span> {</div><div class="line">             	body, _ := ioutil.ReadAll(response.Body)</div><div class="line">             	bodystr = <span class="typename">string</span>(body)</div><div class="line">             } <span class="keyword">else</span> {</div><div class="line">                          <span class="keyword">return</span> <span class="string">""</span></div><div class="line">             }</div><div class="line">             <span class="keyword">return</span> bodystr</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<h2 id="获取Json数据">获取Json数据</h2>
+<p>如果你知道返回的json数据的格式，可以事先定义好对应的数据结构。例如json返回内容为</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">{</div><div class="line">  "<span class="attribute">name</span>":<span class="value"><span class="string">"Monica"</span></span>,</div><div class="line">  "<span class="attribute">age</span>": <span class="value"><span class="number">10</span></span>, </div><div class="line">  "<span class="attribute">hobby</span>" : <span class="value">[<span class="string">"music"</span>, <span class="string">"dance"</span>]</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>对应的数据结构和操作：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> {</div><div class="line">  name <span class="typename">string</span> <span class="string">`json:"name"`</span></div><div class="line">  age <span class="typename">string</span> <span class="string">`json:"age"`</span></div><div class="line">  hobby []<span class="typename">string</span> <span class="string">`json:"hobby"`</span></div><div class="line">}</div><div class="line"></div><div class="line">bodystr := sendHttpRequest(url)</div><div class="line"></div><div class="line"><span class="keyword">var</span> person Person</div><div class="line">err := json.Unmarshal([]<span class="typename">byte</span>(bodystr), &person)</div></pre></td></tr></table></figure>
+
+<p>这样json内容就会变成一个实例化的Person对象，所有的json成员都会对应类型化。</p>
+<p>如果我们不知道json数据格式怎么办?  json的最外层肯定是一个map, 所以可以把json数据反序列化为一个通用的 <code>interface{}</code> :</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">func</span> getJson(url <span class="typename">string</span>) <span class="keyword">map</span>[<span class="typename">string</span>]<span class="keyword">interface</span>{} {</div><div class="line">	bodystr := sendHttpRequest(url)</div><div class="line">        <span class="keyword">var</span>  object <span class="keyword">interface</span>{}</div><div class="line">        err := json.Unmarshal([]<span class="typename">byte</span>(bodystr), &object)</div><div class="line">	<span class="keyword">if</span> err != <span class="constant">nil</span> {</div><div class="line">	      <span class="keyword">return</span> <span class="constant">nil</span>	</div><div class="line">	} <span class="keyword">else</span> {</div><div class="line">	      <span class="keyword">return</span> object.(<span class="keyword">map</span>[<span class="typename">string</span>]<span class="keyword">interface</span>{})</div><div class="line">	}</div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>好处是通用，可以解析任意的json，但由于不知内层数据的类型，因此只作了最外层map的解析，返回数据的类型为<code>map[string]interface{}</code>。之后可能会根据需要进行类型断言，转换等。</p>
+<p>感觉json目前已经成了网络数据传输格式的事实标准，有很多人总结过<a href="http://www.cnblogs.com/SanMaoSpace/p/3139186.html" target="_blank" rel="external">JSON与XML的区别比较</a>，我觉得json最大的优势是:程序员友好。json中的map, array, set, string, num都能完美地对应到某一编程语言中，即表示的不仅仅是文本，还是带类型的数据。而xml本质还是文本，要借助于xslt，scheme，属性等一堆东西实现json的类型化，表示成本高，解析成本也高。可能的好处是比较体系化，有成套的解决方案，用户可视化方便。</p>
 
       
     </div>
@@ -97,13 +89,13 @@
         
   
   <div class="categories">
-    <a href="/categories/storm/">storm</a>
+    <a href="/categories/golang/">golang</a>
   </div>
 
         
   
   <div class="tags">
-    <a href="/tags/storm,-job/">storm, job</a>
+    <a href="/tags/json,-golang,-networking/">json, golang, networking</a>
   </div>
 
         
@@ -133,16 +125,16 @@
 
  <nav id="pagination" >
     
-    <a href="/2014/09/06/pattern-match-is-good/" class="alignleft prev" >上一页</a>
+    <a href="/2014/11/28/concurrent-in-go/" class="alignleft prev" >上一页</a>
     
     
-    <a href="/2014/08/31/summary-2014-08/" class="alignright next" >下一页</a>
+    <a href="/2014/11/02/storm-cluster-install-config/" class="alignright next" >下一页</a>
     
     <div class="clearfix"></div>
 </nav>
 <section id="comment">
 <!-- 多说评论框 start -->
-    <div class="ds-thread" data-thread-key="2014/09/04/storm-real-time-case1/" data-title="Storm实时处理案例(1)" data-url="http://yoursite.com/2014/09/04/storm-real-time-case1/"></div>
+    <div class="ds-thread" data-thread-key="2014/11/28/json-and-go/" data-title="Go实践之JSON解析" data-url="http://yoursite.com/2014/11/28/json-and-go/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
