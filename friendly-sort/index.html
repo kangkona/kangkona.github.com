@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    人性化排序 // Grey Times
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+
+  <meta property="og:title" content="人性化排序" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://kangkona.tk/friendly-sort/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://kangkona.tk//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://kangkona.tk/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://kangkona.tk/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Grey Times" />
+
+    
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/tomorrow-night-bright.min.css">
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+     
+
+
+
+
+
+<div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">Gery Times</h1>
+    <h2 class="brand-tagline">Thoughts in the mirror.</h2>
+
+    <nav class="nav">
+    <ul class="nav-list">
+          
+          
+              
+          <li class="nav-item">
+          <a href="http://kangkona.tk/about/">
+
+          <span>about</span>
+          </a> 
+          
+          </li><br/>
+          
+              
+          <li class="nav-item">
+          <a href="http://kangkona.tk/link/">
+
+          <span>link</span>
+          </a> 
+          
+          </li><br/>
+          
+            <li> <a href="#" target="blank">Edit this Page</a> </li>
+     </ul>
+     </nav>
+
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://kangkona.tk/friendly-sort">人性化排序</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>27</sup></span><span class="post-date-separator">/</span><span>&nbsp;</span><span class="post-date-month">Oct</span> <span class="post-date-year">2014</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-job" href="http://kangkona.tk//categories/job">Job</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            <p>对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：</p>
+
+<pre><code>    1. 按自然顺序排列；
+    2. 按相似度由高至低排列；
+    3. 按信息的活性(热度)进行排列。
+</code></pre>
+
+<p>当然，最糟糕也最常见的是下面这种方式：完全不做任何排序。</p>
+
+<p>最近碰到的一个应用场景让我对此进行了反思。我们的实时公交查询系统为其他App开发者提供了这样的一个API：根据用户的搜索内容返回线路名称。现在不妨假设用户输入了一个 &ldquo;1&rdquo;，后台进行查询，找到所有与 &ldquo;1&rdquo; 有关的线路，最开始我们的输出是无序的:</p>
+
+<pre><code>               81,  17, 201路， 快线1号, 11, 1路, 168 , 高快巴士1号线 ....
+</code></pre>
+
+<p>结果竟然返回了221个与1有关的线路，这样的展示结果显然是会让用户骂人的。后来决定先返回所有 &ldquo;1&rdquo; 开头的线路，其余自然排序:</p>
+
+<pre><code>              11, 17, 168, 1路，201路， 81, 高快巴士1号线，快线1号 ...
+</code></pre>
+
+<p>这次结果好了很多，但是1路竟然排在168后面，仍然会让人不爽，所以按照相似度进行排序:</p>
+
+<pre><code>              11，17，81，1路，168，201路，.... 快线1号，高快巴士1号线
+</code></pre>
+
+<p>这次达到了预想的效果，但把快线1号，高快巴士1号线这样比较难记，难输入的线路放到了最后，实际上用户如果只输入 &ldquo;1&rdquo; 进行查询，很可能要找的就是 “快线1号” 或者 “高快巴士1号线”，所以把这种输入成本高的线路挪到了前面:</p>
+
+<pre><code>              11, 17, 1路，168，快线1号，高快巴士1号线，201路，81 ....
+</code></pre>
+
+<p>实现代码：</p>
+
+<pre><code class="language-Java">		Arrays.sort(sortedLineNames, new Comparator&lt;Object&gt;(){  
+            @Override  
+            public int compare(Object b1, Object b2) {  
+            	String s1 = (String)b1;
+            	String s2 = (String)b2;
+            	
+            	if (s1.startsWith(searchString) &amp;&amp; !s2.startsWith(searchString)) {
+            		return -1;
+            	} 
+            	else if(!s1.startsWith(searchString) &amp;&amp; s2.startsWith(searchString)) {
+            		return 1;
+            	} 
+            	else if (! s1.startsWith(searchString) &amp;&amp; !s2.startsWith(searchString)) {
+            	       return s2.compareTo(s1);
+            	}
+            	else {
+            	       return s1.compareTo(s2);
+            	}
+            }             
+        });                                                                            
+</code></pre>
+
+<p>当然，Java 8引入lambda之后，可以简写为：</p>
+
+<pre><code>       Arrays.sort(sortedLineNames, 
+                   (s1, s2) -&gt;  
+                     s1.startsWith(searchString) &amp;&amp; !s2.startsWith(searchString) ? -1 :
+                    !s1.startsWith(searchString) &amp;&amp;  s2.startsWith(searchString) ?  1 :
+                    !s1.startsWith(searchString) &amp;&amp; !s2.startsWith(searchString) ?  s2.compareTo(s1) : 
+                     s1.compareTo(s2));
+</code></pre>
+
+<p>在多数情况下，这些策略已经可以组合出不错的效果了，但这就足够了么？ 用户搜索的目的是希望找到对自己有价值的信息，而排序最终是为了讨好用户：在信息呈现之前，猜测一下用户的心理，认为用户最想要什么，就把什么放在前面，让用户用最少的时间成本获取最有价值的信息。所以为了更懂用户，可能还需要对日志进行分析，统计每条线路的搜索频率，得出线路的活跃程度，每次尽可能把活性比较大的线路放置在返回结果的前面。更进一步，可以看看线路活性的分布情况和规律，得出更有指导性的结论。</p>
+
+<p>写到这里，突然感觉排序分明就是一种人工智能的东东，这也无怪乎那些做搜索的公司都铆足了劲儿搞深度学习。 在这样一个时代，不懂人心估计就得死吧。</p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-job" href="http://kangkona.tk//tags/job">job</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+					<div class="paging-newer">
+						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="http://kangkona.tk/storm-cluster-install-config">Storm集群的安装与配置</a>
+		            </div>
+		            
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://kangkona.tk/data-struct-powerful">借力数据结构</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>Kangkona D.Han &copy; 2015. All rights reserved. </p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

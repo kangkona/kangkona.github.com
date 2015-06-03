@@ -11,10 +11,10 @@
     
     <item>
       <title>Storm集群的安装与配置</title>
-      <link>http://kangkona.tk/posts/storm-cluster-install-config/</link>
+      <link>http://kangkona.tk/storm-cluster-install-config/</link>
       <pubDate>Sun, 02 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/posts/storm-cluster-install-config/</guid>
+      <guid>http://kangkona.tk/storm-cluster-install-config/</guid>
       <description>
 
 &lt;h2 id=&#34;1-infrastructure:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;1. Infrastructure&lt;/h2&gt;
@@ -300,10 +300,10 @@ export PATH=${STORM_HOME}/bin:$PATH
     
     <item>
       <title>人性化排序</title>
-      <link>http://kangkona.tk/posts/friendly-sort/</link>
+      <link>http://kangkona.tk/friendly-sort/</link>
       <pubDate>Mon, 27 Oct 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/posts/friendly-sort/</guid>
+      <guid>http://kangkona.tk/friendly-sort/</guid>
       <description>&lt;p&gt;对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;    1. 按自然顺序排列；
@@ -375,10 +375,10 @@ export PATH=${STORM_HOME}/bin:$PATH
     
     <item>
       <title>借力数据结构</title>
-      <link>http://kangkona.tk/posts/data-struct-powerful/</link>
+      <link>http://kangkona.tk/data-struct-powerful/</link>
       <pubDate>Thu, 18 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/posts/data-struct-powerful/</guid>
+      <guid>http://kangkona.tk/data-struct-powerful/</guid>
       <description>
 
 &lt;p&gt;做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:&lt;/p&gt;
@@ -483,10 +483,10 @@ type TrackPoint struct {
     
     <item>
       <title>Storm实时处理案例(1)</title>
-      <link>http://kangkona.tk/posts/storm-real-time-case-1/</link>
+      <link>http://kangkona.tk/storm-real-time-case-1/</link>
       <pubDate>Thu, 04 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/posts/storm-real-time-case-1/</guid>
+      <guid>http://kangkona.tk/storm-real-time-case-1/</guid>
       <description>&lt;p&gt;在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,
 Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截
 出一个单位数据。&lt;/p&gt;

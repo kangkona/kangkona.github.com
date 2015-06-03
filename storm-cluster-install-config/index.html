@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Storm集群的安装与配置 // Grey Times
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+
+  <meta property="og:title" content="Storm集群的安装与配置" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://kangkona.tk/storm-cluster-install-config/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://kangkona.tk//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://kangkona.tk/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://kangkona.tk/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Grey Times" />
+
+    
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/tomorrow-night-bright.min.css">
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+     
+
+
+
+
+
+<div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">Gery Times</h1>
+    <h2 class="brand-tagline">Thoughts in the mirror.</h2>
+
+    <nav class="nav">
+    <ul class="nav-list">
+          
+          
+              
+          <li class="nav-item">
+          <a href="http://kangkona.tk/about/">
+
+          <span>about</span>
+          </a> 
+          
+          </li><br/>
+          
+              
+          <li class="nav-item">
+          <a href="http://kangkona.tk/link/">
+
+          <span>link</span>
+          </a> 
+          
+          </li><br/>
+          
+            <li> <a href="#" target="blank">Edit this Page</a> </li>
+     </ul>
+     </nav>
+
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#1-infrastructure:cb311eb8dc04c7f9620c5e97632331c7">1. Infrastructure</a></li>
+<li><a href="#2-depended-software:cb311eb8dc04c7f9620c5e97632331c7">2. Depended Software</a></li>
+<li><a href="#3-install-config:cb311eb8dc04c7f9620c5e97632331c7">3. Install &amp;&amp; Config</a>
+<ul>
+<li><a href="#3-1-修改-etc-hosts:cb311eb8dc04c7f9620c5e97632331c7">3.1 修改/etc/hosts</a></li>
+<li><a href="#3-2-build-essential:cb311eb8dc04c7f9620c5e97632331c7">3.2 build-essential</a></li>
+<li><a href="#3-3-安装jdk:cb311eb8dc04c7f9620c5e97632331c7">3.3 安装JDK</a></li>
+<li><a href="#3-4-安装zookeeper-3-4-6:cb311eb8dc04c7f9620c5e97632331c7">3.4 安装Zookeeper 3.4.6</a></li>
+<li><a href="#3-5-安装zmq:cb311eb8dc04c7f9620c5e97632331c7">3.5 安装ZMQ</a></li>
+<li><a href="#3-6-安装-jzmq:cb311eb8dc04c7f9620c5e97632331c7">3.6 安装 jzmq</a></li>
+<li><a href="#3-7-storm-install-config:cb311eb8dc04c7f9620c5e97632331c7">3.7 Storm install &amp;&amp; config</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://kangkona.tk/storm-cluster-install-config">Storm集群的安装与配置</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>2</sup></span><span class="post-date-separator">/</span><span>&nbsp;</span><span class="post-date-month">Nov</span> <span class="post-date-year">2014</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-job" href="http://kangkona.tk//categories/job">Job</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            
+
+<h2 id="1-infrastructure:cb311eb8dc04c7f9620c5e97632331c7">1. Infrastructure</h2>
+
+<p>3台流处理Server
+- CPU : 3 Core
+- Memory : 3G
+- Disk : 300G
+- OS : Ubuntu Server 12.04 64bit</p>
+
+<h2 id="2-depended-software:cb311eb8dc04c7f9620c5e97632331c7">2. Depended Software</h2>
+
+<ul>
+<li>built-essential</li>
+<li>Python 2.7</li>
+<li>Java 1.7.0_71(最低要求1.6)</li>
+<li>Zookeeeper 3.4.6</li>
+<li>ZeroMQ 4.0.5</li>
+<li>jzmq github-master</li>
+<li>Storm 0.9.1-incubating</li>
+</ul>
+
+<h2 id="3-install-config:cb311eb8dc04c7f9620c5e97632331c7">3. Install &amp;&amp; Config</h2>
+
+<p>几乎所有软件对集群中的机器来说，安装过程都是完全一致的，所有没有必要在每台机器重复安装过程，可以使用Puppet或者Docker这些工具来提高效率。但由于操作的集群网络环境受限，最终利用Xshell可以一次向多个会话发送命令的功能，做到了完全同步的安装和配置。</p>
+
+<h3 id="3-1-修改-etc-hosts:cb311eb8dc04c7f9620c5e97632331c7">3.1 修改/etc/hosts</h3>
+
+<p>使用名称来代表机器会带来很多方便，在/etc/hosts中追加如下内容：</p>
+
+<pre><code>172.21.1.168	master
+172.21.1.169	node1
+172.21.1.170	node2
+</code></pre>
+
+<h3 id="3-2-build-essential:cb311eb8dc04c7f9620c5e97632331c7">3.2 build-essential</h3>
+
+<p><a href="http://packages.ubuntu.com/lucid/amd64/build-essential/filelist">build-essential</a>作用是提供编译程序必须软件包的列表信息, 编译程序有了这个软件包, 才知道 头文件和库函数的位置，还会下载依赖的软件包，组成一个基本的开发环境</p>
+
+<pre><code>  $ sudo apt-get install build-essential
+</code></pre>
+
+<h3 id="3-3-安装jdk:cb311eb8dc04c7f9620c5e97632331c7">3.3 安装JDK</h3>
+
+<pre><code>$ tar zxvf jdk-7u71-linux-x86.tar.gz
+# mv jdk1.7.0_71 /usr/lib/jvm
+# sudo vim /etc/profile
+</code></pre>
+
+<p>追加内容：</p>
+
+<pre><code>export JAVA_HOME=/usr/lib/jvm/jdk1.7.0_71
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=${JAVA_HOME}/bin:${JRE_HOME}/bin:$PATH
+</code></pre>
+
+<pre><code>$source /etc/profile
+</code></pre>
+
+<h3 id="3-4-安装zookeeper-3-4-6:cb311eb8dc04c7f9620c5e97632331c7">3.4 安装Zookeeper 3.4.6</h3>
+
+<p>详细内容可以参考 <a href="http://www.iteblog.com/archives/904">Zookeeper 3.4.5分布式安装手册</a> 这篇文章， 这里简要描述：</p>
+
+<pre><code class="language-shell">$ tar -zxvf zookeeper-3.4.6.tar.gz
+$ cd zookeeper-3.4.6/conf/
+$ cp zoo_sample.cfg zoo.cfg
+$ vim zoo.cfg
+</code></pre>
+
+<ul>
+<li>将里面的默认配置修改为如下（具体配置可以根据你机器来定）：</li>
+</ul>
+
+<pre><code>tickTime=2000
+# The number of ticks that the initial
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit=5
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just
+# example sakes.
+dataDir=/logs/zookeeper
+# the port at which the clients will connect
+clientPort=2181
+
+server.1 = master:2888:3888
+server.2 = node1:2888:3888
+server.3 = node2:2888:3888
+</code></pre>
+
+<ul>
+<li>在刚刚zoo.cfg文件中dataDir属性指定的目录（本文中为/logs/zookeeper）下创建一个myid，在里面添加你指定的server编号，因为这台机器是master，而zoo.cfg中master编号为1(server.1=master:2888:3888)，所以myid内容只需要为1即可。</li>
+</ul>
+
+<pre><code>$ mkdir -p /logs/zookeeper
+$ echo 1   &gt; /logs/zookeeper/myid 
+</code></pre>
+
+<ul>
+<li><p>这样就在master机器上配置好Zookeeper，接下来只需要将master配置好的Zookeeper整个目录打包分发到node1、node2机器中，解压到安装位置。</p>
+
+<p><strong>不要忘记在node1的/logs/zookeeper/myid文件中添加2。node2的/logs/zookeeper/myid文件中添加3。</strong></p></li>
+
+<li><p>将每个机器的zookeeper的路径添加到Path
+在/etc/profile追加如下内容：</p></li>
+</ul>
+
+<pre><code># zookeeper
+export ZOOKEEPER_HOME=/packages/zookeeper-3.4.6
+export PATH=${ZOOKEEPER_HOME}/bin:$PATH
+</code></pre>
+
+<p><strong>不要忘记在三台机器 <code>source /etc/profile</code> 使之生效。</strong></p>
+
+<ul>
+<li>分别在master、node1、node2机器上启动Zookeeper相关服务：</li>
+</ul>
+
+<pre><code>$ZOOKEEPER_HOME/bin/zkServer.sh start
+JMX enabled by default
+Using config: /home/wyp/Downloads/zookeeper-3.4.5/bin/../conf/zoo.cfg
+Starting zookeeper ... STARTED
+</code></pre>
+
+<ul>
+<li>测试Zookeeper是否安装成功：
+参见 <a href="http://www.iteblog.com/archives/904">Zookeeper 3.4.5分布式安装手册</a> 第7点 。</li>
+</ul>
+
+<h3 id="3-5-安装zmq:cb311eb8dc04c7f9620c5e97632331c7">3.5 安装ZMQ</h3>
+
+<p>默认安装在/usr/local/lib位置，后面会比较省劲：</p>
+
+<pre><code>$ tar -xzf zeromq-4.0.5.tar.gz
+$ cd zeromq-4.0.5
+$ ./configure
+$ make
+$ sudo make install
+</code></pre>
+
+<h3 id="3-6-安装-jzmq:cb311eb8dc04c7f9620c5e97632331c7">3.6 安装 jzmq</h3>
+
+<p>最开始装<a href="https://github.com/nathanmarz/jzmq">nathanmarz</a>的分支，一直无法make，最后下载了zeromq的<a href="https://github.com/zeromq/jzmq">master</a>分支。  make过程中提示安装libtool, pkg-config, autoconf几个工具:</p>
+
+<pre><code>$ sudo apt-get install libtool pkg-config autoconf
+$ git clone https://github.com/zeromq/jzmq
+$ cd jzmq
+$ ./autogen.sh
+$ ./configure
+$ make
+$ sudo make install
+</code></pre>
+
+<h3 id="3-7-storm-install-config:cb311eb8dc04c7f9620c5e97632331c7">3.7 Storm install &amp;&amp; config</h3>
+
+<ul>
+<li>安装之前的调研</li>
+</ul>
+
+<p>在官网下载了storm-0.9.1-incubating 版本解压到安装位置。 该版本的一大亮点是采用了Netty做消息传输层，在以前的版本里，Storm只能依赖ZeroMQ做消息的传输，但其实并不适合,  <a href="http://www.cnblogs.com/alephsoul-alephsoul/p/3467651.html">理由</a>：</p>
+
+<ul>
+<li>ZeroMQ是一个本地化的消息库，它过度依赖操作系统环境；</li>
+<li>安装起来比较麻烦；(有了Netty可以不要ZeroMQ和jzmq)</li>
+<li>ZeroMQ的稳定性在不同版本之间差异巨大，并且目前只有2.1.7版本的ZeroMQ能与Storm协调的工作(写文档才注意到这句话。。。后面需要测试一下)。</li>
+</ul>
+
+<p>引入Netty的原因是：
+  - 平台隔离，Netty是一个纯Java实现的消息队列，可以帮助Storm实现更好的跨平台特性，同时基于JVM的实现可以让我们对消息有更好的控制；
+  - 高性能，Netty的性能要比ZeroMQ快两倍左右，<a href="http://yahooeng.tumblr.com/post/64758709722/making-storm-fly-with-netty">让Storm飞</a> 专门比较了ZeroMQ和Netty的性能。
+  -  安全性认证，使得我们将来要做的 worker 进程之间的认证授权机制成为可能。</p>
+
+<p>主要参考<a href="http://www.cnblogs.com/panfeng412/archive/2012/11/30/how-to-install-and-deploy-storm-cluster.html">Storm集群安装部署步骤【详细版】</a> 和其他集群的经验对conf/storm.yaml进行如下配置：</p>
+
+<ul>
+<li>storm.zookeeper.servers: Storm集群使用的Zookeeper集群地址，其格式如下：</li>
+</ul>
+
+<pre><code>storm.zookeeper.servers:
+     - &quot;172.21.1.168&quot;
+     - &quot;172.21.1.169&quot;
+     - &quot;172.21.1.170&quot;
+</code></pre>
+
+<p>如果Zookeeper集群使用的不是默认端口，那么还需要storm.zookeeper.port选项。</p>
+
+<ul>
+<li>storm.local.dir: Nimbus和Supervisor进程用于存储少量状态，如jars、confs等的本地磁盘目录，需要提前创建该目录并给以足够的访问权限。然后在storm.yaml中配置该目录，如：</li>
+</ul>
+
+<pre><code>storm.local.dir: &quot;/logs/storm/workdir&quot;
+</code></pre>
+
+<ul>
+<li><p>java.library.path: Storm使用的本地库(ZMQ和JZMQ)加载路径，默认为&rdquo;/usr/local/lib:/opt/local/lib:/usr/lib&rdquo;，一般来说ZMQ和JZMQ默认安装在/usr/local/lib 下，因此不需要配置即可。</p></li>
+
+<li><p>nimbus.host: Storm集群Nimbus机器地址，各个Supervisor工作节点需要知道哪个机器是Nimbus，以便下载Topologies的jars、confs等文件，如：</p></li>
+</ul>
+
+<pre><code>nimbus.host: &quot;172.21.1.168&quot;
+</code></pre>
+
+<ul>
+<li>supervisor.slots.ports: 对于每个Supervisor工作节点，需要配置该工作节点可以运行的worker数量。每个worker占用一个单独的端口用于接收消息，该配置选项即用于定义哪些端口是可被worker使用的。默认情况下，每个节点上可运行4个workers，分别在6700、6701、6702和6703端口，我配置了80个：</li>
+</ul>
+
+<pre><code>supervisor.slots.ports:
+    - 6700
+    - 6701
+    - 6702
+    - 6703
+     ......
+    - 6780
+</code></pre>
+
+<ul>
+<li>storm UI端口</li>
+</ul>
+
+<pre><code>ui.port: 8088
+</code></pre>
+
+<ul>
+<li>如果要在Storm里使用Netty做传输层，只需要简单的把下面的内容加入到storm.yaml中，并根据你的实际情况调整参数即可：</li>
+</ul>
+
+<pre><code>storm.messaging.transport: &quot;backtype.storm.messaging.netty.Context&quot;
+storm.messaging.netty.server_worker_threads: 1
+storm.messaging.netty.client_worker_threads: 1
+storm.messaging.netty.buffer_size: 5242880
+storm.messaging.netty.max_retries: 100
+storm.messaging.netty.max_wait_ms: 1000
+storm.messaging.netty.min_wait_ms: 100
+</code></pre>
+
+<ul>
+<li>为了方便使用，可以将Storm位置加入到系统环境变量中</li>
+</ul>
+
+<p>在/etc/profile追加如下内容：</p>
+
+<pre><code># Storm
+export STORM_HOME=/packages/zookeeper-3.4.6
+export PATH=${STORM_HOME}/bin:$PATH
+</code></pre>
+
+<p><strong>不要忘记在三台机器 <code>source /etc/profile</code> 使之生效。</strong></p>
+
+<ul>
+<li>启动Storm各个后台进程</li>
+</ul>
+
+<p>最后一步，启动Storm的所有后台进程。和Zookeeper一样，Storm也是快速失败（fail-fast)的系统，这样Storm才能在任意时刻被停止，并且当进程重启后被正确地恢复执行。这也是为什么Storm不在进程内保存状态的原因，即使Nimbus或    Supervisors被重启，运行中的Topologies不会受到影响。</p>
+
+<p>以下是启动Storm各个后台进程的方式：
+  - Nimbus: 在Storm主控节点上运行&rdquo;bin/storm nimbus &gt;/dev/null 2&gt;&amp;1 &amp;&ldquo;启动Nimbus后台程序，并放到后台执行；
+  - Supervisor: 在Storm各个工作节点上运行&rdquo;bin/storm supervisor &gt;/dev/null 2&gt;&amp;1 &amp;&ldquo;启动Supervisor后台程序，并放到后台执行；
+  - UI: 在Storm主控节点上运行&rdquo;bin/storm ui &gt;/dev/null 2&gt;&amp;1 &amp;&ldquo;启动UI后台程序，并放到后台执行，启动后可以通过http://{nimbus host}:8080观察集群的worker资源使用情况、Topologies的运行状态等信息。</p>
+
+<p><strong>注意事项</strong>：
+  - Storm后台进程被启动后，将在Storm安装部署目录下的logs/子目录下生成各个进程的日志文件。
+  - 经测试，Storm UI必须和Storm Nimbus部署在同一台机器上，否则UI无法正常工作，因为UI进程会检查本机是否存在Nimbus链接。</p>
+
+<p>至此，Storm集群已经部署、配置完毕，可以向集群提交拓扑运行了。</p>
+
+<ul>
+<li><p>向集群提交任务</p>
+
+<ul>
+<li>启动Storm Topology：</li>
+</ul></li>
+</ul>
+
+<p><code>storm jar allmycode.jar org.me.MyTopology arg1 arg2 arg3</code>
+ - 停止Storm Topology：</p>
+
+<p><code>storm kill {toponame}</code></p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-storm" href="http://kangkona.tk//tags/storm">storm</a>,
+	                
+	                <a class="post-tag post-tag-job" href="http://kangkona.tk//tags/job">job</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+					<div class="paging-newer">
+						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="http://kangkona.tk/json-and-go">Go实践之JSON解析</a>
+		            </div>
+		            
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://kangkona.tk/friendly-sort">人性化排序</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>Kangkona D.Han &copy; 2015. All rights reserved. </p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

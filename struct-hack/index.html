@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    Struct Hack // Grey Times
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+
+  <meta property="og:title" content="Struct Hack" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://kangkona.tk/struct-hack/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://kangkona.tk//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://kangkona.tk/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://kangkona.tk/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Grey Times" />
+
+    
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/tomorrow-night-bright.min.css">
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+     
+
+
+
+
+
+<div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    <h1 class="brand-title">Gery Times</h1>
+    <h2 class="brand-tagline">Thoughts in the mirror.</h2>
+
+    <nav class="nav">
+    <ul class="nav-list">
+          
+          
+              
+          <li class="nav-item">
+          <a href="http://kangkona.tk/about/">
+
+          <span>about</span>
+          </a> 
+          
+          </li><br/>
+          
+              
+          <li class="nav-item">
+          <a href="http://kangkona.tk/link/">
+
+          <span>link</span>
+          </a> 
+          
+          </li><br/>
+          
+            <li> <a href="#" target="blank">Edit this Page</a> </li>
+     </ul>
+     </nav>
+
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://kangkona.tk/struct-hack">Struct Hack</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>7</sup></span><span class="post-date-separator">/</span><span>&nbsp;</span><span class="post-date-month">Nov</span> <span class="post-date-year">2013</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-c" href="http://kangkona.tk//categories/c">C</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            <p>最近在搞<strong>Compiler</strong>的<strong>CodeGenerator</strong>实验，有一部分需要把Java程序翻译成C程序，比如:</p>
+
+<pre><code> int [] array;
+ array = new int[10];
+ System.out.println(array.length); //10
+</code></pre>
+
+<p>这段代码翻译成C很自然的想法是：</p>
+
+<pre><code> int * array; // int array[] not support in C
+ array = (int*)malloc(sizof(int)*10);
+ printf(&quot;%d\n&quot;,sizof(array)/sizeof(int)); // 1
+</code></pre>
+
+<p>但很可惜这样是错误的，因为malloc操作在堆上分配空间，不一定是连续的，sizof(array)得到的是指针本身所占的单元，和sizeof(int)相等，无法通过sizof求得数组长度。它和下面还不一样：</p>
+
+<pre><code> int array[10];
+ printf(&quot;%d\n&quot;,sizof(array)/sizeof(int)); // 10
+</code></pre>
+
+<p>这里<code>array</code>是数组，是指向整个连续存储空间的常量，所以<code>sizeof</code>对其操作求得的是整个区域的长度。但是当数组名作为函数的参数传递时，数组就退化为指针，又回到了刚才问题。</p>
+
+<p>我们应该怎么做？</p>
+
+<p>在 <a href="http://stackoverflow.com/">StackOverflow</a> 搜了一下，发现<code>ANSI C</code>根本没有直接办法通过指向内存的指针求得分配长度。但<code>Windows</code>下提供了计算指针指向的内存大小的方法[<a href="http://msdn.microsoft.com/zh-cn/library/vstudio/z2s077bc(v=vs.80).aspx#feedback">malloc.h</a>]：</p>
+
+<blockquote>
+<p>msize: returns the size (in bytes) as an unsigned integer.</p>
+</blockquote>
+
+<pre><code> size_t _msize(
+ void *memblock
+ );
+</code></pre>
+
+<p>但由于操作系统策略的原因，实际分配到的大小可能会比指定的大一些<a href="http://jiaqinxu.info/tag/_msize">here</a>。</p>
+
+<p>在Linux下，指针往前偏移一个整形大小的单元也会记录实际分配的大小，我们来窥探一下那个单元的内容：</p>
+
+<pre><code>//test.c
+int main(){
+ int * p;
+ int i;
+ int size;
+ for (i=1;i&lt;11;i++)
+ printf(&quot;%d &quot;,i);
+ printf(&quot;\n&quot;);
+ for (i=0;i&lt;10;i++){
+ p = (int*)malloc(sizeof(int)*i);
+ size = *(int*)((char*)p-sizeof(int));
+ printf(&quot;size:%d &quot;,size);
+ free(p);
+ }
+ printf(&quot;\n&quot;);
+}
+</code></pre>
+
+<pre><code class="language-shell">$gcc test.c
+$./a.out
+1  2  3  4  5  6  7  8  9  10
+17 17 17 17 25 25 33 33 41 41
+</code></pre>
+
+<p>看来Linux的分配策略不能使得内存大小和元素个数一一对应，此法不可用。
+后来发现在Linux下原来也有类似<code>_msize</code>的函数[<a href="http://www.linuxidc.com/Linux/2011-12/48624.htm">malloc.h</a>]：</p>
+
+<pre><code>int * array;
+int size;
+array = (int*)malloc(sizof(50);
+size = malloc_usable_size(array);
+printf(&quot;%d\n&quot;,size);//50
+</code></pre>
+
+<p>但是malloc.h不属于标准C，我们还要继续寻找通用之法。经过大量查阅，终于发现了一种code trick,称作<a href="http://tonybai.com/2013/03/07/struct-hack-in-c/"><strong>struct-hack</strong></a>. 前面提到过，在C语言中，<code>int a[]</code>是违法的，但是把它作为struct的最后一个成员却是可以的：</p>
+
+<pre><code>typedef struct array{
+ int size;
+ int free;
+ int buf[];
+ }array,*Tiger_array;
+</code></pre>
+
+<p>这是在C语言的后期加入的特性，目的就是为了实现<strong>flexible array</strong>， 这样每次给数组分配空间时，需要同步记录size大小。而求size的时候，直接取出来即可：</p>
+
+<pre><code>Tiger_array ta;
+ta = (int*)malloc(sizeof(array)+100);
+ta-&gt;size = 100;
+ta-&gt;free = 0;
+</code></pre>
+
+<p>需要注意一点，这时分配的大小应该是sizeof(struct)加上需求的数组大小。</p>
+
+<p>这个问题就说到这里。</p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-c" href="http://kangkona.tk//tags/c">c</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+					<div class="paging-newer">
+						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="http://kangkona.tk/nlp-note">NLPNote</a>
+		            </div>
+		            
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://kangkona.tk/muse-5-minutes">冥想5分钟, 沉睡1小时</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	<div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = '';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>Kangkona D.Han &copy; 2015. All rights reserved. </p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

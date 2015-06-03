@@ -8,83 +8,87 @@
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/jcommander-using-example/</loc>
+    <loc>http://kangkona.tk/jcommander-using-example/</loc>
     <lastmod>2015-03-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/concurrent-in-go/</loc>
+    <loc>http://kangkona.tk/concurrent-in-go/</loc>
     <lastmod>2014-11-28T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/json-and-go/</loc>
+    <loc>http://kangkona.tk/json-and-go/</loc>
     <lastmod>2014-11-28T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/storm-cluster-install-config/</loc>
+    <loc>http://kangkona.tk/storm-cluster-install-config/</loc>
     <lastmod>2014-11-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/friendly-sort/</loc>
+    <loc>http://kangkona.tk/friendly-sort/</loc>
     <lastmod>2014-10-27T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/data-struct-powerful/</loc>
+    <loc>http://kangkona.tk/data-struct-powerful/</loc>
     <lastmod>2014-09-18T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/the-story-of-aaron-swartz/</loc>
+    <loc>http://kangkona.tk/the-story-of-aaron-swartz/</loc>
     <lastmod>2014-09-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/818-browser-caching/</loc>
+    <loc>http://kangkona.tk/818-browser-caching/</loc>
     <lastmod>2014-09-10T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/the-meaning-of-blogging/</loc>
+    <loc>http://kangkona.tk/the-meaning-of-blogging/</loc>
     <lastmod>2014-09-07T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/pattern-match-is-good/</loc>
+    <loc>http://kangkona.tk/pattern-match-is-good/</loc>
     <lastmod>2014-09-06T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/storm-real-time-case-1/</loc>
+    <loc>http://kangkona.tk/storm-real-time-case-1/</loc>
     <lastmod>2014-09-04T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/tomcat-tune/</loc>
+    <loc>http://kangkona.tk/tomcat-tune/</loc>
     <lastmod>2014-08-06T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/nlp-note/</loc>
+    <loc>http://kangkona.tk/nlp-note/</loc>
     <lastmod>2014-02-06T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/struct-hack/</loc>
+    <loc>http://kangkona.tk/struct-hack/</loc>
     <lastmod>2013-11-07T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/muse-5-minutes/</loc>
+    <loc>http://kangkona.tk/muse-5-minutes/</loc>
     <lastmod>2013-03-16T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>http://kangkona.tk/posts/python-note-1/</loc>
+    <loc>http://kangkona.tk/python-note-1/</loc>
     <lastmod>2013-03-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://kangkona.tk/link/</loc>
   </url>
   
 </urlset>

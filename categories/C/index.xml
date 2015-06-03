@@ -11,10 +11,10 @@
     
     <item>
       <title>Struct Hack</title>
-      <link>http://kangkona.tk/posts/struct-hack/</link>
+      <link>http://kangkona.tk/struct-hack/</link>
       <pubDate>Thu, 07 Nov 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/posts/struct-hack/</guid>
+      <guid>http://kangkona.tk/struct-hack/</guid>
       <description>&lt;p&gt;最近在搞&lt;strong&gt;Compiler&lt;/strong&gt;的&lt;strong&gt;CodeGenerator&lt;/strong&gt;实验，有一部分需要把Java程序翻译成C程序，比如:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt; int [] array;
