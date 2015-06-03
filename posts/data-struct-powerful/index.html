@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    借力数据结构 // Grey Times
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+
+  <meta property="og:title" content="借力数据结构" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://localhost:1313/posts/data-struct-powerful/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://localhost:1313//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:1313/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://localhost:1313/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Grey Times" />
+
+    
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/tomorrow-night-bright.min.css">
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    
+    
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://localhost:1313/">Grey Times</a></li>
+        
+      </ul>
+    </nav>
+
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#位置计算:d361afbdc75d323080e31fe61f4bb8f8">位置计算</a></li>
+<li><a href="#时间预测:d361afbdc75d323080e31fe61f4bb8f8">时间预测</a></li>
+<li><a href="#1-不把站点插入轨迹点集里面:d361afbdc75d323080e31fe61f4bb8f8">1.  不把站点插入轨迹点集里面</a></li>
+<li><a href="#2-把站点插入轨迹集合里面:d361afbdc75d323080e31fe61f4bb8f8">2. 把站点插入轨迹集合里面</a></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://localhost:1313/posts/data-struct-powerful">借力数据结构</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>18</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Sep</span> <span class="post-date-year">2014</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-job" href="http://localhost:1313//categories/job">Job</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            
+
+<p>做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:</p>
+
+<h2 id="位置计算:d361afbdc75d323080e31fe61f4bb8f8">位置计算</h2>
+
+<pre><code>S1         S2        S3             S4                 S5            S6            S7 
+                               P
+</code></pre>
+
+<p>为了得到P的位置，需要利用一个评价公式: 假设P到前一站距离Pre, 到后一站距离Next，两站之间距离Between，有如下公式：</p>
+
+<pre><code>   Cost =  Pre + Next - Between
+</code></pre>
+
+<p>我们认为使Cost取值最小的两个站即为P所在位置的前后站。</p>
+
+<h2 id="时间预测:d361afbdc75d323080e31fe61f4bb8f8">时间预测</h2>
+
+<p>比如我们要估算P到S7站点的到站时间，可以取该车次所有车最近5趟S3到S7的时间 T_AVG，所以预估时间公式为：</p>
+
+<pre><code>T_ESTIMATE = Distance(P-&gt;S4-&gt; ... -&gt;S7) / Distance(S3-&gt;S4-&gt; .... -&gt; S7)   *  T_AVG
+</code></pre>
+
+<p>BUT，现在通过历史数据分析，提取出了线路的轨迹信息，就是除了站点以外，还有很多有序的轨迹点可以代表线路。这些点带来的好处是： 两个站之间的轨迹是曲线(甚至环形都是很常见的)的话，如果只有站点，连出的轨迹就是一条直线段，模拟效果很差；而点多了以后，几乎就可以还原出真实的线路轨迹。</p>
+
+<p>在考虑如何利用这些点的时候，就碰到一个设计权衡的问题：</p>
+
+<h2 id="1-不把站点插入轨迹点集里面:d361afbdc75d323080e31fe61f4bb8f8">1.  不把站点插入轨迹点集里面</h2>
+
+<p>得到的轨迹点集合已经可以很好模拟真实情况了，而站点信息(主要是经纬度)由于是人工采集的，会存在一些偏差，把站点插入轨迹点集之后的模拟效果反而会变差(抽样发现会出现迂回的情况)。但是仍然需要记录每个轨迹点的位置信息(位于哪两站)，设计轨迹点数据结构如下：</p>
+
+<pre><code>type GeoPoint  struct {
+	lat	float
+	lng	float
+}
+
+type TrackPoint struct {
+	GeoPoint
+	preStationIndex	int  //前一站
+	nextStationIndex	int  //后一站
+	index	int   //在点集中的次序
+}
+</code></pre>
+
+<p>这时进行位置计算，就需要用轨迹点去计算:  先算出在哪两个点之间，然后根据前后点的关系，计算出在哪两个站点之间，这时计算比较复杂，可以分成如下情况：</p>
+
+<ul>
+<li><p>前后点没有跨站</p>
+
+<pre><code>  /**
+    *    S1  p1 . . .   pre  cur  next   . .  p2  S2 . . . S3
+    *  
+    *  Path(S1, cur) =  Dis(cur, pre) + Σ PointDis(p1-pre) + Dis(S1, p1)
+    *  Path(S2, cur) =  Dis(cur, next) + Σ PointDis(next-p2) + Dis(p2, S2)
+    */
+</code></pre></li>
+
+<li><p>前后点跨站</p>
+
+<pre><code>//    case1:  S1  . . .   pre   cur  S2   next  . . . . S3
+</code></pre>
+
+<p>//     case2:  S1  &hellip;   pre   S2   cur  next  &hellip; . S3</p></li>
+</ul>
+
+<p>为了区分这两种情况，还要利用上面的Cost函数，计算cur到底在pre-S2，还是S2-next，计算过程十分繁琐。 时间预测的计算有过之而无不及。</p>
+
+<h2 id="2-把站点插入轨迹集合里面:d361afbdc75d323080e31fe61f4bb8f8">2. 把站点插入轨迹集合里面</h2>
+
+<p>如果把站点插入轨迹集合里面，计算位置以及预测时间的过程就会简化许多，这时就需要给TrackPoint增加类型信息进行区分(将来可能会加入红绿灯，拐点等类型) :</p>
+
+<pre><code>const ( 
+    Ordinary =  iota
+    TurnPoint
+    Station
+    TrafficLight 
+)
+
+type Kind int
+
+type TrackPoint struct {
+	GeoPoint
+	preStationIndex	int  //前一站
+	nextStationIndex	int  //后一站
+	index	int   //在点集中的次序
+	kind	Kind //点类型
+}
+</code></pre>
+
+<p>由于站点也是轨迹集合的一员，位置计算时就不存在是否跨站问题了，  时间预测时到两站的距离也只需要计算两部分。</p>
+
+<p>本来为了使轨迹信息不致于受到站点的干扰，采用了第一种设计。但实现位置计算以及时间预测时，明显感觉各种计算都要围绕站点来进行，即使轨迹序列里不加站点，在其他地方还是会受到钳制。改用第二种设计之后，很多计算就变得自然许多，简洁许多，省了很多不必要的弯路。 借用《The Design of Design》的一句话就是：
+<p></p>
+<div style="background-color:black; font:bold 17px italic red;padding-left:50px" >
+     The viewpoint is that of an engineer, focused on utility and effctiveness
+      but also efficiency and elegance.</p>
+
+<p></div></p>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-datastruct" href="http://localhost:1313//tags/datastruct">datastruct</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+					<div class="paging-newer">
+						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="http://localhost:1313/posts/friendly-sort">人性化排序</a>
+		            </div>
+		            
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://localhost:1313/posts/the-story-of-aaron-swartz">互联网之子:亚伦·斯沃茨的故事</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2015. All rights reserved. </p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

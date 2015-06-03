@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Json on Grey Times</title>
+    <link>http://localhost:1313/tags/json/</link>
+    <description>Recent content in Json on Grey Times</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 28 Nov 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/json/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Go实践之JSON解析</title>
+      <link>http://localhost:1313/posts/json-and-go/</link>
+      <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/json-and-go/</guid>
+      <description>
+
+&lt;p&gt;当我们开发了一个新版本的软件时，通常需要和稳定版进行对比，进行QoS评估。对实时性网络服务而言，比较客观的做法是同时请求相同的服务，然后对比返回结果。&lt;/p&gt;
+
+&lt;p&gt;首先，我们对一些常用的函数进行包裹，简化操作：&lt;/p&gt;
+
+&lt;h2 id=&#34;发送http请求:1cbd46da2c17c1ba4bcf718d25d25046&#34;&gt;发送Http请求&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;func sendHttpRequest(url string) string {
+	response, _ := http.Get(url)
+	defer response.Body.Close()
+	var bodystr string
+             if response.StatusCode == 200 {
+             	body, _ := ioutil.ReadAll(response.Body)
+             	bodystr = string(body)
+             } else {
+                          return &amp;quot;&amp;quot;
+             }
+             return bodystr
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;获取json数据:1cbd46da2c17c1ba4bcf718d25d25046&#34;&gt;获取Json数据&lt;/h2&gt;
+
+&lt;p&gt;如果你知道返回的json数据的格式，可以事先定义好对应的数据结构。例如json返回内容为&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  &amp;quot;name&amp;quot;:&amp;quot;Monica&amp;quot;,
+  &amp;quot;age&amp;quot;: 10, 
+  &amp;quot;hobby&amp;quot; : [&amp;quot;music&amp;quot;, &amp;quot;dance&amp;quot;]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对应的数据结构和操作：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Person struct {
+  name string `json:&amp;quot;name&amp;quot;`
+  age string `json:&amp;quot;age&amp;quot;`
+  hobby []string `json:&amp;quot;hobby&amp;quot;`
+}
+
+bodystr := sendHttpRequest(url)
+
+var person Person
+err := json.Unmarshal([]byte(bodystr), &amp;amp;person)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样json内容就会变成一个实例化的Person对象，所有的json成员都会对应类型化。&lt;/p&gt;
+
+&lt;p&gt;如果我们不知道json数据格式怎么办?  json的最外层肯定是一个map, 所以可以把json数据反序列化为一个通用的 &lt;code&gt;interface{}&lt;/code&gt; :&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func getJson(url string) map[string]interface{} {
+	bodystr := sendHttpRequest(url)
+        var  object interface{}
+        err := json.Unmarshal([]byte(bodystr), &amp;amp;object)
+	if err != nil {
+	      return nil	
+	} else {
+	      return object.(map[string]interface{})
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好处是通用，可以解析任意的json，但由于不知内层数据的类型，因此只作了最外层map的解析，返回数据的类型为&lt;code&gt;map[string]interface{}&lt;/code&gt;。之后可能会根据需要进行类型断言，转换等。&lt;/p&gt;
+
+&lt;p&gt;感觉json目前已经成了网络数据传输格式的事实标准，有很多人总结过&lt;a href=&#34;http://www.cnblogs.com/SanMaoSpace/p/3139186.html&#34;&gt;JSON与XML的区别比较&lt;/a&gt;，我觉得json最大的优势是:程序员友好。json中的map, array, set, string, num都能完美地对应到某一编程语言中，即表示的不仅仅是文本，还是带类型的数据。而xml本质还是文本，要借助于xslt，scheme，属性等一堆东西实现json的类型化，表示成本高，解析成本也高。可能的好处是比较体系化，有成套的解决方案，用户可视化方便。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

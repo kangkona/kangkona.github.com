@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <title>
+    《Python学习笔记》的笔记 // Grey Times
+  </title>
+
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+<meta name="description" content="">
+<meta name="keywords" content="">
+<meta name="author" content="">
+
+  <meta property="og:title" content="《Python学习笔记》的笔记" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:url" content="http://localhost:1313/posts/python-note-1/" />
+
+
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/base-min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/pure-min.css">
+  
+  
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.5.0/grids-responsive-min.css">
+  
+  
+
+  <link rel="stylesheet" href="http://localhost:1313//css/redlounge.css">
+  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <link href='//fonts.googleapis.com/css?family=Raleway:400,200,100,700,300,500,600,800' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="http://localhost:1313/touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="http://localhost:1313/favicon.png">
+
+  
+  <link href="" rel="alternate" type="application/rss+xml" title="Grey Times" />
+
+    
+  
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/tomorrow-night-bright.min.css">
+  
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+
+  
+
+  
+
+  
+</head>
+
+<body>
+	
+
+	<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+  <div class="header">
+    
+
+    
+    
+
+    <nav class="nav">
+      <ul class="nav-list">
+        <li class="nav-item"><span class="nav-item-separator">//</span><a href="http://localhost:1313/">Grey Times</a></li>
+        
+      </ul>
+    </nav>
+
+    
+
+  </div>
+</div>
+
+	
+	
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+		<a name="top"></a>
+		
+
+		
+			
+		    <div id="toc" class="pure-u-1 pure-u-md-1-4">
+				<small class="toc-label">Contents</small>
+		   	 	<nav id="TableOfContents">
+<ul>
+<li>
+<ul>
+<li><a href="#基本环境:92ca2ff6f04c0f4fcf9327caf7cf2980">基本环境</a>
+<ul>
+<li><a href="#引用计数:92ca2ff6f04c0f4fcf9327caf7cf2980">引用计数</a></li>
+<li><a href="#垃圾回收:92ca2ff6f04c0f4fcf9327caf7cf2980">垃圾回收</a></li>
+</ul></li>
+<li><a href="#内置类型:92ca2ff6f04c0f4fcf9327caf7cf2980">内置类型</a>
+<ul>
+<li><a href="#字符串:92ca2ff6f04c0f4fcf9327caf7cf2980">字符串</a></li>
+<li><a href="#池化:92ca2ff6f04c0f4fcf9327caf7cf2980">池化</a></li>
+<li><a href="#list:92ca2ff6f04c0f4fcf9327caf7cf2980">List</a>
+<ul>
+<li><a href="#视图:92ca2ff6f04c0f4fcf9327caf7cf2980">视图</a></li>
+</ul></li>
+<li><a href="#set:92ca2ff6f04c0f4fcf9327caf7cf2980">set</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+		    </div>
+		    
+	    
+  		<section class="post">
+            <h1 class="post-title">
+              <a href="http://localhost:1313/posts/python-note-1">《Python学习笔记》的笔记</a>
+            </h1>
+            <h3 class="post-subtitle">
+            	
+            </h3>
+            
+            	<span class="post-date">
+                	<span class="post-date-day"><sup>16</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2013</span>
+            	</span>
+            	
+            
+            	
+            
+
+			
+			
+				<div class="post-categories">
+				
+					<a class="post-category post-category-python" href="http://localhost:1313//categories/python">Python</a>
+				
+				</div>
+			
+
+			
+
+			
+
+            
+
+<p>这是对雨痕写的Python学习笔记的学习。</p>
+
+<h2 id="基本环境:92ca2ff6f04c0f4fcf9327caf7cf2980">基本环境</h2>
+
+<p>对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。
+因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。</p>
+
+<h3 id="引用计数:92ca2ff6f04c0f4fcf9327caf7cf2980">引用计数</h3>
+
+<p>除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。</p>
+
+<h3 id="垃圾回收:92ca2ff6f04c0f4fcf9327caf7cf2980">垃圾回收</h3>
+
+<p>Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 &ldquo;Reference Cycle Garbage Collection&rdquo;。</p>
+
+<p>能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。</p>
+
+<p>#世代回收</p>
+
+<h2 id="内置类型:92ca2ff6f04c0f4fcf9327caf7cf2980">内置类型</h2>
+
+<ol>
+<li><strong>尽量使用xrange代替range</strong>，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。</li>
+</ol>
+
+<h3 id="字符串:92ca2ff6f04c0f4fcf9327caf7cf2980">字符串</h3>
+
+<pre><code class="language-python">&gt;&gt;&gt; &quot;,&quot;.join([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;])
+'a,b,c'
+&gt;&gt;&gt; &quot;a,b,c&quot;.split(&quot;,&quot;)
+!
+['a', 'b', 'c']
+&gt;&gt;&gt; &quot;a\nb\r\nc&quot;.splitlines()
+['a', 'b', 'c']
+&gt;&gt;&gt;&quot;a\nb\r\nc&quot;.splitlines(True)
+['a\n', 'b\r\n', 'c']
+&gt;&gt;&gt; &quot;abc&quot;.startswith(&quot;ab&quot;), &quot;abc&quot;.endswith(&quot;bc&quot;)
+True, True
+&gt;&gt;&gt; &quot;abc&quot;.upper(), &quot;Abc&quot;.lower()
+'ABC', 'abc'
+
+&gt;&gt;&gt; &quot;abcabc&quot;.find(&quot;bc&quot;), &quot;abcabc&quot;.find(&quot;bc&quot;, 2) # 可指定查找起始结束位置。
+1, 4
+&gt;&gt;&gt; &quot; abc&quot;.lstrip(), &quot;abc &quot;.rstrip(), &quot; abc &quot;.strip() # 剔除前后空格。
+'abc', 'abc', 'abc'
+&gt;&gt;&gt; &quot;abc&quot;.strip(&quot;ac&quot;)  # 可删除指定的前后缀字符。
+'b'
+&gt;&gt;&gt; &quot;abcabc&quot;.replace(&quot;bc&quot;, &quot;BC&quot;)# 可指定替换次数。
+'aBCaBC'
+&gt;&gt;&gt; &quot;a\tbc&quot;.expandtabs(4)
+'a  bc'
+&gt;&gt;&gt; &quot;123&quot;.ljust(5, '0'), &quot;456&quot;.rjust(5, '0'), &quot;abc&quot;.center(10, '*') # 填充
+'12300', '00456', '***abc****'
+&gt;&gt;&gt; &quot;123&quot;.zfill(6), &quot;123456&quot;.zfill(4) # 数字填充
+'000123', '123456'
+</code></pre>
+
+<blockquote>
+<p>string.Template可以处理较复杂的需求</p>
+</blockquote>
+
+<h3 id="池化:92ca2ff6f04c0f4fcf9327caf7cf2980">池化</h3>
+
+<p>池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。</p>
+
+<h3 id="list:92ca2ff6f04c0f4fcf9327caf7cf2980">List</h3>
+
+<p>可用bisect 向有序列表中插入元素。</p>
+
+<p><strong>性能</strong>
+1. 列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。
+2. 某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。</p>
+
+<p>###tuple
+在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。</p>
+
+<p>###dict
+字典 (dict) 采用用开放地址法的哈希表实现。
+• 自带元素容量为 8 的 smalltable,只有 &ldquo;超出&rdquo;时才到堆上额外分配元素表内存。
+• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。
+• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。
+• 删除元素操作不会立立即收缩内存。</p>
+
+<blockquote>
+<p>对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减
+少内存开销。</p>
+</blockquote>
+
+<h4 id="视图:92ca2ff6f04c0f4fcf9327caf7cf2980">视图</h4>
+
+<p>要判断两个字典间的差异,使用用视图是最简便的做法。</p>
+
+<pre><code>&gt;&gt;&gt; d1 = dict(a = 1, b = 2)
+&gt;&gt;&gt; d2 = dict(b = 2, c = 3)
+&gt;&gt;&gt; d1 &amp; d2 # 字典不支支持该操作。
+TypeError: unsupported operand type(s) for &amp;: 'dict' and 'dict'
+&gt;&gt;&gt; v1 = d1.viewitems()
+&gt;&gt;&gt; v2 = d2.viewitems()
+&gt;&gt;&gt; v1 &amp; v2  # 交集
+set([('b', 2)])
+&gt;&gt;&gt; v1 | v2  #并
+set([('a', 1), ('b', 2), ('c', 3)])
+&gt;&gt;&gt; v1 - v2  # 差集 (仅 v1 有,v2 没有的)
+set([('a', 1)])
+&gt;&gt;&gt; v1 ^ v2  #对称差集 (不会同时出现在 v1 和 v2 中)
+set([('a', 1), ('c', 3)])
+&gt;&gt;&gt; ('a', 1) in v1
+True
+</code></pre>
+
+<h3 id="set:92ca2ff6f04c0f4fcf9327caf7cf2980">set</h3>
+
+<p>集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 &ldquo;值&rdquo; 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。</p>
+
+<p>运算： ==， ！=， &gt;, |, &amp; ,-, ^</p>
+
+<blockquote>
+<p><strong>数据结构很重要,这几个内置类型并不足以完成全部工作。像 C、数据结构、常用算法这类基础是每个程序开发人员都应该掌握的。</strong></p>
+</blockquote>
+
+	
+			
+
+			
+				<div class="tags-list">
+					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
+					
+	                <a class="post-tag post-tag-reading" href="http://localhost:1313//tags/reading">reading</a>,
+	                
+	                <a class="post-tag post-tag-python" href="http://localhost:1313//tags/python">python</a>,
+	                
+				</div>
+			
+
+			
+				<div class="paging">
+					<span class="paging-label">More Reading</span>
+					
+					<div class="paging-newer">
+						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
+						<a class="paging-link" href="http://localhost:1313/posts/struct-hack">Struct Hack</a>
+		            </div>
+		            
+
+					
+					<div class="paging-older">
+						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
+			            <a class="paging-link" href="http://localhost:1313/posts/muse-5-minutes">冥想5分钟, 沉睡1小时</a>
+		            </div>
+		            
+	            </div>
+            
+          </section>
+          
+          	
+          
+        
+      <div class="footer">
+	<hr class="thin" />
+	<div class="pure-menu pure-menu-horizontal pure-menu-open">
+		<ul class="footer-menu">
+		
+		</ul>
+	</div>
+
+	<p>&copy; 2015. All rights reserved. </p>
+</div>
+    </div>
+  </div>
+	
+
+	
+
+  
+</body>
+</html>

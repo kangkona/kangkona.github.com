@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Movie on Grey Times</title>
+    <link>http://localhost:1313/tags/movie/</link>
+    <description>Recent content in Movie on Grey Times</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 13 Sep 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/movie/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>互联网之子:亚伦·斯沃茨的故事</title>
+      <link>http://localhost:1313/posts/the-story-of-aaron-swartz/</link>
+      <pubDate>Sat, 13 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/the-story-of-aaron-swartz/</guid>
+      <description>&lt;p&gt;今天看了&lt;a href=&#34;http://movie.douban.com/subject/25785114/&#34;&gt;The Internet&amp;rsquo;s Own Boy: The Story of Aaron Swartz&lt;/a&gt;，主人公&lt;a href=&#34;https://en.wikipedia.org/wiki/Aaron_Swartz&#34;&gt;Aaron Swartz&lt;/a&gt;是一个英年早逝的天才黑客，或者可以称其为一个致力于推动世界进步的人。
+Aaron做过很多非凡的事：不到14岁就和互联网之父蒂姆·伯纳斯-李这些互联网大佬们一起工作，参与基础互联网协议RSS的制定，之后创办过TheInfo.org，一个比维基百科还早的知识创建平台。Aaron年幼时就对版权问题感兴趣，以致于飞到华盛顿参与最高法院关于版权的听证会。之后参与Creative-Commons项目，致力于提供一种互联网知识共享的解决方案。你一定听说过Reddit这个网站，没错，这个游走在恶趣味与严肃议题之间的神奇网站也是这个家伙创办的。哦，对了，我正在使用的&lt;code&gt;Markdown&lt;/code&gt;同样也是出自Aaron之手。&lt;/p&gt;
+
+&lt;p&gt;Aaron在技术方面很有成就，但他绝不止是一个只会写代码的人。他是一个理想主义式的人物，他在接受采访时如是说:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;I thing deeply about things and want others to do likewise. I work for ideas and learn from 
+people. I don&#39;t like excluding people.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Aaron认为美国的出版商以及政府对公共领域知识把守过于严苛，以致于知识无法发挥到巨大的作用。所以他利用自己的技术获取到了很多需要付费的文献， 同时在社会公正和政治组织方面也进行了开创性工作。但正在他的影响力逐渐扩大时，当局也开始重视起Aaron本人，在一次导火索上决定严惩Aaron，杀一儆百。由于政府持续施压，Aaron承受压力过大，最终选择了自我了结的方式，用生命捍卫自己未竟的事业。&lt;/p&gt;
+
+&lt;p&gt;影片中有大量对不同人物的采访，通过这些人的表达，我最大的感受是，他们有着自己的价值底线，而且大多数人都会毫不犹豫地按照自己的内心去过活，而不是去与世俗观念寻求一种妥协。
+我感受到的第二点是，互联网一定会促使政治，民主，以及人权朝着好的方向发展。虽然总是有着相反的力量在阻挠， 但同时有种一批不屈的斗士在引领着变革。
+感受最深的一点，需要装裱一下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    只要你愿意去改变，神奇的事情就会发生。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后附上&lt;a href=&#34;http://lists.w3.org/Archives/Public/www-tag/2013Jan/0017.html&#34;&gt;蒂姆·伯纳斯-李对Aaron的悼词&lt;/a&gt;：&lt;/p&gt;
+
+&lt;p&gt;Aaron is dead.&lt;/p&gt;
+
+&lt;p&gt;Wanderers in this crazy world,
+we have lost a mentor, a wise elder.&lt;/p&gt;
+
+&lt;p&gt;Hackers for right, we are one down,
+we have lost one of our own.&lt;/p&gt;
+
+&lt;p&gt;Nurtures, careers, listeners, feeders,
+parents all,
+we have lost a child.&lt;/p&gt;
+
+&lt;p&gt;Let us all weep.&lt;/p&gt;
+
+&lt;p&gt;timbl&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

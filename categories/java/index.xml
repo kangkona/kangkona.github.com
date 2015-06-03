@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Java on Grey Times</title>
+    <link>http://localhost:1313/categories/java/</link>
+    <description>Recent content in Java on Grey Times</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 13 Mar 2015 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>JCommander：Java外部参数解析利器</title>
+      <link>http://localhost:1313/posts/jcommander-using-example/</link>
+      <pubDate>Fri, 13 Mar 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/jcommander-using-example/</guid>
+      <description>&lt;p&gt;最近需要把项目交给别人进行运维，为了不让接手之人涉及太多繁琐细节，我把一些定义在final类中的不可变量抽取出来，把项目变成可外部配置的。用配置文件可以达到这个目的，但由于配置之间有相互依赖关系，比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public static boolean local = false;
+public static String host =  (local) ? &amp;quot;127.0.0.1&amp;quot; : &amp;quot;172.16.3.142&amp;quot;;
+public static int port = (local) ? 6379 : 6380; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;原本只需要改变local, 用配置文件的话与local值有依赖关系的地方都要面临修改。&lt;/p&gt;
+
+&lt;p&gt;后来打算用命令行参数实现可外部动态配置，如果自己动手实现完善的命令行参数解析，可不是一项little job。 比较了几款开源的工具，还是选择了&lt;a href=&#34;http://www.jcommander.org/&#34;&gt;JCommander&lt;/a&gt;。主要原因是被它官网的slogan打动了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Because life is too short to parse command line parameters.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;项目是maven构建的，使用JCommander的方式十分简单:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
+&amp;lt;groupId&amp;gt;com.beust&amp;lt;/groupId&amp;gt;
+&amp;lt;artifactId&amp;gt;jcommander&amp;lt;/artifactId&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用JCommander的方式也很简单，给需要外部传参的变量加Parameter标注：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; @Parameter(names = { &amp;quot;-topologyName&amp;quot;}, description = &amp;quot;Topology name.&amp;quot;)
+ private static String TOP_NAME = &amp;quot;sz-train&amp;quot;;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一般类型参数后面都要跟值，JCommander会根据对应变量做类型检查和转换，不合法时会抛出异常错误。&lt;/p&gt;
+
+&lt;p&gt;boolean类型有点特殊，后面不需要跟一个值，输入&lt;code&gt;-local&lt;/code&gt;之后，local值即为true：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Parameter(names = { &amp;quot;-local&amp;quot;}, description = &amp;quot;Local model, default cluster Model.&amp;quot;)
+public static boolean LOCAL_MODE = false;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果一个boolean变量的默认值为true，而想通过参数设置为false，可以指定元数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Parameter(names = { &amp;quot;-log&amp;quot;, &amp;quot;-verbose&amp;quot;}, description = &amp;quot; Wheather to write system log.&amp;quot;, arity = 1)
+public static boolean LOG = true;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;默认情况下，参数是可选的，如果要求必须指定参数，可以设置required：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Parameter(names = &amp;quot;-operator&amp;quot;, required = true)
+private String operator;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有时仅仅依靠JCommander的类型检查还不够，还需要自定义检查器提前发现不合法的输入：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Parameter(names = { &amp;quot;-redisPort&amp;quot;}, description = &amp;quot;Redis port.&amp;quot;, validateWith = PortValidator.class)
+public static int REDIS_PORT=(LOCAL_MODE) ? 6379:6380;
+
+public static class PortValidator implements IParameterValidator {
+           public void validate(String name, String value)
+            throws ParameterException {
+          Pattern pattern = Pattern.compile(&amp;quot;[1-9]\\d*&amp;quot;);
+          Matcher matcher = pattern.matcher(value);
+          if (matcher.matches()) {
+              int n = Integer.parseInt(value);
+              if (n &amp;lt; 65536) {
+                  return;
+              }
+          }
+          throw new ParameterException(&amp;quot;Parameter &amp;quot; + name 
+                    + &amp;quot; should be a number(0~65535) (found &amp;quot; + value +&amp;quot;)&amp;quot;);
+        }
+      }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果是一个写日志的目录，可以提前发现该目录是否可写，这是配置文件无法做到的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Parameter(names = { &amp;quot;-logDir&amp;quot;}, description = &amp;quot;Dir to write log file.&amp;quot;, 
+                                          validateWith = DirValidator.class)
+public static String LOG_DIR = &amp;quot;/logs/your_project/&amp;quot;; 
+
+public static class DirValidator implements IParameterValidator {
+           public void validate(String name, String value)
+            throws ParameterException {
+            File file = new File(value);
+            if (!file.isDirectory() || !file.canWrite()) {
+                  throw new ParameterException(&amp;quot;Parameter &amp;quot; + name 
+                         + &amp;quot; should be a writable folder(found &amp;quot; + value +&amp;quot;)&amp;quot;);
+                  }
+            }
+      }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于IP地址，不仅可以通过正则表达式进行匹配，还可以进行简单的网络连通性探测等。相比基于文本的配置文件，JCommander显示出了强大的优势。&lt;/p&gt;
+
+&lt;p&gt;但更多的项目可能还是更适合用配置文件的方式进行外部配置，如果配置文件如果可以吸收JCommander的特点，那就perfect了。我理想中的配置文件应该有如下特性：
+- 配置文件本身是programmable
+- 可以进行上下文联系
+- 自动类型检查和转换
+- 可以自定义语义检查器
+- 所使用的弱语言可以方便嵌入&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Tomcat 并发调优</title>
+      <link>http://localhost:1313/posts/tomcat-tune/</link>
+      <pubDate>Wed, 06 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/tomcat-tune/</guid>
+      <description>
+
+&lt;h2 id=&#34;一-linux系统配置:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;一. Linux系统配置&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-增大最大打开文件数限制:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;1. 增大最大打开文件数限制&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt; $ sudo vim /etc/sysctl.conf 
+ # add &amp;quot;fs.file-max = 8061540&amp;quot;
+ $ sudo vim /etc/security/limit.conf 
+ # add &amp;quot;* soft nofile 8192&amp;quot;  and &amp;quot;* hard nofile 16384&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-优化网络:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;2. 优化网络&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo vim /etc/sysctl.conf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;优化后的内容如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; net.ipv4.ip_forward = 0
+
+ # Controls source route verification
+ net.ipv4.conf.default.rp_filter = 1
+
+ # Do not accept source routing
+ net.ipv4.conf.default.accept_source_route = 0
+
+ # Controls the System Request debugging functionality of the kernel
+ kernel.sysrq = 0
+
+ # Controls whether core dumps will append the PID to the core filename
+ # Useful for debugging multi-threaded applications
+ kernel.core_uses_pid = 1
+
+ # Controls the use of TCP syncookies
+ net.ipv4.tcp_syncookies = 1
+
+ # Controls the maximum size of a message, in bytes
+ kernel.msgmnb = 65536
+
+ # Controls the default maxmimum size of a mesage queue
+ kernel.msgmax = 65536
+
+ # Controls the maximum shared segment size, in bytes
+ kernel.shmmax = 68719476736
+
+ # Controls the maximum number of shared memory segments, in pages
+ kernel.shmall = 4294967296
+ vm.swappiness = 0
+ kernel.core_pattern = /tmp/corefile/core-%e-%p-%t
+ net.ipv4.tcp_tw_reuse = 1
+ net.ipv4.tcp_tw_recycle = 1
+ net.ipv4.tcp_fin_timeout = 5
+ net.ipv4.tcp_max_syn_backlog = 65536
+ net.core.netdev_max_backlog =  32768
+ net.core.somaxconn = 32768
+ net.core.wmem_default = 8388608
+ net.core.rmem_default = 8388608
+ net.core.rmem_max = 16777216
+ net.core.wmem_max = 16777216
+ net.ipv4.tcp_timestamps = 0
+ net.ipv4.tcp_synack_retries = 2
+ net.ipv4.tcp_syn_retries = 2
+ net.ipv4.tcp_mem = 94500000 915000000 927000000
+ net.ipv4.tcp_max_orphans = 3276800
+ net.ipv4.ip_local_port_range = 2000  65535
+ net.ipv4.tcp_max_tw_buckets = 5000
+ net.ipv4.netfilter.ip_conntrack_max = 1000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;二-tomcat内存优化:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;二. Tomcat内存优化&lt;/h2&gt;
+
+&lt;h4 id=&#34;tomcat内存优化主要是对-tomcat-启动参数优化-我们可以在-tomcat-的启动脚本-catalina-sh-中设置-java-opts-参数:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;&lt;strong&gt;Tomcat内存优化主要是对 Tomcat 启动参数优化，我们可以在 Tomcat 的启动脚本 catalina.sh 中设置 JAVA_OPTS 参数&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;-server:  启用jdk的server版,一定要作为第一个参数，在多个CPU时性能佳 
+-Xms： 初始Heap大小，使用的最小内存,cpu性能高时此值应设的大一些 
+-Xmx： java heap最大值，使用的最大内存 
+上面两个值是分配JVM的最小和最大内存，取决于硬件物理内存的大小，建议均设为物理内存的一半。 
+-XX:PermSize:设定内存的永久保存区域 
+-XX:MaxPermSize:设定最大内存的永久保存区域 
+-XX:MaxNewSize: 
+-Xss 15120 这使得JBoss每增加一个线程（thread)就会立即消耗15M内存，而最佳值应该是128K,默认值好像是512k. 
++XX:AggressiveHeap 会使得 Xms没有意义。这个参数让jvm忽略Xmx参数,疯狂地吃完一个G物理内存,再吃尽一个G的swap。 
+-Xss：每个线程的Stack大小 
+-verbose:gc 现实垃圾收集信息 
+-Xloggc:gc.log 指定垃圾收集日志文件 
+-Xmn：young generation的heap大小，一般设置为Xmx的3、4分之一 
+-XX:+UseParNewGC ：缩短minor收集的时间 
+-XX:+UseConcMarkSweepGC ：缩短major收集的时间 
+提示：此选项在Heap Size 比较大而且Major收集时间较长的情况下使用更合适。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;三-tomcat并发优化:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;三. Tomcat并发优化&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-tomcat连接相关参数:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;1.Tomcat连接相关参数&lt;/h3&gt;
+
+&lt;p&gt;在Tomcat配置文件conf/server.xml 中的Connector配置中&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; acceptCount：允许的最大连接数
+ enableLookups：是否反查域名，取值为： true 或 false 。为了提高处理能力，应设置为 false
+ connectionTimeout：网络连接超时，单位：毫秒。设置为 0 表示永不超时，这样设置有隐患的。通常可设置为 30000 毫秒。
+ 其中和最大连接数相关的参数为maxProcessors 和 acceptCount。如果要加大并发连接数，应同时加大这两个参数。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-调整连接器connector的并发处理能力:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;2.调整连接器connector的并发处理能力&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;  maxThreads        客户请求最大线程数
+  minSpareThreads   Tomcat初始化时创建的 socket 线程数
+  maxSpareThreads   Tomcat连接器的最大空闲 socket 线程数
+  enableLookups     若设为true, 则支持域名解析，可把 ip 地址解析为主机名
+  redirectPort      在需要基于安全通道的场合，把客户请求转发到基于SSL 的 redirectPort 端口
+  acceptAccount     监听端口队列最大数，满了之后客户请求会被拒绝(不能小于maxSpareThreads)
+  connectionTimeout 连接超时
+  URIEncoding    URL统一编码
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-tomcat缓存优化:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;3.Tomcat缓存优化&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;      compression 打开压缩功能   
+      compressionMinSize   启用压缩的输出内容大小，这里面默认为2KB
+      compressableMimeType 压缩类型
+      connectionTimeout 定义建立客户连接超时的时间. 如果为 -1, 表示不限制建立客户连接的时间
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结合以上方面，对server.xml的现有配置为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;      &amp;lt;Connector  port=&amp;quot;9027&amp;quot; 
+
+              maxHttpHeaderSize=&amp;quot;8192&amp;quot;
+
+              maxThreads=&amp;quot;2048&amp;quot;
+
+              minSpareThreads=&amp;quot;256&amp;quot;
+
+              enableLookups=&amp;quot;false&amp;quot;
+
+              compression=&amp;quot;on&amp;quot;
+
+              compressionMinSize=&amp;quot;2048&amp;quot;
+
+              compressableMimeType=&amp;quot;text/html,text/xml,text/javascript,text/css,text/plain&amp;quot;
+
+              connectionTimeout=&amp;quot;20000&amp;quot;
+
+              URIEncoding=&amp;quot;utf-8&amp;quot;
+
+              acceptCount=&amp;quot;2048&amp;quot;
+
+              redirectPort=&amp;quot;8443&amp;quot;
+
+              disableUploadTimeout=&amp;quot;true&amp;quot;
+
+              executor=&amp;quot;tomcatThreadPool&amp;quot; /&amp;gt;
+
+      &amp;lt;Executor name=&amp;quot;tomcatThreadPool&amp;quot; 
+                namePrefix=&amp;quot;catalina-exec-&amp;quot; 
+                maxThreads=&amp;quot;2048&amp;quot; 
+                minSpareThreads=&amp;quot;512&amp;quot; 
+                prestartminSpareThreads=&amp;quot;true&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;四-tomcat-native:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;四. Tomcat Native&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Tomcat可以使用APR来提供超强的可伸缩性和性能，更好地集成本地服务器技术。APR(Apache Portable Runtime)
+ 是一个高可移植库，它是Apache HTTP Server 2.x的核心。APR有很多用途，包括访问高级IO功能(例如sendfile,
+ epoll和OpenSSL)，OS级别功能(随机数生成，系统状态等等)，本地进程管理(共享内存，NT管道和UNIX sockets)。这些功能可以
+ 使Tomcat作为一个通常的前台WEB服务器，能更好地和其它本地web技术集成，总体上让Java更有效率作为一个高性能web服务器
+ 平台而不是简单作为后台容器&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;在产品环境中，特别是直接使用Tomcat做WEB服务器的时候，应该使用Tomcat Native来提高其性能。
+说白了，就是如何 在Tomcat中使用JNI的方式来读取文件以及进行网络传输。这个东西可以大大提升Tomcat对静态文件的处理性能，同时如果你使用了HTTPS方式 传输的话，也可以提升SSL的处理性能。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a. 安装 apr&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ sudo ./configure --prefix=/opt/apr
+     $ sudo make
+     $ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;b. 安装 apr-iconv&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ sudo ./configure --prefix=/opt/apr-iconv --with-apr=/opt/apr 
+     $ sudo make
+     $ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;c. 安装 apr-util&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ sudo  ./configure --prefix=/opt/apr-util  --with-apr=/opt/apr --with-apr-iconv=/opt/apr-iconv/bin/apriconv 
+     $ sudo make
+     $ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;d. 安装 tomcat-native&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ cd $TOMCAT_HOME/bin/tomcat-native-1.1.30-src/jni/native
+     $ ./configure --with-apr=/opt/apr --with-java-home=/usr/lib/jvm/java-7-openjdk-i386/ 
+     $ sudo make
+     $ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;五-总结:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;五. 总结&lt;/h2&gt;
+
+&lt;p&gt;为了提高Tomcat的并发处理能力，我从以上几个方面进行了逐步的增量调优，每次优化或者做出改变之后，都从Client用ab模拟并发，观察QPS等指标，并同时在Server端监控各种系统信息：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;           sudo /opt/apache/bin/ab -n 50000 -c 2000 http://192.168.1.2:9027/performance/test.jsp 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;目前比较好的测试结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;           Server Software:        Apache-Coyote/1.1
+           Server Hostname:        192.168.1.2
+           Server Port:            9027
+
+           Document Path:          /performance/test.jsp
+           Document Length:        253 bytes
+
+           Concurrency Level:      2000
+           Time taken for tests:   4.089 seconds
+           Complete requests:      50000
+           Failed requests:        0
+           Total transferred:      25100000 bytes
+           HTML transferred:       12650000 bytes
+           Requests per second:    12227.55 [#/sec] (mean)
+           Time per request:       163.565 [ms] (mean)
+           Time per request:       0.082 [ms] (mean, across all concurrent requests)
+           Transfer rate:          5994.36 [Kbytes/sec] received
+
+           Connection Times (ms)
+                         min  mean[+/-sd] median   max
+           Connect:        9   77 138.5     54    1070
+           Processing:    15   81  51.7     76     617
+           Waiting:       11   59  34.4     57     608
+           Total:         40  158 148.6    127    1221
+
+           Percentage of the requests served within a certain time (ms)
+             50%    127
+             66%    147
+             75%    177
+             80%    180
+             90%    196
+             95%    219
+             98%    662
+             99%   1105
+            100%   1221 (longest request)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但在调优时发现，无论怎样提高各种参数的阈值，并发性都不会再得到明显的提高，有时反而会降低。而且在设置JAVA_OPTS时，-Xms, -Xmx超过2048m时，就会提示超过内存限制。在网路上看到以下内容可以解释这个问题:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;`JVM`内存限制于实际的最大物理内存，假设物理内存无限大的话，`JVM`内存的最大值跟操作系统有很大的关系。
+简单的说就32位处理器虽然可控内存空间有4GB,但是具体的操作系统会给一个限制，这个限制一般是2GB-3GB（一般
+来说`Windows`系统下为1.5G-2G，`Linux`系统下为2G-3G），而64bit以上的处理器就不会有限制了。
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

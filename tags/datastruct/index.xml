@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Datastruct on Grey Times</title>
+    <link>http://localhost:1313/tags/datastruct/</link>
+    <description>Recent content in Datastruct on Grey Times</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 18 Sep 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/datastruct/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>借力数据结构</title>
+      <link>http://localhost:1313/posts/data-struct-powerful/</link>
+      <pubDate>Thu, 18 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/data-struct-powerful/</guid>
+      <description>
+
+&lt;p&gt;做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:&lt;/p&gt;
+
+&lt;h2 id=&#34;位置计算:d361afbdc75d323080e31fe61f4bb8f8&#34;&gt;位置计算&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;S1         S2        S3             S4                 S5            S6            S7 
+                               P
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为了得到P的位置，需要利用一个评价公式: 假设P到前一站距离Pre, 到后一站距离Next，两站之间距离Between，有如下公式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;   Cost =  Pre + Next - Between
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们认为使Cost取值最小的两个站即为P所在位置的前后站。&lt;/p&gt;
+
+&lt;h2 id=&#34;时间预测:d361afbdc75d323080e31fe61f4bb8f8&#34;&gt;时间预测&lt;/h2&gt;
+
+&lt;p&gt;比如我们要估算P到S7站点的到站时间，可以取该车次所有车最近5趟S3到S7的时间 T_AVG，所以预估时间公式为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;T_ESTIMATE = Distance(P-&amp;gt;S4-&amp;gt; ... -&amp;gt;S7) / Distance(S3-&amp;gt;S4-&amp;gt; .... -&amp;gt; S7)   *  T_AVG
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;BUT，现在通过历史数据分析，提取出了线路的轨迹信息，就是除了站点以外，还有很多有序的轨迹点可以代表线路。这些点带来的好处是： 两个站之间的轨迹是曲线(甚至环形都是很常见的)的话，如果只有站点，连出的轨迹就是一条直线段，模拟效果很差；而点多了以后，几乎就可以还原出真实的线路轨迹。&lt;/p&gt;
+
+&lt;p&gt;在考虑如何利用这些点的时候，就碰到一个设计权衡的问题：&lt;/p&gt;
+
+&lt;h2 id=&#34;1-不把站点插入轨迹点集里面:d361afbdc75d323080e31fe61f4bb8f8&#34;&gt;1.  不把站点插入轨迹点集里面&lt;/h2&gt;
+
+&lt;p&gt;得到的轨迹点集合已经可以很好模拟真实情况了，而站点信息(主要是经纬度)由于是人工采集的，会存在一些偏差，把站点插入轨迹点集之后的模拟效果反而会变差(抽样发现会出现迂回的情况)。但是仍然需要记录每个轨迹点的位置信息(位于哪两站)，设计轨迹点数据结构如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type GeoPoint  struct {
+	lat	float
+	lng	float
+}
+
+type TrackPoint struct {
+	GeoPoint
+	preStationIndex	int  //前一站
+	nextStationIndex	int  //后一站
+	index	int   //在点集中的次序
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这时进行位置计算，就需要用轨迹点去计算:  先算出在哪两个点之间，然后根据前后点的关系，计算出在哪两个站点之间，这时计算比较复杂，可以分成如下情况：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;前后点没有跨站&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  /**
+    *    S1  p1 . . .   pre  cur  next   . .  p2  S2 . . . S3
+    *  
+    *  Path(S1, cur) =  Dis(cur, pre) + Σ PointDis(p1-pre) + Dis(S1, p1)
+    *  Path(S2, cur) =  Dis(cur, next) + Σ PointDis(next-p2) + Dis(p2, S2)
+    */
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;前后点跨站&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//    case1:  S1  . . .   pre   cur  S2   next  . . . . S3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;//     case2:  S1  &amp;hellip;   pre   S2   cur  next  &amp;hellip; . S3&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;为了区分这两种情况，还要利用上面的Cost函数，计算cur到底在pre-S2，还是S2-next，计算过程十分繁琐。 时间预测的计算有过之而无不及。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-把站点插入轨迹集合里面:d361afbdc75d323080e31fe61f4bb8f8&#34;&gt;2. 把站点插入轨迹集合里面&lt;/h2&gt;
+
+&lt;p&gt;如果把站点插入轨迹集合里面，计算位置以及预测时间的过程就会简化许多，这时就需要给TrackPoint增加类型信息进行区分(将来可能会加入红绿灯，拐点等类型) :&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const ( 
+    Ordinary =  iota
+    TurnPoint
+    Station
+    TrafficLight 
+)
+
+type Kind int
+
+type TrackPoint struct {
+	GeoPoint
+	preStationIndex	int  //前一站
+	nextStationIndex	int  //后一站
+	index	int   //在点集中的次序
+	kind	Kind //点类型
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;由于站点也是轨迹集合的一员，位置计算时就不存在是否跨站问题了，  时间预测时到两站的距离也只需要计算两部分。&lt;/p&gt;
+
+&lt;p&gt;本来为了使轨迹信息不致于受到站点的干扰，采用了第一种设计。但实现位置计算以及时间预测时，明显感觉各种计算都要围绕站点来进行，即使轨迹序列里不加站点，在其他地方还是会受到钳制。改用第二种设计之后，很多计算就变得自然许多，简洁许多，省了很多不必要的弯路。 借用《The Design of Design》的一句话就是：
+&lt;p&gt;&lt;/p&gt;
+&lt;div style=&#34;background-color:black; font:bold 17px italic red;padding-left:50px&#34; &gt;
+     The viewpoint is that of an engineer, focused on utility and effctiveness
+      but also efficiency and elegance.&lt;/p&gt;
+
+&lt;p&gt;&lt;/div&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

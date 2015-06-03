@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Fp on Grey Times</title>
+    <link>http://localhost:1313/categories/fp/</link>
+    <description>Recent content in Fp on Grey Times</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 06 Sep 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/fp/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>模式匹配大法好</title>
+      <link>http://localhost:1313/posts/pattern-match-is-good/</link>
+      <pubDate>Sat, 06 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/pattern-match-is-good/</guid>
+      <description>
+
+&lt;h2 id=&#34;if-while-for:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;if, while, for&lt;/h2&gt;
+
+&lt;p&gt;除了Hello,world之外的任何程序，几乎都离不开控制结构。比如if-then-else, while,for，其实这三种的基础说白了还是加了一层语法塘的goto语句。不过相比直接使用goto而言，程序的流程走向更容易被程序员掌握。for主要用于重复次数明确的情形，while在循环条件已知时很合适。由于二者完全是在做同样的事情，以至于Rob Pike在Go中统一命名为for。&lt;/p&gt;
+
+&lt;p&gt;如果每天只能重复地做一件事，世界会变地多么乏味。。。所以我们需要更多的选择，更多的种类。真实世界是纷繁复杂的，我们无时无刻不面临着选择。编程语言处理选择问题，最常见的就算if-then-else, 其实这个结构最早来源于lisp语言。 if-then-else是一种显式的选择方式，提醒程序员&lt;a href=&#34;http://www.xiami.com/play?ids=/song/playlist/id/1769300396/object_name/default/object_id/0#loaded&#34;&gt;下个路口再见吧&lt;/a&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;	if A = 1:
+        return &amp;quot;positive&amp;quot;
+	elif A = -1:
+        return &amp;quot;negative&amp;quot;
+	else:
+        return &amp;quot;abnormal&amp;quot;
+                         
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其实在做选择的时候，我们已经知道这是一个选择问题，不必在文字上再次提醒这里面临着一个选择，如果&amp;hellip;&amp;hellip;则&amp;hellip;&amp;hellip;那么&amp;hellip;&amp;hellip;， 即我们可以把if, then, else这样的字眼給省略掉：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  A := 
+      1 -&amp;gt; &amp;quot;positive&amp;quot;
+     -1 -&amp;gt; &amp;quot;negative&amp;quot;
+      _ -&amp;gt; &amp;quot;abnormal&amp;quot;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这种简洁的选择方式和if-then-else是等价的，这种表达方式来自于ML, 一般称之为&lt;code&gt;模式匹配&lt;/code&gt;。简洁带来的好处一是代码上的整洁，舒适。 二是把很多dirty的细节隐匿起来，直达问题本身，这样我们就可以前进的更快，想象力就会飘的更远。。。举个快速排序的栗子:&lt;/p&gt;
+
+&lt;h3 id=&#34;命令式语言-go实现-https-github-com-kangkona-1day1algorithm-blob-master-qsort2-go:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;命令式语言 &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsort2.go&#34;&gt;Go实现&lt;/a&gt;&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func partition(A []int, low int, high int) int {
+	x := A[high]
+	i := low - 1
+	for j := low; j &amp;lt; high; j++ {
+		if A[j] &amp;lt;= x {
+			i++
+			A[i], A[j] = A[j], A[i]
+		}
+	}
+	A[i+1], A[high] = A[high], A[i+1]
+	return i + 1
+}
+
+func quickSort(A []int, low int, high int) {
+	if low &amp;lt; high {
+		p := partition(A, low, high)
+		quickSort(A, low, p-1)
+		quickSort(A, p+1, high)
+	}
+}
+
+func QuickSort(A []int) {
+	quickSort(A, 0, len(A)-1)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;不带模式匹配的lisp-scheme实现-https-github-com-kangkona-1day1algorithm-blob-master-qsortv3-scm:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;不带模式匹配的Lisp &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsortv3.scm&#34;&gt;Scheme实现&lt;/a&gt;&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-scheme&#34;&gt;(define (qsort lst)
+(if (&amp;lt;= (length lst) 1)
+lst
+(append (qsort (filter (cdr lst) (lambda (x) (&amp;lt;= x (car lst)))))
+(cons (car lst) (qsort (filter (cdr lst) (lambda (x) (&amp;gt; x (car lst)))))))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;带模式匹配的语言-erlang实现-https-github-com-kangkona-1day1algorithm-blob-master-qsortv4-erl:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;带模式匹配的语言  &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsortv4.erl&#34;&gt;Erlang实现&lt;/a&gt;&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;qsort([]) -&amp;gt; [];
+qsort([Pivot|T]) -&amp;gt;
+			qsort([X || X &amp;lt;- T, X &amp;lt; Pivot])
+			++ [Pivot] ++
+			qsort([X || X &amp;lt;- T, X &amp;gt;= Pivot]).
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;显而易见，自带模式匹配的语言在屏蔽了语言细节之后，直接把快速排序的本质勾勒了出来，简单粗暴且自带闪光灯！！！ 为什么仅仅是省略了选择相关的字眼，生产率以及通俗性提高那么多呢？ 我猜测的原因如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    人是一种害怕做选择的动物，尤其是意识到自己面临着一个悬(选)着(择)的问题时候。使用if-then-else好比是在做选择
+    的时候告诉程序员：Hi,SB, you should make a choice!  是不是还有点细思极恐？？？！！！
+    而使用模式匹配，似乎只需要制定好一条条规则， Let the compiler do the fuck choice! 对于选择困难综合症
+    的 朋友来说，真是居家旅行，杀人越货必备之良器。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;总结来说，简洁的事物之所以有时候威力更强大，是因为简洁的重点不是简，而是洁。 隐匿了冗余的细节，减轻了思想上的包袱，让程序员可以轻装上阵，专注于真正的问题，谓之“洁”。&lt;/p&gt;
+
+&lt;p&gt;所以， 如果存在最好的语言，她不一定是最简单的语言，但一定是最简洁的语言。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

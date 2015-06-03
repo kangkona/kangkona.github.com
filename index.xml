@@ -1,0 +1,1881 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Grey Times</title>
+    <link>http://localhost:1313/</link>
+    <description>Recent content on Grey Times</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 13 Mar 2015 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>JCommander：Java外部参数解析利器</title>
+      <link>http://localhost:1313/posts/jcommander-using-example/</link>
+      <pubDate>Fri, 13 Mar 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/jcommander-using-example/</guid>
+      <description>&lt;p&gt;最近需要把项目交给别人进行运维，为了不让接手之人涉及太多繁琐细节，我把一些定义在final类中的不可变量抽取出来，把项目变成可外部配置的。用配置文件可以达到这个目的，但由于配置之间有相互依赖关系，比如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;public static boolean local = false;
+public static String host =  (local) ? &amp;quot;127.0.0.1&amp;quot; : &amp;quot;172.16.3.142&amp;quot;;
+public static int port = (local) ? 6379 : 6380; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;原本只需要改变local, 用配置文件的话与local值有依赖关系的地方都要面临修改。&lt;/p&gt;
+
+&lt;p&gt;后来打算用命令行参数实现可外部动态配置，如果自己动手实现完善的命令行参数解析，可不是一项little job。 比较了几款开源的工具，还是选择了&lt;a href=&#34;http://www.jcommander.org/&#34;&gt;JCommander&lt;/a&gt;。主要原因是被它官网的slogan打动了：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Because life is too short to parse command line parameters.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;项目是maven构建的，使用JCommander的方式十分简单:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;dependency&amp;gt;
+&amp;lt;groupId&amp;gt;com.beust&amp;lt;/groupId&amp;gt;
+&amp;lt;artifactId&amp;gt;jcommander&amp;lt;/artifactId&amp;gt;
+&amp;lt;/dependency&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;使用JCommander的方式也很简单，给需要外部传参的变量加Parameter标注：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; @Parameter(names = { &amp;quot;-topologyName&amp;quot;}, description = &amp;quot;Topology name.&amp;quot;)
+ private static String TOP_NAME = &amp;quot;sz-train&amp;quot;;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;一般类型参数后面都要跟值，JCommander会根据对应变量做类型检查和转换，不合法时会抛出异常错误。&lt;/p&gt;
+
+&lt;p&gt;boolean类型有点特殊，后面不需要跟一个值，输入&lt;code&gt;-local&lt;/code&gt;之后，local值即为true：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Parameter(names = { &amp;quot;-local&amp;quot;}, description = &amp;quot;Local model, default cluster Model.&amp;quot;)
+public static boolean LOCAL_MODE = false;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果一个boolean变量的默认值为true，而想通过参数设置为false，可以指定元数：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Parameter(names = { &amp;quot;-log&amp;quot;, &amp;quot;-verbose&amp;quot;}, description = &amp;quot; Wheather to write system log.&amp;quot;, arity = 1)
+public static boolean LOG = true;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;默认情况下，参数是可选的，如果要求必须指定参数，可以设置required：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Parameter(names = &amp;quot;-operator&amp;quot;, required = true)
+private String operator;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;有时仅仅依靠JCommander的类型检查还不够，还需要自定义检查器提前发现不合法的输入：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Parameter(names = { &amp;quot;-redisPort&amp;quot;}, description = &amp;quot;Redis port.&amp;quot;, validateWith = PortValidator.class)
+public static int REDIS_PORT=(LOCAL_MODE) ? 6379:6380;
+
+public static class PortValidator implements IParameterValidator {
+           public void validate(String name, String value)
+            throws ParameterException {
+          Pattern pattern = Pattern.compile(&amp;quot;[1-9]\\d*&amp;quot;);
+          Matcher matcher = pattern.matcher(value);
+          if (matcher.matches()) {
+              int n = Integer.parseInt(value);
+              if (n &amp;lt; 65536) {
+                  return;
+              }
+          }
+          throw new ParameterException(&amp;quot;Parameter &amp;quot; + name 
+                    + &amp;quot; should be a number(0~65535) (found &amp;quot; + value +&amp;quot;)&amp;quot;);
+        }
+      }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果是一个写日志的目录，可以提前发现该目录是否可写，这是配置文件无法做到的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;@Parameter(names = { &amp;quot;-logDir&amp;quot;}, description = &amp;quot;Dir to write log file.&amp;quot;, 
+                                          validateWith = DirValidator.class)
+public static String LOG_DIR = &amp;quot;/logs/your_project/&amp;quot;; 
+
+public static class DirValidator implements IParameterValidator {
+           public void validate(String name, String value)
+            throws ParameterException {
+            File file = new File(value);
+            if (!file.isDirectory() || !file.canWrite()) {
+                  throw new ParameterException(&amp;quot;Parameter &amp;quot; + name 
+                         + &amp;quot; should be a writable folder(found &amp;quot; + value +&amp;quot;)&amp;quot;);
+                  }
+            }
+      }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于IP地址，不仅可以通过正则表达式进行匹配，还可以进行简单的网络连通性探测等。相比基于文本的配置文件，JCommander显示出了强大的优势。&lt;/p&gt;
+
+&lt;p&gt;但更多的项目可能还是更适合用配置文件的方式进行外部配置，如果配置文件如果可以吸收JCommander的特点，那就perfect了。我理想中的配置文件应该有如下特性：
+- 配置文件本身是programmable
+- 可以进行上下文联系
+- 自动类型检查和转换
+- 可以自定义语义检查器
+- 所使用的弱语言可以方便嵌入&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go实践之并发初体验</title>
+      <link>http://localhost:1313/posts/concurrent-in-go/</link>
+      <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/concurrent-in-go/</guid>
+      <description>
+
+&lt;p&gt;golang的一大卖点是并发模型基于CPS(continuation passing style)，使用起来比较简单。刚开始我也觉得比较简单，但使用之后发现，你必须很清楚golang的并发机制才能使用自如，在需要同步尤甚，一不小心就会陷入罪恶的渊薮。&lt;/p&gt;
+
+&lt;h2 id=&#34;sharing-vs-communicating:e3781e9f61b43c7620c38c8d3327fe1d&#34;&gt;Sharing VS Communicating&lt;/h2&gt;
+
+&lt;p&gt;如何我们想从1顺序打印到10000，可能会&lt;a href=&#34;http://play.golang.org/p/ZG5EihF4PU&#34;&gt;这样&lt;/a&gt;写：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;package main
+
+import (
+	&amp;quot;fmt&amp;quot;
+)
+
+var messages chan int
+var done chan bool
+
+func main() {
+	messages = make(chan int)
+	done = make(chan bool)
+	times := 10000
+	for i := 0; i &amp;lt; times; i++ {
+		go func() {
+			messages &amp;lt;- i
+			done &amp;lt;- true
+		}()
+	}
+
+	go func() {
+		for i := range messages {
+			fmt.Println(i)
+		}
+	}()
+
+	for i := 0; i &amp;lt; times; i++ {
+		&amp;lt;-done
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但事实上，打印的结果的是&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;10000
+10000
+....
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;由于10000个for循环执行地相当快， 很可能在for已经循环结束， i的值增长到10000时， gorountines的调度才完成，i此时作为逃逸变量为goroutines共享，所以gorountines看到的i都是10000,打印的也都是10000。&lt;/p&gt;
+
+&lt;p&gt;以上共享变量的方式我们称之为Share，要解决这个问题，只能把main的i通过消息传递的方式Communicate给每个gorountines &lt;a href=&#34;http://play.golang.org/p/lppU7mFsRh&#34;&gt;例子&lt;/a&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;	for i := 0; i &amp;lt; times; i++ {
+		go func(v int) {
+			messages &amp;lt;- v
+			done &amp;lt;- true
+		}(i)
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行一下，结果是正确的。这时候才真正体会到那句话的奥妙：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Don’t communicate by shared memory. Instead, share memory by communicating. 
+
+	                                                                             —— Rob Pike
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;synchronization:e3781e9f61b43c7620c38c8d3327fe1d&#34;&gt;Synchronization&lt;/h2&gt;
+
+&lt;p&gt;golang没有join，无法直接在程序中设置等待点。实现同步通常有两种做法：&lt;/p&gt;
+
+&lt;h3 id=&#34;使用channel:e3781e9f61b43c7620c38c8d3327fe1d&#34;&gt;使用channel&lt;/h3&gt;
+
+&lt;p&gt;由于channel分为阻塞和非阻塞的，使用阻塞的channel时就能达到同步的目的。上面两个例子都使用了channel进行同步。&lt;/p&gt;
+
+&lt;h3 id=&#34;使用waitgroup:e3781e9f61b43c7620c38c8d3327fe1d&#34;&gt;使用WaitGroup&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://play.golang.org/p/k440dqN3Ai&#34;&gt;示例如下&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func main() {
+	var wg sync.WaitGroup
+	wg.Add(1000)
+
+	for i := 0; i &amp;lt; 1000; i++ {
+		go func(v int) {
+			defer wg.Done()
+			fmt.Println(v)
+		}(i)
+	}
+	wg.Wait()
+	fmt.Println(&amp;quot;exit&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Add操作设置要等待的gorountine个数，每执行一次Done，waitgroup就会减1, 执行Wait的地方就相当于join。&lt;/p&gt;
+
+&lt;p&gt;两种操作的本质都是设置一个计数器，每个gorountine执行完都会通知一下主程序，直到所以gorountine完全dead，main才会往下走。&lt;/p&gt;
+
+&lt;p&gt;当不清楚gorountines的数目时，在&lt;a href=&#34;http://segmentfault.com/q/1010000000487990&#34;&gt;网上&lt;/a&gt;看到的一种做法是可以设置一个远大于gorountines的数目的&lt;a href=&#34;http://play.golang.org/p/jb1wJaQJZ0&#34;&gt;阈值&lt;/a&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;L: for { 
+           select { 
+               case &amp;lt;- done:
+                   i++ 
+                   if i &amp;gt; 10000 {
+                         break L
+                            }
+                   }
+            }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;concurrent-data-structure:e3781e9f61b43c7620c38c8d3327fe1d&#34;&gt;Concurrent Data Structure&lt;/h2&gt;
+
+&lt;p&gt;在并发环境下，数据结构往往也需要设计成并发的，比如一个并发的Map可以这样设计：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type CorrMap struct {
+	line2BusId  map[string][]string
+	sync.RWMutex
+}
+
+func NewCorrMap() *CorrMap {
+	return &amp;amp;CorrMap{line2BusId :  map[string][]string{}}
+}
+
+func (c *CorrMap) Add(line string, busId string) {
+	c.Lock()
+	defer c.Unlock()
+	busIds, exists := c.line2BusId[line]
+	if exists {
+		c.line2BusId[line] = append(busIds, busId)
+	} else {
+		var tmp []string
+		c.line2BusId[line] = append(tmp, busId)
+	}
+}
+
+func (c CorrMap) Size() int {
+	count := 0
+	for _, v := range c.line2BusId {
+		count+= len(v)
+	}
+	return count
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;不过利用Lock可能没有充分发挥golang的优势，更好的方法可以参考&lt;a href=&#34;http://se77en.cc/2014/04/08/share-by-communicating-the-concurrency-slogan-in-golang/&#34;&gt;这篇博客&lt;/a&gt;。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Go实践之JSON解析</title>
+      <link>http://localhost:1313/posts/json-and-go/</link>
+      <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/json-and-go/</guid>
+      <description>
+
+&lt;p&gt;当我们开发了一个新版本的软件时，通常需要和稳定版进行对比，进行QoS评估。对实时性网络服务而言，比较客观的做法是同时请求相同的服务，然后对比返回结果。&lt;/p&gt;
+
+&lt;p&gt;首先，我们对一些常用的函数进行包裹，简化操作：&lt;/p&gt;
+
+&lt;h2 id=&#34;发送http请求:1cbd46da2c17c1ba4bcf718d25d25046&#34;&gt;发送Http请求&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;func sendHttpRequest(url string) string {
+	response, _ := http.Get(url)
+	defer response.Body.Close()
+	var bodystr string
+             if response.StatusCode == 200 {
+             	body, _ := ioutil.ReadAll(response.Body)
+             	bodystr = string(body)
+             } else {
+                          return &amp;quot;&amp;quot;
+             }
+             return bodystr
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;获取json数据:1cbd46da2c17c1ba4bcf718d25d25046&#34;&gt;获取Json数据&lt;/h2&gt;
+
+&lt;p&gt;如果你知道返回的json数据的格式，可以事先定义好对应的数据结构。例如json返回内容为&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-json&#34;&gt;{
+  &amp;quot;name&amp;quot;:&amp;quot;Monica&amp;quot;,
+  &amp;quot;age&amp;quot;: 10, 
+  &amp;quot;hobby&amp;quot; : [&amp;quot;music&amp;quot;, &amp;quot;dance&amp;quot;]
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对应的数据结构和操作：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Person struct {
+  name string `json:&amp;quot;name&amp;quot;`
+  age string `json:&amp;quot;age&amp;quot;`
+  hobby []string `json:&amp;quot;hobby&amp;quot;`
+}
+
+bodystr := sendHttpRequest(url)
+
+var person Person
+err := json.Unmarshal([]byte(bodystr), &amp;amp;person)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这样json内容就会变成一个实例化的Person对象，所有的json成员都会对应类型化。&lt;/p&gt;
+
+&lt;p&gt;如果我们不知道json数据格式怎么办?  json的最外层肯定是一个map, 所以可以把json数据反序列化为一个通用的 &lt;code&gt;interface{}&lt;/code&gt; :&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func getJson(url string) map[string]interface{} {
+	bodystr := sendHttpRequest(url)
+        var  object interface{}
+        err := json.Unmarshal([]byte(bodystr), &amp;amp;object)
+	if err != nil {
+	      return nil	
+	} else {
+	      return object.(map[string]interface{})
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;好处是通用，可以解析任意的json，但由于不知内层数据的类型，因此只作了最外层map的解析，返回数据的类型为&lt;code&gt;map[string]interface{}&lt;/code&gt;。之后可能会根据需要进行类型断言，转换等。&lt;/p&gt;
+
+&lt;p&gt;感觉json目前已经成了网络数据传输格式的事实标准，有很多人总结过&lt;a href=&#34;http://www.cnblogs.com/SanMaoSpace/p/3139186.html&#34;&gt;JSON与XML的区别比较&lt;/a&gt;，我觉得json最大的优势是:程序员友好。json中的map, array, set, string, num都能完美地对应到某一编程语言中，即表示的不仅仅是文本，还是带类型的数据。而xml本质还是文本，要借助于xslt，scheme，属性等一堆东西实现json的类型化，表示成本高，解析成本也高。可能的好处是比较体系化，有成套的解决方案，用户可视化方便。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Storm集群的安装与配置</title>
+      <link>http://localhost:1313/posts/storm-cluster-install-config/</link>
+      <pubDate>Sun, 02 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/storm-cluster-install-config/</guid>
+      <description>
+
+&lt;h2 id=&#34;1-infrastructure:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;1. Infrastructure&lt;/h2&gt;
+
+&lt;p&gt;3台流处理Server
+- CPU : 3 Core
+- Memory : 3G
+- Disk : 300G
+- OS : Ubuntu Server 12.04 64bit&lt;/p&gt;
+
+&lt;h2 id=&#34;2-depended-software:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;2. Depended Software&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;built-essential&lt;/li&gt;
+&lt;li&gt;Python 2.7&lt;/li&gt;
+&lt;li&gt;Java 1.7.0_71(最低要求1.6)&lt;/li&gt;
+&lt;li&gt;Zookeeeper 3.4.6&lt;/li&gt;
+&lt;li&gt;ZeroMQ 4.0.5&lt;/li&gt;
+&lt;li&gt;jzmq github-master&lt;/li&gt;
+&lt;li&gt;Storm 0.9.1-incubating&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;3-install-config:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3. Install &amp;amp;&amp;amp; Config&lt;/h2&gt;
+
+&lt;p&gt;几乎所有软件对集群中的机器来说，安装过程都是完全一致的，所有没有必要在每台机器重复安装过程，可以使用Puppet或者Docker这些工具来提高效率。但由于操作的集群网络环境受限，最终利用Xshell可以一次向多个会话发送命令的功能，做到了完全同步的安装和配置。&lt;/p&gt;
+
+&lt;h3 id=&#34;3-1-修改-etc-hosts:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.1 修改/etc/hosts&lt;/h3&gt;
+
+&lt;p&gt;使用名称来代表机器会带来很多方便，在/etc/hosts中追加如下内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;172.21.1.168	master
+172.21.1.169	node1
+172.21.1.170	node2
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-2-build-essential:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.2 build-essential&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://packages.ubuntu.com/lucid/amd64/build-essential/filelist&#34;&gt;build-essential&lt;/a&gt;作用是提供编译程序必须软件包的列表信息, 编译程序有了这个软件包, 才知道 头文件和库函数的位置，还会下载依赖的软件包，组成一个基本的开发环境&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  $ sudo apt-get install build-essential
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-3-安装jdk:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.3 安装JDK&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ tar zxvf jdk-7u71-linux-x86.tar.gz
+# mv jdk1.7.0_71 /usr/lib/jvm
+# sudo vim /etc/profile
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;追加内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;export JAVA_HOME=/usr/lib/jvm/jdk1.7.0_71
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=${JAVA_HOME}/bin:${JRE_HOME}/bin:$PATH
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;$source /etc/profile
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-4-安装zookeeper-3-4-6:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.4 安装Zookeeper 3.4.6&lt;/h3&gt;
+
+&lt;p&gt;详细内容可以参考 &lt;a href=&#34;http://www.iteblog.com/archives/904&#34;&gt;Zookeeper 3.4.5分布式安装手册&lt;/a&gt; 这篇文章， 这里简要描述：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$ tar -zxvf zookeeper-3.4.6.tar.gz
+$ cd zookeeper-3.4.6/conf/
+$ cp zoo_sample.cfg zoo.cfg
+$ vim zoo.cfg
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;将里面的默认配置修改为如下（具体配置可以根据你机器来定）：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;tickTime=2000
+# The number of ticks that the initial
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit=5
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just
+# example sakes.
+dataDir=/logs/zookeeper
+# the port at which the clients will connect
+clientPort=2181
+
+server.1 = master:2888:3888
+server.2 = node1:2888:3888
+server.3 = node2:2888:3888
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;在刚刚zoo.cfg文件中dataDir属性指定的目录（本文中为/logs/zookeeper）下创建一个myid，在里面添加你指定的server编号，因为这台机器是master，而zoo.cfg中master编号为1(server.1=master:2888:3888)，所以myid内容只需要为1即可。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ mkdir -p /logs/zookeeper
+$ echo 1   &amp;gt; /logs/zookeeper/myid 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;这样就在master机器上配置好Zookeeper，接下来只需要将master配置好的Zookeeper整个目录打包分发到node1、node2机器中，解压到安装位置。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;不要忘记在node1的/logs/zookeeper/myid文件中添加2。node2的/logs/zookeeper/myid文件中添加3。&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;将每个机器的zookeeper的路径添加到Path
+在/etc/profile追加如下内容：&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;# zookeeper
+export ZOOKEEPER_HOME=/packages/zookeeper-3.4.6
+export PATH=${ZOOKEEPER_HOME}/bin:$PATH
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;不要忘记在三台机器 &lt;code&gt;source /etc/profile&lt;/code&gt; 使之生效。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;分别在master、node1、node2机器上启动Zookeeper相关服务：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ZOOKEEPER_HOME/bin/zkServer.sh start
+JMX enabled by default
+Using config: /home/wyp/Downloads/zookeeper-3.4.5/bin/../conf/zoo.cfg
+Starting zookeeper ... STARTED
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;测试Zookeeper是否安装成功：
+参见 &lt;a href=&#34;http://www.iteblog.com/archives/904&#34;&gt;Zookeeper 3.4.5分布式安装手册&lt;/a&gt; 第7点 。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;3-5-安装zmq:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.5 安装ZMQ&lt;/h3&gt;
+
+&lt;p&gt;默认安装在/usr/local/lib位置，后面会比较省劲：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ tar -xzf zeromq-4.0.5.tar.gz
+$ cd zeromq-4.0.5
+$ ./configure
+$ make
+$ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-6-安装-jzmq:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.6 安装 jzmq&lt;/h3&gt;
+
+&lt;p&gt;最开始装&lt;a href=&#34;https://github.com/nathanmarz/jzmq&#34;&gt;nathanmarz&lt;/a&gt;的分支，一直无法make，最后下载了zeromq的&lt;a href=&#34;https://github.com/zeromq/jzmq&#34;&gt;master&lt;/a&gt;分支。  make过程中提示安装libtool, pkg-config, autoconf几个工具:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo apt-get install libtool pkg-config autoconf
+$ git clone https://github.com/zeromq/jzmq
+$ cd jzmq
+$ ./autogen.sh
+$ ./configure
+$ make
+$ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-7-storm-install-config:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.7 Storm install &amp;amp;&amp;amp; config&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;安装之前的调研&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在官网下载了storm-0.9.1-incubating 版本解压到安装位置。 该版本的一大亮点是采用了Netty做消息传输层，在以前的版本里，Storm只能依赖ZeroMQ做消息的传输，但其实并不适合,  &lt;a href=&#34;http://www.cnblogs.com/alephsoul-alephsoul/p/3467651.html&#34;&gt;理由&lt;/a&gt;：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;ZeroMQ是一个本地化的消息库，它过度依赖操作系统环境；&lt;/li&gt;
+&lt;li&gt;安装起来比较麻烦；(有了Netty可以不要ZeroMQ和jzmq)&lt;/li&gt;
+&lt;li&gt;ZeroMQ的稳定性在不同版本之间差异巨大，并且目前只有2.1.7版本的ZeroMQ能与Storm协调的工作(写文档才注意到这句话。。。后面需要测试一下)。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;引入Netty的原因是：
+  - 平台隔离，Netty是一个纯Java实现的消息队列，可以帮助Storm实现更好的跨平台特性，同时基于JVM的实现可以让我们对消息有更好的控制；
+  - 高性能，Netty的性能要比ZeroMQ快两倍左右，&lt;a href=&#34;http://yahooeng.tumblr.com/post/64758709722/making-storm-fly-with-netty&#34;&gt;让Storm飞&lt;/a&gt; 专门比较了ZeroMQ和Netty的性能。
+  -  安全性认证，使得我们将来要做的 worker 进程之间的认证授权机制成为可能。&lt;/p&gt;
+
+&lt;p&gt;主要参考&lt;a href=&#34;http://www.cnblogs.com/panfeng412/archive/2012/11/30/how-to-install-and-deploy-storm-cluster.html&#34;&gt;Storm集群安装部署步骤【详细版】&lt;/a&gt; 和其他集群的经验对conf/storm.yaml进行如下配置：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;storm.zookeeper.servers: Storm集群使用的Zookeeper集群地址，其格式如下：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;storm.zookeeper.servers:
+     - &amp;quot;172.21.1.168&amp;quot;
+     - &amp;quot;172.21.1.169&amp;quot;
+     - &amp;quot;172.21.1.170&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果Zookeeper集群使用的不是默认端口，那么还需要storm.zookeeper.port选项。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;storm.local.dir: Nimbus和Supervisor进程用于存储少量状态，如jars、confs等的本地磁盘目录，需要提前创建该目录并给以足够的访问权限。然后在storm.yaml中配置该目录，如：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;storm.local.dir: &amp;quot;/logs/storm/workdir&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;java.library.path: Storm使用的本地库(ZMQ和JZMQ)加载路径，默认为&amp;rdquo;/usr/local/lib:/opt/local/lib:/usr/lib&amp;rdquo;，一般来说ZMQ和JZMQ默认安装在/usr/local/lib 下，因此不需要配置即可。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;nimbus.host: Storm集群Nimbus机器地址，各个Supervisor工作节点需要知道哪个机器是Nimbus，以便下载Topologies的jars、confs等文件，如：&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;nimbus.host: &amp;quot;172.21.1.168&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;supervisor.slots.ports: 对于每个Supervisor工作节点，需要配置该工作节点可以运行的worker数量。每个worker占用一个单独的端口用于接收消息，该配置选项即用于定义哪些端口是可被worker使用的。默认情况下，每个节点上可运行4个workers，分别在6700、6701、6702和6703端口，我配置了80个：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;supervisor.slots.ports:
+    - 6700
+    - 6701
+    - 6702
+    - 6703
+     ......
+    - 6780
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;storm UI端口&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;ui.port: 8088
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;如果要在Storm里使用Netty做传输层，只需要简单的把下面的内容加入到storm.yaml中，并根据你的实际情况调整参数即可：&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;storm.messaging.transport: &amp;quot;backtype.storm.messaging.netty.Context&amp;quot;
+storm.messaging.netty.server_worker_threads: 1
+storm.messaging.netty.client_worker_threads: 1
+storm.messaging.netty.buffer_size: 5242880
+storm.messaging.netty.max_retries: 100
+storm.messaging.netty.max_wait_ms: 1000
+storm.messaging.netty.min_wait_ms: 100
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;为了方便使用，可以将Storm位置加入到系统环境变量中&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在/etc/profile追加如下内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Storm
+export STORM_HOME=/packages/zookeeper-3.4.6
+export PATH=${STORM_HOME}/bin:$PATH
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;不要忘记在三台机器 &lt;code&gt;source /etc/profile&lt;/code&gt; 使之生效。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;启动Storm各个后台进程&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;最后一步，启动Storm的所有后台进程。和Zookeeper一样，Storm也是快速失败（fail-fast)的系统，这样Storm才能在任意时刻被停止，并且当进程重启后被正确地恢复执行。这也是为什么Storm不在进程内保存状态的原因，即使Nimbus或    Supervisors被重启，运行中的Topologies不会受到影响。&lt;/p&gt;
+
+&lt;p&gt;以下是启动Storm各个后台进程的方式：
+  - Nimbus: 在Storm主控节点上运行&amp;rdquo;bin/storm nimbus &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;ldquo;启动Nimbus后台程序，并放到后台执行；
+  - Supervisor: 在Storm各个工作节点上运行&amp;rdquo;bin/storm supervisor &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;ldquo;启动Supervisor后台程序，并放到后台执行；
+  - UI: 在Storm主控节点上运行&amp;rdquo;bin/storm ui &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;ldquo;启动UI后台程序，并放到后台执行，启动后可以通过http://{nimbus host}:8080观察集群的worker资源使用情况、Topologies的运行状态等信息。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;注意事项&lt;/strong&gt;：
+  - Storm后台进程被启动后，将在Storm安装部署目录下的logs/子目录下生成各个进程的日志文件。
+  - 经测试，Storm UI必须和Storm Nimbus部署在同一台机器上，否则UI无法正常工作，因为UI进程会检查本机是否存在Nimbus链接。&lt;/p&gt;
+
+&lt;p&gt;至此，Storm集群已经部署、配置完毕，可以向集群提交拓扑运行了。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;向集群提交任务&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;启动Storm Topology：&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;storm jar allmycode.jar org.me.MyTopology arg1 arg2 arg3&lt;/code&gt;
+ - 停止Storm Topology：&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;storm kill {toponame}&lt;/code&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>人性化排序</title>
+      <link>http://localhost:1313/posts/friendly-sort/</link>
+      <pubDate>Mon, 27 Oct 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/friendly-sort/</guid>
+      <description>&lt;p&gt;对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    1. 按自然顺序排列；
+    2. 按相似度由高至低排列；
+    3. 按信息的活性(热度)进行排列。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当然，最糟糕也最常见的是下面这种方式：完全不做任何排序。&lt;/p&gt;
+
+&lt;p&gt;最近碰到的一个应用场景让我对此进行了反思。我们的实时公交查询系统为其他App开发者提供了这样的一个API：根据用户的搜索内容返回线路名称。现在不妨假设用户输入了一个 &amp;ldquo;1&amp;rdquo;，后台进行查询，找到所有与 &amp;ldquo;1&amp;rdquo; 有关的线路，最开始我们的输出是无序的:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;               81,  17, 201路， 快线1号, 11, 1路, 168 , 高快巴士1号线 ....
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结果竟然返回了221个与1有关的线路，这样的展示结果显然是会让用户骂人的。后来决定先返回所有 &amp;ldquo;1&amp;rdquo; 开头的线路，其余自然排序:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;              11, 17, 168, 1路，201路， 81, 高快巴士1号线，快线1号 ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这次结果好了很多，但是1路竟然排在168后面，仍然会让人不爽，所以按照相似度进行排序:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;              11，17，81，1路，168，201路，.... 快线1号，高快巴士1号线
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这次达到了预想的效果，但把快线1号，高快巴士1号线这样比较难记，难输入的线路放到了最后，实际上用户如果只输入 &amp;ldquo;1&amp;rdquo; 进行查询，很可能要找的就是 “快线1号” 或者 “高快巴士1号线”，所以把这种输入成本高的线路挪到了前面:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;              11, 17, 1路，168，快线1号，高快巴士1号线，201路，81 ....
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;实现代码：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-Java&#34;&gt;		Arrays.sort(sortedLineNames, new Comparator&amp;lt;Object&amp;gt;(){  
+            @Override  
+            public int compare(Object b1, Object b2) {  
+            	String s1 = (String)b1;
+            	String s2 = (String)b2;
+            	
+            	if (s1.startsWith(searchString) &amp;amp;&amp;amp; !s2.startsWith(searchString)) {
+            		return -1;
+            	} 
+            	else if(!s1.startsWith(searchString) &amp;amp;&amp;amp; s2.startsWith(searchString)) {
+            		return 1;
+            	} 
+            	else if (! s1.startsWith(searchString) &amp;amp;&amp;amp; !s2.startsWith(searchString)) {
+            	       return s2.compareTo(s1);
+            	}
+            	else {
+            	       return s1.compareTo(s2);
+            	}
+            }             
+        });                                                                            
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;当然，Java 8引入lambda之后，可以简写为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;       Arrays.sort(sortedLineNames, 
+                   (s1, s2) -&amp;gt;  
+                     s1.startsWith(searchString) &amp;amp;&amp;amp; !s2.startsWith(searchString) ? -1 :
+                    !s1.startsWith(searchString) &amp;amp;&amp;amp;  s2.startsWith(searchString) ?  1 :
+                    !s1.startsWith(searchString) &amp;amp;&amp;amp; !s2.startsWith(searchString) ?  s2.compareTo(s1) : 
+                     s1.compareTo(s2));
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;在多数情况下，这些策略已经可以组合出不错的效果了，但这就足够了么？ 用户搜索的目的是希望找到对自己有价值的信息，而排序最终是为了讨好用户：在信息呈现之前，猜测一下用户的心理，认为用户最想要什么，就把什么放在前面，让用户用最少的时间成本获取最有价值的信息。所以为了更懂用户，可能还需要对日志进行分析，统计每条线路的搜索频率，得出线路的活跃程度，每次尽可能把活性比较大的线路放置在返回结果的前面。更进一步，可以看看线路活性的分布情况和规律，得出更有指导性的结论。&lt;/p&gt;
+
+&lt;p&gt;写到这里，突然感觉排序分明就是一种人工智能的东东，这也无怪乎那些做搜索的公司都铆足了劲儿搞深度学习。 在这样一个时代，不懂人心估计就得死吧。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>借力数据结构</title>
+      <link>http://localhost:1313/posts/data-struct-powerful/</link>
+      <pubDate>Thu, 18 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/data-struct-powerful/</guid>
+      <description>
+
+&lt;p&gt;做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:&lt;/p&gt;
+
+&lt;h2 id=&#34;位置计算:d361afbdc75d323080e31fe61f4bb8f8&#34;&gt;位置计算&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;S1         S2        S3             S4                 S5            S6            S7 
+                               P
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;为了得到P的位置，需要利用一个评价公式: 假设P到前一站距离Pre, 到后一站距离Next，两站之间距离Between，有如下公式：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;   Cost =  Pre + Next - Between
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们认为使Cost取值最小的两个站即为P所在位置的前后站。&lt;/p&gt;
+
+&lt;h2 id=&#34;时间预测:d361afbdc75d323080e31fe61f4bb8f8&#34;&gt;时间预测&lt;/h2&gt;
+
+&lt;p&gt;比如我们要估算P到S7站点的到站时间，可以取该车次所有车最近5趟S3到S7的时间 T_AVG，所以预估时间公式为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;T_ESTIMATE = Distance(P-&amp;gt;S4-&amp;gt; ... -&amp;gt;S7) / Distance(S3-&amp;gt;S4-&amp;gt; .... -&amp;gt; S7)   *  T_AVG
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;BUT，现在通过历史数据分析，提取出了线路的轨迹信息，就是除了站点以外，还有很多有序的轨迹点可以代表线路。这些点带来的好处是： 两个站之间的轨迹是曲线(甚至环形都是很常见的)的话，如果只有站点，连出的轨迹就是一条直线段，模拟效果很差；而点多了以后，几乎就可以还原出真实的线路轨迹。&lt;/p&gt;
+
+&lt;p&gt;在考虑如何利用这些点的时候，就碰到一个设计权衡的问题：&lt;/p&gt;
+
+&lt;h2 id=&#34;1-不把站点插入轨迹点集里面:d361afbdc75d323080e31fe61f4bb8f8&#34;&gt;1.  不把站点插入轨迹点集里面&lt;/h2&gt;
+
+&lt;p&gt;得到的轨迹点集合已经可以很好模拟真实情况了，而站点信息(主要是经纬度)由于是人工采集的，会存在一些偏差，把站点插入轨迹点集之后的模拟效果反而会变差(抽样发现会出现迂回的情况)。但是仍然需要记录每个轨迹点的位置信息(位于哪两站)，设计轨迹点数据结构如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type GeoPoint  struct {
+	lat	float
+	lng	float
+}
+
+type TrackPoint struct {
+	GeoPoint
+	preStationIndex	int  //前一站
+	nextStationIndex	int  //后一站
+	index	int   //在点集中的次序
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这时进行位置计算，就需要用轨迹点去计算:  先算出在哪两个点之间，然后根据前后点的关系，计算出在哪两个站点之间，这时计算比较复杂，可以分成如下情况：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;前后点没有跨站&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  /**
+    *    S1  p1 . . .   pre  cur  next   . .  p2  S2 . . . S3
+    *  
+    *  Path(S1, cur) =  Dis(cur, pre) + Σ PointDis(p1-pre) + Dis(S1, p1)
+    *  Path(S2, cur) =  Dis(cur, next) + Σ PointDis(next-p2) + Dis(p2, S2)
+    */
+&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;前后点跨站&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//    case1:  S1  . . .   pre   cur  S2   next  . . . . S3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;//     case2:  S1  &amp;hellip;   pre   S2   cur  next  &amp;hellip; . S3&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;为了区分这两种情况，还要利用上面的Cost函数，计算cur到底在pre-S2，还是S2-next，计算过程十分繁琐。 时间预测的计算有过之而无不及。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-把站点插入轨迹集合里面:d361afbdc75d323080e31fe61f4bb8f8&#34;&gt;2. 把站点插入轨迹集合里面&lt;/h2&gt;
+
+&lt;p&gt;如果把站点插入轨迹集合里面，计算位置以及预测时间的过程就会简化许多，这时就需要给TrackPoint增加类型信息进行区分(将来可能会加入红绿灯，拐点等类型) :&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;const ( 
+    Ordinary =  iota
+    TurnPoint
+    Station
+    TrafficLight 
+)
+
+type Kind int
+
+type TrackPoint struct {
+	GeoPoint
+	preStationIndex	int  //前一站
+	nextStationIndex	int  //后一站
+	index	int   //在点集中的次序
+	kind	Kind //点类型
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;由于站点也是轨迹集合的一员，位置计算时就不存在是否跨站问题了，  时间预测时到两站的距离也只需要计算两部分。&lt;/p&gt;
+
+&lt;p&gt;本来为了使轨迹信息不致于受到站点的干扰，采用了第一种设计。但实现位置计算以及时间预测时，明显感觉各种计算都要围绕站点来进行，即使轨迹序列里不加站点，在其他地方还是会受到钳制。改用第二种设计之后，很多计算就变得自然许多，简洁许多，省了很多不必要的弯路。 借用《The Design of Design》的一句话就是：
+&lt;p&gt;&lt;/p&gt;
+&lt;div style=&#34;background-color:black; font:bold 17px italic red;padding-left:50px&#34; &gt;
+     The viewpoint is that of an engineer, focused on utility and effctiveness
+      but also efficiency and elegance.&lt;/p&gt;
+
+&lt;p&gt;&lt;/div&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>互联网之子:亚伦·斯沃茨的故事</title>
+      <link>http://localhost:1313/posts/the-story-of-aaron-swartz/</link>
+      <pubDate>Sat, 13 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/the-story-of-aaron-swartz/</guid>
+      <description>&lt;p&gt;今天看了&lt;a href=&#34;http://movie.douban.com/subject/25785114/&#34;&gt;The Internet&amp;rsquo;s Own Boy: The Story of Aaron Swartz&lt;/a&gt;，主人公&lt;a href=&#34;https://en.wikipedia.org/wiki/Aaron_Swartz&#34;&gt;Aaron Swartz&lt;/a&gt;是一个英年早逝的天才黑客，或者可以称其为一个致力于推动世界进步的人。
+Aaron做过很多非凡的事：不到14岁就和互联网之父蒂姆·伯纳斯-李这些互联网大佬们一起工作，参与基础互联网协议RSS的制定，之后创办过TheInfo.org，一个比维基百科还早的知识创建平台。Aaron年幼时就对版权问题感兴趣，以致于飞到华盛顿参与最高法院关于版权的听证会。之后参与Creative-Commons项目，致力于提供一种互联网知识共享的解决方案。你一定听说过Reddit这个网站，没错，这个游走在恶趣味与严肃议题之间的神奇网站也是这个家伙创办的。哦，对了，我正在使用的&lt;code&gt;Markdown&lt;/code&gt;同样也是出自Aaron之手。&lt;/p&gt;
+
+&lt;p&gt;Aaron在技术方面很有成就，但他绝不止是一个只会写代码的人。他是一个理想主义式的人物，他在接受采访时如是说:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;I thing deeply about things and want others to do likewise. I work for ideas and learn from 
+people. I don&#39;t like excluding people.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Aaron认为美国的出版商以及政府对公共领域知识把守过于严苛，以致于知识无法发挥到巨大的作用。所以他利用自己的技术获取到了很多需要付费的文献， 同时在社会公正和政治组织方面也进行了开创性工作。但正在他的影响力逐渐扩大时，当局也开始重视起Aaron本人，在一次导火索上决定严惩Aaron，杀一儆百。由于政府持续施压，Aaron承受压力过大，最终选择了自我了结的方式，用生命捍卫自己未竟的事业。&lt;/p&gt;
+
+&lt;p&gt;影片中有大量对不同人物的采访，通过这些人的表达，我最大的感受是，他们有着自己的价值底线，而且大多数人都会毫不犹豫地按照自己的内心去过活，而不是去与世俗观念寻求一种妥协。
+我感受到的第二点是，互联网一定会促使政治，民主，以及人权朝着好的方向发展。虽然总是有着相反的力量在阻挠， 但同时有种一批不屈的斗士在引领着变革。
+感受最深的一点，需要装裱一下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    只要你愿意去改变，神奇的事情就会发生。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;最后附上&lt;a href=&#34;http://lists.w3.org/Archives/Public/www-tag/2013Jan/0017.html&#34;&gt;蒂姆·伯纳斯-李对Aaron的悼词&lt;/a&gt;：&lt;/p&gt;
+
+&lt;p&gt;Aaron is dead.&lt;/p&gt;
+
+&lt;p&gt;Wanderers in this crazy world,
+we have lost a mentor, a wise elder.&lt;/p&gt;
+
+&lt;p&gt;Hackers for right, we are one down,
+we have lost one of our own.&lt;/p&gt;
+
+&lt;p&gt;Nurtures, careers, listeners, feeders,
+parents all,
+we have lost a child.&lt;/p&gt;
+
+&lt;p&gt;Let us all weep.&lt;/p&gt;
+
+&lt;p&gt;timbl&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>八一八浏览器缓存</title>
+      <link>http://localhost:1313/posts/818-browser-caching/</link>
+      <pubDate>Wed, 10 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/818-browser-caching/</guid>
+      <description>
+
+&lt;p&gt;今天由于需求变更，修改了部分前端代码，测试没问题之后进行了部署。交付测试时，发现修改的代码不起作用。而且比较奇怪的是一般手机浏览器没有问题，但微信内嵌浏览器内的结果还停留在部署之前的状态。分析后得知应该是缓存机制引起的。这里总结一下关于浏览器缓存的知识。&lt;/p&gt;
+
+&lt;h2 id=&#34;1-为什么需要浏览器缓存:ba9fd74135b629c8253bcf4f050e119b&#34;&gt;1. 为什么需要浏览器缓存&lt;/h2&gt;
+
+&lt;p&gt;网络的带宽总是有限的，尤其是在并发比较高的情况下，能节约一点儿是一点儿。对于大多数网站来说，类似js, css，图片等静态文件是很少变化的。我们便可以在用户的一次请求之后在本地缓存静态文件。用户进行同样的请求(url一致)时，相应文件直接在本地读取，快速获得响应。 除了减少服务器压力和带宽外，缓存机制还可以极大提高页面的显示速度。&lt;/p&gt;
+
+&lt;h2 id=&#34;2-缓存协商:ba9fd74135b629c8253bcf4f050e119b&#34;&gt;2.  缓存协商&lt;/h2&gt;
+
+&lt;p&gt;缓存的文件是由服务器生成，在本地保存， 但不是保存下来就万事大吉， 合理使用缓存需要双方动态沟通，这样就引入了缓存协商。下面是具体的请求过程分析：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;   (1) 当浏览器第一次请求某个URL时，顺利访问的话，服务器返回状态200的状态, ; 同时会返回给浏览器一些Headers集合，
+    如果只设定了Last-Modified和Etag头信息，那么浏览器接收到服务器这些信息后，就会将资源缓存在本地目录中,同时
+    保存文件的上述信息.
+   (2) 再次请求时，根据 HTTP 协议的规定，浏览器会向服务器传送 If-Modified-Since 与 If-None-Match 报头，这
+    两个报头实际上是第一次请求时服务器返回的Last-Modified,Etag。发送这两个报头目地是询问服务器，该资源在
+    时间内有没有被修改过。如 果该资源未被修改，则服务器会直接返回HTTP 304 （Not Changed.）状态码，内容为
+    空，此时不会下载资源，浏览器则自动从缓存目录中读取资源。
+   (3) 只使用Last-Modified和Etag 可以减少传输成本，但不会减少http请求数量。如果给文件加上关于过期时间(Expires)
+    的header报文,这样浏览器就会先检查缓存中的文件，如果没有过期，就直接使用缓存中的文件,从而不会 发送http请求。 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;3-缓存存在的问题:ba9fd74135b629c8253bcf4f050e119b&#34;&gt;3. 缓存存在的问题&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code&gt;   既然存在了本地，那么最大的问题就是一旦服务器的文件更新了，而浏览器还在使用本地的缓存，
+   会造成服务器端的修改不能生效。 我们碰到的问题刚好可以对号入座。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;4-解决之道:ba9fd74135b629c8253bcf4f050e119b&#34;&gt;4. 解决之道&lt;/h2&gt;
+
+&lt;h3 id=&#34;4-1-设置html的缓存相关信息:ba9fd74135b629c8253bcf4f050e119b&#34;&gt;4.1  设置html的缓存相关信息&lt;/h3&gt;
+
+&lt;p&gt;在html的头部加入如下信息:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;         &amp;lt;META HTTP-EQUIV=&amp;quot;pragma&amp;quot; CONTENT=&amp;quot;no-cache&amp;quot;&amp;gt; 
+
+        &amp;lt;META HTTP-EQUIV=&amp;quot;Cache-Control&amp;quot; CONTENT=&amp;quot;no-cache, must-revalidate&amp;quot;&amp;gt; 
+
+        &amp;lt;META HTTP-EQUIV=&amp;quot;expires&amp;quot; CONTENT=&amp;quot;0&amp;quot;&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;如果是动态语言生成的页面可以类似设置：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;        &amp;lt;% 
+        // 将过期日期设置为一个过去时间 
+        response.setHeader(&amp;quot;Expires&amp;quot;, &amp;quot;Sat, 6 May 1995 12:00:00 GMT&amp;quot;); 
+        // 设置 HTTP/1.1 no-cache 头 
+        response.setHeader(&amp;quot;Cache-Control&amp;quot;, &amp;quot;no-store,no-cache,must-revalidate&amp;quot;); 
+        // 设置 IE 扩展 HTTP/1.1 no-cache headers， 用户自己添加 
+        response.addHeader(&amp;quot;Cache-Control&amp;quot;, &amp;quot;post-check=0, pre-check=0&amp;quot;); 
+        // 设置标准 HTTP/1.0 no-cache header. 
+        response.setHeader(&amp;quot;Pragma&amp;quot;, &amp;quot;no-cache&amp;quot;); 
+        %&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-2-使用post代替get:ba9fd74135b629c8253bcf4f050e119b&#34;&gt;4.2 使用POST代替GET&lt;/h3&gt;
+
+&lt;p&gt;根据 HTTP 规范，GET 用于信息获取，是幂等操作。也就是说，当使用相同的URL重复GET请求会返回预期的相同结果时，GET方法才是适用的。当对一个请求有副作用的时候（例如，提交数据注册新用户时），应该使用POST请求而不是GET。 所以浏览器会对GET请求做缓存处理。 不会对POST做缓存。&lt;/p&gt;
+
+&lt;h3 id=&#34;4-3-在url后加随机参数:ba9fd74135b629c8253bcf4f050e119b&#34;&gt;4.3 在url后加随机参数&lt;/h3&gt;
+
+&lt;p&gt;在一次请求的URL后加随机数，服务器就会认为是不同的请求，就会传回最新的文件覆盖旧的文件。但这种方法仅限于动态语言。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    &amp;lt;%@ page import=&amp;quot;java.util.Random&amp;quot;%&amp;gt;
+    &amp;lt;html&amp;gt;  
+    &amp;lt;head&amp;gt;
+        &amp;lt;script src=&amp;quot;js/fuck.js?&amp;lt;%=new Random().nextInt(1000);%&amp;gt;&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;/head&amp;gt;
+    ...
+    &amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;4-4-给修改后的文件换个名字:ba9fd74135b629c8253bcf4f050e119b&#34;&gt;4.4  给修改后的文件换个名字&lt;/h3&gt;
+
+&lt;p&gt;上面的三种方法都是完全舍弃缓存优点的做法，如果既想使修改生效，又想继续使用缓存机制应该怎么办呢？  其实最简单的做法就是将修改过的文件换个名称，比如加个时间戳之类的东西。这是的文件就变成了新鲜出炉的文件，本地压根儿就没有，只得乖乖从服务器端获取。
+这种方法理论上是行的通的，有时间我会试试，可惜我没有时间了。 你有时间不妨一试？&lt;/p&gt;
+
+&lt;p&gt;参考:
+&lt;a href=&#34;http://alicsd.iteye.com/blog/814276&#34;&gt;浅谈浏览器缓存&lt;/a&gt;
+&lt;a href=&#34;http://java-xp.iteye.com/blog/1518510&#34;&gt;浏览器缓存url请求&lt;/a&gt;
+&lt;a href=&#34;http://www.360doc.com/content/10/0826/18/2905268_48986231.shtml&#34;&gt;浏览器缓存&lt;/a&gt;
+&lt;a href=&#34;http://baike.baidu.com/view/1246381.htm?fr=aladdin&#34;&gt;百科&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>写博客的意义</title>
+      <link>http://localhost:1313/posts/the-meaning-of-blogging/</link>
+      <pubDate>Sun, 07 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/the-meaning-of-blogging/</guid>
+      <description>&lt;p&gt;Thought in The Mirror.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>模式匹配大法好</title>
+      <link>http://localhost:1313/posts/pattern-match-is-good/</link>
+      <pubDate>Sat, 06 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/pattern-match-is-good/</guid>
+      <description>
+
+&lt;h2 id=&#34;if-while-for:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;if, while, for&lt;/h2&gt;
+
+&lt;p&gt;除了Hello,world之外的任何程序，几乎都离不开控制结构。比如if-then-else, while,for，其实这三种的基础说白了还是加了一层语法塘的goto语句。不过相比直接使用goto而言，程序的流程走向更容易被程序员掌握。for主要用于重复次数明确的情形，while在循环条件已知时很合适。由于二者完全是在做同样的事情，以至于Rob Pike在Go中统一命名为for。&lt;/p&gt;
+
+&lt;p&gt;如果每天只能重复地做一件事，世界会变地多么乏味。。。所以我们需要更多的选择，更多的种类。真实世界是纷繁复杂的，我们无时无刻不面临着选择。编程语言处理选择问题，最常见的就算if-then-else, 其实这个结构最早来源于lisp语言。 if-then-else是一种显式的选择方式，提醒程序员&lt;a href=&#34;http://www.xiami.com/play?ids=/song/playlist/id/1769300396/object_name/default/object_id/0#loaded&#34;&gt;下个路口再见吧&lt;/a&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;	if A = 1:
+        return &amp;quot;positive&amp;quot;
+	elif A = -1:
+        return &amp;quot;negative&amp;quot;
+	else:
+        return &amp;quot;abnormal&amp;quot;
+                         
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其实在做选择的时候，我们已经知道这是一个选择问题，不必在文字上再次提醒这里面临着一个选择，如果&amp;hellip;&amp;hellip;则&amp;hellip;&amp;hellip;那么&amp;hellip;&amp;hellip;， 即我们可以把if, then, else这样的字眼給省略掉：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;  A := 
+      1 -&amp;gt; &amp;quot;positive&amp;quot;
+     -1 -&amp;gt; &amp;quot;negative&amp;quot;
+      _ -&amp;gt; &amp;quot;abnormal&amp;quot;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这种简洁的选择方式和if-then-else是等价的，这种表达方式来自于ML, 一般称之为&lt;code&gt;模式匹配&lt;/code&gt;。简洁带来的好处一是代码上的整洁，舒适。 二是把很多dirty的细节隐匿起来，直达问题本身，这样我们就可以前进的更快，想象力就会飘的更远。。。举个快速排序的栗子:&lt;/p&gt;
+
+&lt;h3 id=&#34;命令式语言-go实现-https-github-com-kangkona-1day1algorithm-blob-master-qsort2-go:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;命令式语言 &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsort2.go&#34;&gt;Go实现&lt;/a&gt;&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func partition(A []int, low int, high int) int {
+	x := A[high]
+	i := low - 1
+	for j := low; j &amp;lt; high; j++ {
+		if A[j] &amp;lt;= x {
+			i++
+			A[i], A[j] = A[j], A[i]
+		}
+	}
+	A[i+1], A[high] = A[high], A[i+1]
+	return i + 1
+}
+
+func quickSort(A []int, low int, high int) {
+	if low &amp;lt; high {
+		p := partition(A, low, high)
+		quickSort(A, low, p-1)
+		quickSort(A, p+1, high)
+	}
+}
+
+func QuickSort(A []int) {
+	quickSort(A, 0, len(A)-1)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;不带模式匹配的lisp-scheme实现-https-github-com-kangkona-1day1algorithm-blob-master-qsortv3-scm:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;不带模式匹配的Lisp &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsortv3.scm&#34;&gt;Scheme实现&lt;/a&gt;&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-scheme&#34;&gt;(define (qsort lst)
+(if (&amp;lt;= (length lst) 1)
+lst
+(append (qsort (filter (cdr lst) (lambda (x) (&amp;lt;= x (car lst)))))
+(cons (car lst) (qsort (filter (cdr lst) (lambda (x) (&amp;gt; x (car lst)))))))))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;带模式匹配的语言-erlang实现-https-github-com-kangkona-1day1algorithm-blob-master-qsortv4-erl:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;带模式匹配的语言  &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsortv4.erl&#34;&gt;Erlang实现&lt;/a&gt;&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;qsort([]) -&amp;gt; [];
+qsort([Pivot|T]) -&amp;gt;
+			qsort([X || X &amp;lt;- T, X &amp;lt; Pivot])
+			++ [Pivot] ++
+			qsort([X || X &amp;lt;- T, X &amp;gt;= Pivot]).
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;显而易见，自带模式匹配的语言在屏蔽了语言细节之后，直接把快速排序的本质勾勒了出来，简单粗暴且自带闪光灯！！！ 为什么仅仅是省略了选择相关的字眼，生产率以及通俗性提高那么多呢？ 我猜测的原因如下:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    人是一种害怕做选择的动物，尤其是意识到自己面临着一个悬(选)着(择)的问题时候。使用if-then-else好比是在做选择
+    的时候告诉程序员：Hi,SB, you should make a choice!  是不是还有点细思极恐？？？！！！
+    而使用模式匹配，似乎只需要制定好一条条规则， Let the compiler do the fuck choice! 对于选择困难综合症
+    的 朋友来说，真是居家旅行，杀人越货必备之良器。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;总结来说，简洁的事物之所以有时候威力更强大，是因为简洁的重点不是简，而是洁。 隐匿了冗余的细节，减轻了思想上的包袱，让程序员可以轻装上阵，专注于真正的问题，谓之“洁”。&lt;/p&gt;
+
+&lt;p&gt;所以， 如果存在最好的语言，她不一定是最简单的语言，但一定是最简洁的语言。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Storm实时处理案例(1)</title>
+      <link>http://localhost:1313/posts/storm-real-time-case-1/</link>
+      <pubDate>Thu, 04 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/storm-real-time-case-1/</guid>
+      <description>&lt;p&gt;在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,
+Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截
+出一个单位数据。&lt;/p&gt;
+
+&lt;p&gt;通常会对流入的数据源定好协议，比如一个单位数据的header是FAFB, tail是EAEB：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    while( true ) {
+        while( true ) {
+         first = is.readByte();
+         if (first == (byte)0xFA) {
+            second = is.readByte();
+            if (second == (byte)0xFB) {
+                break;
+            }
+         }
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其实上段代码不够严谨，比如出现0xFA0xFA0xFB&amp;hellip;这样的流，就可能会丢弃正常的流。
+询问得知正文和头部是正交的, 暂时按下不表。&lt;/p&gt;
+
+&lt;p&gt;之后对截断的流进行基础性的检查，emit出去，交给Bolt处理。&lt;/p&gt;
+
+&lt;p&gt;Spout只管喷射出一个个截断的数据流，Bolt(螺栓)把自己拧在Spout的接口上, 对输出
+的元组进行必要的处理。&lt;/p&gt;
+
+&lt;p&gt;Storm的一大卖点是高度的稳定性，所以往往异常处理代码量比正常逻辑代码要多很多。&lt;/p&gt;
+
+&lt;p&gt;BTW, 看到这样一个段子：每条原始的Unix命令，都会变成一项互联网服务:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;    find -&amp;gt; yahool!,
+    grep-&amp;gt;Google, 
+    rsync-&amp;gt;Dropbox, 
+    man-&amp;gt;stack overflow, 
+    MapReduce = grep|sort|uniq,
+    cron-&amp;gt;ifttt，
+    cp-&amp;gt;Tencent, 
+    trap-&amp;gt;360, 
+    wall-&amp;gt;weibo.
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;其实&lt;code&gt;Storm&lt;/code&gt;不正是对应着&lt;code&gt;Pipe&lt;/code&gt;吗:)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Tomcat 并发调优</title>
+      <link>http://localhost:1313/posts/tomcat-tune/</link>
+      <pubDate>Wed, 06 Aug 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/tomcat-tune/</guid>
+      <description>
+
+&lt;h2 id=&#34;一-linux系统配置:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;一. Linux系统配置&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-增大最大打开文件数限制:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;1. 增大最大打开文件数限制&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt; $ sudo vim /etc/sysctl.conf 
+ # add &amp;quot;fs.file-max = 8061540&amp;quot;
+ $ sudo vim /etc/security/limit.conf 
+ # add &amp;quot;* soft nofile 8192&amp;quot;  and &amp;quot;* hard nofile 16384&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-优化网络:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;2. 优化网络&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;$ sudo vim /etc/sysctl.conf
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;优化后的内容如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; net.ipv4.ip_forward = 0
+
+ # Controls source route verification
+ net.ipv4.conf.default.rp_filter = 1
+
+ # Do not accept source routing
+ net.ipv4.conf.default.accept_source_route = 0
+
+ # Controls the System Request debugging functionality of the kernel
+ kernel.sysrq = 0
+
+ # Controls whether core dumps will append the PID to the core filename
+ # Useful for debugging multi-threaded applications
+ kernel.core_uses_pid = 1
+
+ # Controls the use of TCP syncookies
+ net.ipv4.tcp_syncookies = 1
+
+ # Controls the maximum size of a message, in bytes
+ kernel.msgmnb = 65536
+
+ # Controls the default maxmimum size of a mesage queue
+ kernel.msgmax = 65536
+
+ # Controls the maximum shared segment size, in bytes
+ kernel.shmmax = 68719476736
+
+ # Controls the maximum number of shared memory segments, in pages
+ kernel.shmall = 4294967296
+ vm.swappiness = 0
+ kernel.core_pattern = /tmp/corefile/core-%e-%p-%t
+ net.ipv4.tcp_tw_reuse = 1
+ net.ipv4.tcp_tw_recycle = 1
+ net.ipv4.tcp_fin_timeout = 5
+ net.ipv4.tcp_max_syn_backlog = 65536
+ net.core.netdev_max_backlog =  32768
+ net.core.somaxconn = 32768
+ net.core.wmem_default = 8388608
+ net.core.rmem_default = 8388608
+ net.core.rmem_max = 16777216
+ net.core.wmem_max = 16777216
+ net.ipv4.tcp_timestamps = 0
+ net.ipv4.tcp_synack_retries = 2
+ net.ipv4.tcp_syn_retries = 2
+ net.ipv4.tcp_mem = 94500000 915000000 927000000
+ net.ipv4.tcp_max_orphans = 3276800
+ net.ipv4.ip_local_port_range = 2000  65535
+ net.ipv4.tcp_max_tw_buckets = 5000
+ net.ipv4.netfilter.ip_conntrack_max = 1000000
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;二-tomcat内存优化:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;二. Tomcat内存优化&lt;/h2&gt;
+
+&lt;h4 id=&#34;tomcat内存优化主要是对-tomcat-启动参数优化-我们可以在-tomcat-的启动脚本-catalina-sh-中设置-java-opts-参数:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;&lt;strong&gt;Tomcat内存优化主要是对 Tomcat 启动参数优化，我们可以在 Tomcat 的启动脚本 catalina.sh 中设置 JAVA_OPTS 参数&lt;/strong&gt;&lt;/h4&gt;
+
+&lt;pre&gt;&lt;code&gt;-server:  启用jdk的server版,一定要作为第一个参数，在多个CPU时性能佳 
+-Xms： 初始Heap大小，使用的最小内存,cpu性能高时此值应设的大一些 
+-Xmx： java heap最大值，使用的最大内存 
+上面两个值是分配JVM的最小和最大内存，取决于硬件物理内存的大小，建议均设为物理内存的一半。 
+-XX:PermSize:设定内存的永久保存区域 
+-XX:MaxPermSize:设定最大内存的永久保存区域 
+-XX:MaxNewSize: 
+-Xss 15120 这使得JBoss每增加一个线程（thread)就会立即消耗15M内存，而最佳值应该是128K,默认值好像是512k. 
++XX:AggressiveHeap 会使得 Xms没有意义。这个参数让jvm忽略Xmx参数,疯狂地吃完一个G物理内存,再吃尽一个G的swap。 
+-Xss：每个线程的Stack大小 
+-verbose:gc 现实垃圾收集信息 
+-Xloggc:gc.log 指定垃圾收集日志文件 
+-Xmn：young generation的heap大小，一般设置为Xmx的3、4分之一 
+-XX:+UseParNewGC ：缩短minor收集的时间 
+-XX:+UseConcMarkSweepGC ：缩短major收集的时间 
+提示：此选项在Heap Size 比较大而且Major收集时间较长的情况下使用更合适。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;三-tomcat并发优化:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;三. Tomcat并发优化&lt;/h2&gt;
+
+&lt;h3 id=&#34;1-tomcat连接相关参数:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;1.Tomcat连接相关参数&lt;/h3&gt;
+
+&lt;p&gt;在Tomcat配置文件conf/server.xml 中的Connector配置中&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; acceptCount：允许的最大连接数
+ enableLookups：是否反查域名，取值为： true 或 false 。为了提高处理能力，应设置为 false
+ connectionTimeout：网络连接超时，单位：毫秒。设置为 0 表示永不超时，这样设置有隐患的。通常可设置为 30000 毫秒。
+ 其中和最大连接数相关的参数为maxProcessors 和 acceptCount。如果要加大并发连接数，应同时加大这两个参数。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;2-调整连接器connector的并发处理能力:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;2.调整连接器connector的并发处理能力&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;  maxThreads        客户请求最大线程数
+  minSpareThreads   Tomcat初始化时创建的 socket 线程数
+  maxSpareThreads   Tomcat连接器的最大空闲 socket 线程数
+  enableLookups     若设为true, 则支持域名解析，可把 ip 地址解析为主机名
+  redirectPort      在需要基于安全通道的场合，把客户请求转发到基于SSL 的 redirectPort 端口
+  acceptAccount     监听端口队列最大数，满了之后客户请求会被拒绝(不能小于maxSpareThreads)
+  connectionTimeout 连接超时
+  URIEncoding    URL统一编码
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;3-tomcat缓存优化:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;3.Tomcat缓存优化&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code&gt;      compression 打开压缩功能   
+      compressionMinSize   启用压缩的输出内容大小，这里面默认为2KB
+      compressableMimeType 压缩类型
+      connectionTimeout 定义建立客户连接超时的时间. 如果为 -1, 表示不限制建立客户连接的时间
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;结合以上方面，对server.xml的现有配置为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;      &amp;lt;Connector  port=&amp;quot;9027&amp;quot; 
+
+              maxHttpHeaderSize=&amp;quot;8192&amp;quot;
+
+              maxThreads=&amp;quot;2048&amp;quot;
+
+              minSpareThreads=&amp;quot;256&amp;quot;
+
+              enableLookups=&amp;quot;false&amp;quot;
+
+              compression=&amp;quot;on&amp;quot;
+
+              compressionMinSize=&amp;quot;2048&amp;quot;
+
+              compressableMimeType=&amp;quot;text/html,text/xml,text/javascript,text/css,text/plain&amp;quot;
+
+              connectionTimeout=&amp;quot;20000&amp;quot;
+
+              URIEncoding=&amp;quot;utf-8&amp;quot;
+
+              acceptCount=&amp;quot;2048&amp;quot;
+
+              redirectPort=&amp;quot;8443&amp;quot;
+
+              disableUploadTimeout=&amp;quot;true&amp;quot;
+
+              executor=&amp;quot;tomcatThreadPool&amp;quot; /&amp;gt;
+
+      &amp;lt;Executor name=&amp;quot;tomcatThreadPool&amp;quot; 
+                namePrefix=&amp;quot;catalina-exec-&amp;quot; 
+                maxThreads=&amp;quot;2048&amp;quot; 
+                minSpareThreads=&amp;quot;512&amp;quot; 
+                prestartminSpareThreads=&amp;quot;true&amp;quot; /&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;四-tomcat-native:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;四. Tomcat Native&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Tomcat可以使用APR来提供超强的可伸缩性和性能，更好地集成本地服务器技术。APR(Apache Portable Runtime)
+ 是一个高可移植库，它是Apache HTTP Server 2.x的核心。APR有很多用途，包括访问高级IO功能(例如sendfile,
+ epoll和OpenSSL)，OS级别功能(随机数生成，系统状态等等)，本地进程管理(共享内存，NT管道和UNIX sockets)。这些功能可以
+ 使Tomcat作为一个通常的前台WEB服务器，能更好地和其它本地web技术集成，总体上让Java更有效率作为一个高性能web服务器
+ 平台而不是简单作为后台容器&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;在产品环境中，特别是直接使用Tomcat做WEB服务器的时候，应该使用Tomcat Native来提高其性能。
+说白了，就是如何 在Tomcat中使用JNI的方式来读取文件以及进行网络传输。这个东西可以大大提升Tomcat对静态文件的处理性能，同时如果你使用了HTTPS方式 传输的话，也可以提升SSL的处理性能。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a. 安装 apr&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ sudo ./configure --prefix=/opt/apr
+     $ sudo make
+     $ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;b. 安装 apr-iconv&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ sudo ./configure --prefix=/opt/apr-iconv --with-apr=/opt/apr 
+     $ sudo make
+     $ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;c. 安装 apr-util&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ sudo  ./configure --prefix=/opt/apr-util  --with-apr=/opt/apr --with-apr-iconv=/opt/apr-iconv/bin/apriconv 
+     $ sudo make
+     $ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;d. 安装 tomcat-native&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ cd $TOMCAT_HOME/bin/tomcat-native-1.1.30-src/jni/native
+     $ ./configure --with-apr=/opt/apr --with-java-home=/usr/lib/jvm/java-7-openjdk-i386/ 
+     $ sudo make
+     $ sudo make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;五-总结:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;五. 总结&lt;/h2&gt;
+
+&lt;p&gt;为了提高Tomcat的并发处理能力，我从以上几个方面进行了逐步的增量调优，每次优化或者做出改变之后，都从Client用ab模拟并发，观察QPS等指标，并同时在Server端监控各种系统信息：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;           sudo /opt/apache/bin/ab -n 50000 -c 2000 http://192.168.1.2:9027/performance/test.jsp 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;目前比较好的测试结果如下：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;           Server Software:        Apache-Coyote/1.1
+           Server Hostname:        192.168.1.2
+           Server Port:            9027
+
+           Document Path:          /performance/test.jsp
+           Document Length:        253 bytes
+
+           Concurrency Level:      2000
+           Time taken for tests:   4.089 seconds
+           Complete requests:      50000
+           Failed requests:        0
+           Total transferred:      25100000 bytes
+           HTML transferred:       12650000 bytes
+           Requests per second:    12227.55 [#/sec] (mean)
+           Time per request:       163.565 [ms] (mean)
+           Time per request:       0.082 [ms] (mean, across all concurrent requests)
+           Transfer rate:          5994.36 [Kbytes/sec] received
+
+           Connection Times (ms)
+                         min  mean[+/-sd] median   max
+           Connect:        9   77 138.5     54    1070
+           Processing:    15   81  51.7     76     617
+           Waiting:       11   59  34.4     57     608
+           Total:         40  158 148.6    127    1221
+
+           Percentage of the requests served within a certain time (ms)
+             50%    127
+             66%    147
+             75%    177
+             80%    180
+             90%    196
+             95%    219
+             98%    662
+             99%   1105
+            100%   1221 (longest request)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但在调优时发现，无论怎样提高各种参数的阈值，并发性都不会再得到明显的提高，有时反而会降低。而且在设置JAVA_OPTS时，-Xms, -Xmx超过2048m时，就会提示超过内存限制。在网路上看到以下内容可以解释这个问题:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;`JVM`内存限制于实际的最大物理内存，假设物理内存无限大的话，`JVM`内存的最大值跟操作系统有很大的关系。
+简单的说就32位处理器虽然可控内存空间有4GB,但是具体的操作系统会给一个限制，这个限制一般是2GB-3GB（一般
+来说`Windows`系统下为1.5G-2G，`Linux`系统下为2G-3G），而64bit以上的处理器就不会有限制了。
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>NLPNote</title>
+      <link>http://localhost:1313/posts/nlp-note/</link>
+      <pubDate>Thu, 06 Feb 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/nlp-note/</guid>
+      <description>
+
+&lt;h2 id=&#34;1-python自然语言处理-笔记:f4f67061fc493a4c2b2b421639ba2c55&#34;&gt;1.《Python自然语言处理》笔记&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;遍历序列的各种方式&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    Python 表达式                       评论
+    for item in s                       遍历 s 中的元素
+    for item in sorted(s)               按顺序遍历 s 中的元素
+    for item in set(s)                  遍历 s 中的无重复的元素
+    for item in reversed(s)             按逆序遍历 s 中的元素
+    for item in set(s).difference(t)    遍历在集合 s 中不在集合 t 的元素
+    for item in random.shuffle(s)       按随机顺序遍历 s 中的元素
+
+    组合使用显威力： reversed(sorted(set(s)))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;zip &amp;amp;&amp;amp; enumerate&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    &amp;gt;&amp;gt;&amp;gt; words = [&#39;I&#39;, &#39;turned&#39;, &#39;off&#39;, &#39;the&#39;, &#39;spectroroute&#39;]
+    &amp;gt;&amp;gt;&amp;gt; tags = [&#39;noun&#39;, &#39;verb&#39;, &#39;prep&#39;, &#39;det&#39;, &#39;noun&#39;]
+    &amp;gt;&amp;gt;&amp;gt; zip(words, tags)
+    [(&#39;I&#39;, &#39;noun&#39;), (&#39;turned&#39;, &#39;verb&#39;), (&#39;off&#39;, &#39;prep&#39;),
+    (&#39;the&#39;, &#39;det&#39;), (&#39;spectroroute&#39;, &#39;noun&#39;)]
+    &amp;gt;&amp;gt;&amp;gt; list(enumerate(words))
+    [(0, &#39;I&#39;), (1, &#39;turned&#39;), (2, &#39;off&#39;), (3, &#39;the&#39;), (4, &#39;spectroroute&#39;)]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;对于一些 NLP 的任务,有必要将一个序列分割成两个或两个以上的部分。例如:我们
+可能需要用 90%的数据来“训练”一个系统,剩余 10%进行测试。要做到这一点,我们指
+定想要分割数据的位置,然后在这个位置分割序列。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    &amp;gt;&amp;gt;&amp;gt; text = nltk.corpus.nps_chat.words()
+    &amp;gt;&amp;gt;&amp;gt; cut = int(0.9 * len(text)) 
+    &amp;gt;&amp;gt;&amp;gt; training_data, test_data = text[:cut], text[cut:] 
+    &amp;gt;&amp;gt;&amp;gt; text == training_data + test_data 
+    True
+    &amp;gt;&amp;gt;&amp;gt; len(training_data) / len(test_data) 4
+    9
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;我们可以验证在此过程中的原始数据没有丢失,也不是复制。我们也可以验证两块大
+小的比例是我们预期的。&lt;/p&gt;
+
+&lt;p&gt;让我们综合关于这三种类型的序列的知识,一起使用链表推导处理一个字符串中的词,
+按它们的长度排序。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    &amp;gt;&amp;gt;&amp;gt; words = &#39;I turned off the spectroroute&#39;.split() 
+    &amp;gt;&amp;gt;&amp;gt; wordlens = [(len(word), word) for word in words] 
+    &amp;gt;&amp;gt;&amp;gt; wordlens.sort() 
+    &amp;gt;&amp;gt;&amp;gt; &#39; &#39;.join(w for (_, w) in wordlens)
+    &#39;I off the turned spectroroute&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;从html中提取信息的通用办法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    import re
+    def get_text(file):
+    &amp;quot;&amp;quot;&amp;quot;Read text from a file, normalizing whitespace and stripping HTML markup.&amp;quot;&amp;quot;&amp;quot;
+    text = open(file).read()
+    text = re.sub(&#39;\s+&#39;, &#39; &#39;, text)
+    text = re.sub(r&#39;&amp;lt;.*?&amp;gt;&#39;, &#39; &#39;, text)
+    return text
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;防御性编程&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;     def tag(word):
+        assert isinstance(word, basestring), &amp;quot;argument to tag() must be a string&amp;quot;
+        if word in [&#39;a&#39;, &#39;the&#39;, &#39;all&#39;]:
+            return &#39;det&#39;
+        else:
+            return &#39;noun&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;FreqDist&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    def freq_words(file, min=1, num=10):
+        text = open(file).read()
+        tokens = nltk.word_tokenize(text)
+        freqdist = nltk.FreqDist(t for t in tokens if len(t) &amp;gt;= min)
+        return freqdist.keys()[:num]
+
+
+    def freq_words_verbose(file, min=1, num=10, verbose=False):
+     &#39;&#39;&#39;如果设置了 verbose 标志将会报告其进展情况&#39;&#39;&#39;
+     freqdist = FreqDist()
+     if trace: print &amp;quot;Opening&amp;quot;, file
+     text = open(file).read()
+     if trace: print &amp;quot;Read in %d characters&amp;quot; % len(file)
+     for word in nltk.word_tokenize(text):
+         if len(word) &amp;gt;= min:
+            freqdist.inc(word)
+            if trace and freqdist.N() % 100 == 0: print &amp;quot;.&amp;quot;
+     if trace: print
+     return freqdist.keys()[:num]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;调试＆＆Pdb&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;CSV :Python有自己的CSV库，csv.reader&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;动态规划是一种在 NLP 中广泛使用的算法设计技术,它存储以前的计算结果,
+以避免不必要的重复计算。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;2-文本分类:f4f67061fc493a4c2b2b421639ba2c55&#34;&gt;2. 文本分类&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;过拟合： 如果你提供太多的特征,那么该算法将高度依赖你的训练数据的特性，而一般化到新的例子的效果不会很好。这个问题被称为过拟合。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;devtest： 一旦初始特征集被选定,完善特征集的一个非常有成效的方法是错误分析。首先,我们选择一个开发集,包含用于创建模型的语料数据。然后将这种开发集分为训练集和开发测试集。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Topic映射到关键词组，映射的越多，表示越切题。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;不去关注词法，语法阶段的错误，做到隔离。面面俱到的效果未必好。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;    algorithm : 主题检测
+    input: document
+    tools: 
+         - 特征提取器(eg:给定一些模式（词，词组，词模式)，得到对于给定document的`布尔数组`)
+         - 训练一个文档分类器
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;特征提取函数的行为就像有色眼镜一样,强调我们的数据中的某些属性(颜色),并使其无法看到其他属性。分类器在决定如何标记输入时,将完全依赖它们强调的属性。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;要不要走一条无监督学习之路，寻找不动点。&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;文本自动层级聚类
+这种试探性的数据分析(exploratory data  analysis)来识别跑题作文,并辅以人工鉴别。这种内容评价方法的特点是不需要事先基于大规模标注训练集构建评价模型,并且有着层级聚合聚类法的突出优点,郎能够生成比较规整的类集合,聚类结果不依赖文档的初始排列或输入次序,与聚类过程的先后次序无关,聚类结果比较稳定,不易导致类的重构。并且对于作文i平价来讲,得到的结果比较容易解释。实验结果表明,该方法能比较清晰地识别与大多数作文内容不同的作文,再辅以人工鉴别,可准确识别跑题作文,从而在通用自动作文评价中实现作文内容的测量。&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;3-代码工具库:f4f67061fc493a4c2b2b421639ba2c55&#34;&gt;3. 代码工具库&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;	# -*- coding: utf-8 -*-
+	&amp;quot;&amp;quot;&amp;quot;
+	为跑题检测储备的工具代码
+	~/Project/NLTK-offTopic/.temp.py
+	&amp;quot;&amp;quot;&amp;quot;
+	import numpy as np
+	import nltk as nk
+	import re
+
+	s=open(&amp;quot;nlptest.txt&amp;quot;,&amp;quot;r&amp;quot;)
+	&#39;&#39;&#39;s.seek(0)&#39;&#39;&#39;
+	m1=s.read()
+	pattern=re.compile(&amp;quot;^A-Za-z&amp;quot;)
+	s1=re.split(&amp;quot;\s+&amp;quot;,re.sub(pattern,&amp;quot; &amp;quot;,m1.replace(&amp;quot;\n&amp;quot;,&amp;quot; &amp;quot;)))
+	s2=set(s1) #union作用
+	s3=nk.FreqDist(s1)
+	nk.FreqDist(s1).items()#显示所有信息
+	nk.FreqDist(s1).keys()[:50]#显示前50的词频为降序排列
+	s4=[len(ca) for ca in s1]#计算词频长度
+	s5=nk.FreqDist(s4)
+	max(s5)#显示最大的词频
+	s5.freq(s5.keys(max(s5))#可显示比率
+	z1=[ca for ca in set(s1) if s3[ca]&amp;gt;10]#可以只输出符合规则的词频
+	s3.plot(50,cumulative=True)#累计汇总图前50个词频的
+	s3.hapaxes()#输出只一次的词
+	nk.bigrams(s1)#形成双连词
+	s3.inc(s3)#可添加样本
+	s3.N()可现实总量
+	s3.tabulate(conditions=&amp;quot;表示第几个文本对应的名字&amp;quot;,samples=&amp;quot;表示要显示的词&amp;quot;)#绘制频率分布表
+	 
+	###nltk上的人机交互程序
+	nk.chat.chatbots()
+	 
+	##载入自己的语料库
+	 
+	from nltk.corpus import PlaintextCorpusReader
+	wd=&amp;quot;D:\\nlptest&amp;quot;
+	wd1=PlaintextCorpusReader(wd,&amp;quot;.*&amp;quot;)
+	wd1.fileids()#显示语料库中的文件名
+	wd1.words(&amp;quot;nlptest.txt&amp;quot;)#显示词和split效果一样
+	cfd=nk.ConditionalFreqDist((genre,word) for genre in [&amp;quot;first&amp;quot;,&amp;quot;second&amp;quot;] for word in s1)
+	#对应的条件概率如果在word，其实就是分类汇总
+	cfd.conditions()#显示并按照条件字母排序
+	#一样可以用tabulate显示table列表
+	 
+	 
+	#英文同义词字典库
+	 
+	from nltk.corpus import wordnet as wn
+	wn.synsets(&amp;quot;hell&amp;quot;)#显示出同义词类
+	wn.synset(&amp;quot;hell.n.01&amp;quot;).lemma_names#可以显示出在第几种词义词性下对应的相同英文
+	wn.synset(&amp;quot;hell.n.01&amp;quot;).definition#词语定义
+	wn.synset(&amp;quot;hell.n.01&amp;quot;).examples#常用词义例句子
+	wn.synset(&amp;quot;hell.n.01&amp;quot;).lemmas#显示所有词条
+	wn.lemma(&amp;quot;hell.n.01.hell_on_earth&amp;quot;)
+	wn.lemma(&amp;quot;hell.n.01.hell_on_earth&amp;quot;).synset#显示上层hell.n.01
+	wn.lemma(&amp;quot;hell.n.01.hell_on_earth&amp;quot;).name#显示单词&#39;hell_on_earth&#39;
+	hell=wn.synset(&amp;quot;cat.n.01&amp;quot;)
+	hell1=hell.hyponyms()
+	sorted([lemma.name for synset1 in hell1 for lemma in synset1.lemmas])
+	#Out[65]: [&#39;Felis_catus&#39;, &#39;Felis_domesticus&#39;, &#39;domestic_cat&#39;, &#39;house_cat&#39;, &#39;wildcat&#39;]
+	#先进行词条分类
+	#通过hyponyms找到下位词如毛 可以使什么类型的猫等
+	hell.root_hypernyms()#可以找到最一般的上位词
+	hell.hypernym_paths()#可以找到层次 len测是几类
+	wn.synset(&amp;quot;cat.n.01&amp;quot;).part_meronyms()#可以显示出如猫耳朵，猫毛这类词汇关系
+	wn.synset(&amp;quot;cat.n.01&amp;quot;).substance_meronyms()#不理解什么叫树的实质是心材和边材
+	wn.synset(&amp;quot;walk.v.01&amp;quot;).entailments()#动词的蕴含意义，如走路蕴含着抬脚，吃蕴含着咀嚼等
+	wn.lemma(&amp;quot;rush.v.01&amp;quot;).antonyms()#动词的反义
+	dir(wn.synset(&amp;quot;rush.v.01&amp;quot;))#可以通过此种方式再词汇挂你选等上查找
+	wn.synset(&amp;quot;right_whale.n.01&amp;quot;).lowest_common_hypernyms(wn.synset(&amp;quot;orca.n.01&amp;quot;))#可以计算出两个相似的类
+	wn.synset(&amp;quot;right_whale.n.01&amp;quot;).min_depth()#可以查对应的深度量化
+	wn.synset(&amp;quot;right_whale.n.01&amp;quot;).path_similarity(wn.synset(&amp;quot;orca.n.01&amp;quot;))#直接可以计算相似度1为基本一样
+	&#39;&#39;&#39;urllib urlopen urlopen().read()
+	#nk.word_tokenize()可直接对文本分词
+	#text=nk.Text(nk.word_tokenize)的list形变为nltk文本
+	list形式可用 .find(&amp;quot;&amp;quot;)
+	 
+	#html
+	k1=urlopen().read()
+	#直接转换
+	k2=nk.clean_html(k1)
+	k3=nk.word_tokenize(k2)
+	&#39;&#39;&#39;
+	 
+	#词干提取器
+	porter=nk.PorterStemmer()#或者LancasterStemmer()
+	[porter.stem(t) for t in s1]
+	#词型归并器
+	l1=nk.WordNetLemmatizer()
+	[l1.lemmatize(t) for t in s1]
+	#nk.regexp_tokenize(text,pattern)比re.findall快很多
+	#random.shuffle(sample)
+	 
+	#词性标注器
+	nk.pos_tag(s1)#cc连词 rb副词 in介词 nn名词 jj形容词 vbp动词
+	#adj形容词 adv动词 cnj连词 det限定词 ex存量词 fw外来词 mod情态动词
+	#n 名词 np 专有名词 num数量词 pro代词 p介词 to 词投 uh感叹词 v动词
+	#vd过去式 vg现有分词 vn过去分词 wh wh限定词
+	 
+	#读取已标注的语料库
+	s1.tagged_words()
+	#朴素贝叶斯
+	cla=nk.NaiveBayesClassifier.train()
+	cla.classfiy()
+	nk.classify.accuracy(cla,&amp;quot;测试集&amp;quot;)
+	#决策树
+	nk.DecisionTreeClassifier.tarin()
+
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Struct Hack</title>
+      <link>http://localhost:1313/posts/struct-hack/</link>
+      <pubDate>Thu, 07 Nov 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/struct-hack/</guid>
+      <description>&lt;p&gt;最近在搞&lt;strong&gt;Compiler&lt;/strong&gt;的&lt;strong&gt;CodeGenerator&lt;/strong&gt;实验，有一部分需要把Java程序翻译成C程序，比如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; int [] array;
+ array = new int[10];
+ System.out.println(array.length); //10
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这段代码翻译成C很自然的想法是：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; int * array; // int array[] not support in C
+ array = (int*)malloc(sizof(int)*10);
+ printf(&amp;quot;%d\n&amp;quot;,sizof(array)/sizeof(int)); // 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但很可惜这样是错误的，因为malloc操作在堆上分配空间，不一定是连续的，sizof(array)得到的是指针本身所占的单元，和sizeof(int)相等，无法通过sizof求得数组长度。它和下面还不一样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; int array[10];
+ printf(&amp;quot;%d\n&amp;quot;,sizof(array)/sizeof(int)); // 10
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里&lt;code&gt;array&lt;/code&gt;是数组，是指向整个连续存储空间的常量，所以&lt;code&gt;sizeof&lt;/code&gt;对其操作求得的是整个区域的长度。但是当数组名作为函数的参数传递时，数组就退化为指针，又回到了刚才问题。&lt;/p&gt;
+
+&lt;p&gt;我们应该怎么做？&lt;/p&gt;
+
+&lt;p&gt;在 &lt;a href=&#34;http://stackoverflow.com/&#34;&gt;StackOverflow&lt;/a&gt; 搜了一下，发现&lt;code&gt;ANSI C&lt;/code&gt;根本没有直接办法通过指向内存的指针求得分配长度。但&lt;code&gt;Windows&lt;/code&gt;下提供了计算指针指向的内存大小的方法[&lt;a href=&#34;http://msdn.microsoft.com/zh-cn/library/vstudio/z2s077bc(v=vs.80).aspx#feedback&#34;&gt;malloc.h&lt;/a&gt;]：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;msize: returns the size (in bytes) as an unsigned integer.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt; size_t _msize(
+ void *memblock
+ );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但由于操作系统策略的原因，实际分配到的大小可能会比指定的大一些&lt;a href=&#34;http://jiaqinxu.info/tag/_msize&#34;&gt;here&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;在Linux下，指针往前偏移一个整形大小的单元也会记录实际分配的大小，我们来窥探一下那个单元的内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//test.c
+int main(){
+ int * p;
+ int i;
+ int size;
+ for (i=1;i&amp;lt;11;i++)
+ printf(&amp;quot;%d &amp;quot;,i);
+ printf(&amp;quot;\n&amp;quot;);
+ for (i=0;i&amp;lt;10;i++){
+ p = (int*)malloc(sizeof(int)*i);
+ size = *(int*)((char*)p-sizeof(int));
+ printf(&amp;quot;size:%d &amp;quot;,size);
+ free(p);
+ }
+ printf(&amp;quot;\n&amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$gcc test.c
+$./a.out
+1  2  3  4  5  6  7  8  9  10
+17 17 17 17 25 25 33 33 41 41
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看来Linux的分配策略不能使得内存大小和元素个数一一对应，此法不可用。
+后来发现在Linux下原来也有类似&lt;code&gt;_msize&lt;/code&gt;的函数[&lt;a href=&#34;http://www.linuxidc.com/Linux/2011-12/48624.htm&#34;&gt;malloc.h&lt;/a&gt;]：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int * array;
+int size;
+array = (int*)malloc(sizof(50);
+size = malloc_usable_size(array);
+printf(&amp;quot;%d\n&amp;quot;,size);//50
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是malloc.h不属于标准C，我们还要继续寻找通用之法。经过大量查阅，终于发现了一种code trick,称作&lt;a href=&#34;http://tonybai.com/2013/03/07/struct-hack-in-c/&#34;&gt;&lt;strong&gt;struct-hack&lt;/strong&gt;&lt;/a&gt;. 前面提到过，在C语言中，&lt;code&gt;int a[]&lt;/code&gt;是违法的，但是把它作为struct的最后一个成员却是可以的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;typedef struct array{
+ int size;
+ int free;
+ int buf[];
+ }array,*Tiger_array;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是在C语言的后期加入的特性，目的就是为了实现&lt;strong&gt;flexible array&lt;/strong&gt;， 这样每次给数组分配空间时，需要同步记录size大小。而求size的时候，直接取出来即可：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Tiger_array ta;
+ta = (int*)malloc(sizeof(array)+100);
+ta-&amp;gt;size = 100;
+ta-&amp;gt;free = 0;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;需要注意一点，这时分配的大小应该是sizeof(struct)加上需求的数组大小。&lt;/p&gt;
+
+&lt;p&gt;这个问题就说到这里。&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>《Python学习笔记》的笔记</title>
+      <link>http://localhost:1313/posts/python-note-1/</link>
+      <pubDate>Sat, 16 Mar 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/python-note-1/</guid>
+      <description>
+
+&lt;p&gt;这是对雨痕写的Python学习笔记的学习。&lt;/p&gt;
+
+&lt;h2 id=&#34;基本环境:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;基本环境&lt;/h2&gt;
+
+&lt;p&gt;对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。
+因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。&lt;/p&gt;
+
+&lt;h3 id=&#34;引用计数:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;引用计数&lt;/h3&gt;
+
+&lt;p&gt;除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。&lt;/p&gt;
+
+&lt;h3 id=&#34;垃圾回收:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;垃圾回收&lt;/h3&gt;
+
+&lt;p&gt;Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 &amp;ldquo;Reference Cycle Garbage Collection&amp;rdquo;。&lt;/p&gt;
+
+&lt;p&gt;能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。&lt;/p&gt;
+
+&lt;p&gt;#世代回收&lt;/p&gt;
+
+&lt;h2 id=&#34;内置类型:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;内置类型&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;尽量使用xrange代替range&lt;/strong&gt;，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;字符串:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;字符串&lt;/h3&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;&amp;gt;&amp;gt;&amp;gt; &amp;quot;,&amp;quot;.join([&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;])
+&#39;a,b,c&#39;
+&amp;gt;&amp;gt;&amp;gt; &amp;quot;a,b,c&amp;quot;.split(&amp;quot;,&amp;quot;)
+!
+[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
+&amp;gt;&amp;gt;&amp;gt; &amp;quot;a\nb\r\nc&amp;quot;.splitlines()
+[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
+&amp;gt;&amp;gt;&amp;gt;&amp;quot;a\nb\r\nc&amp;quot;.splitlines(True)
+[&#39;a\n&#39;, &#39;b\r\n&#39;, &#39;c&#39;]
+&amp;gt;&amp;gt;&amp;gt; &amp;quot;abc&amp;quot;.startswith(&amp;quot;ab&amp;quot;), &amp;quot;abc&amp;quot;.endswith(&amp;quot;bc&amp;quot;)
+True, True
+&amp;gt;&amp;gt;&amp;gt; &amp;quot;abc&amp;quot;.upper(), &amp;quot;Abc&amp;quot;.lower()
+&#39;ABC&#39;, &#39;abc&#39;
+
+&amp;gt;&amp;gt;&amp;gt; &amp;quot;abcabc&amp;quot;.find(&amp;quot;bc&amp;quot;), &amp;quot;abcabc&amp;quot;.find(&amp;quot;bc&amp;quot;, 2) # 可指定查找起始结束位置。
+1, 4
+&amp;gt;&amp;gt;&amp;gt; &amp;quot; abc&amp;quot;.lstrip(), &amp;quot;abc &amp;quot;.rstrip(), &amp;quot; abc &amp;quot;.strip() # 剔除前后空格。
+&#39;abc&#39;, &#39;abc&#39;, &#39;abc&#39;
+&amp;gt;&amp;gt;&amp;gt; &amp;quot;abc&amp;quot;.strip(&amp;quot;ac&amp;quot;)  # 可删除指定的前后缀字符。
+&#39;b&#39;
+&amp;gt;&amp;gt;&amp;gt; &amp;quot;abcabc&amp;quot;.replace(&amp;quot;bc&amp;quot;, &amp;quot;BC&amp;quot;)# 可指定替换次数。
+&#39;aBCaBC&#39;
+&amp;gt;&amp;gt;&amp;gt; &amp;quot;a\tbc&amp;quot;.expandtabs(4)
+&#39;a  bc&#39;
+&amp;gt;&amp;gt;&amp;gt; &amp;quot;123&amp;quot;.ljust(5, &#39;0&#39;), &amp;quot;456&amp;quot;.rjust(5, &#39;0&#39;), &amp;quot;abc&amp;quot;.center(10, &#39;*&#39;) # 填充
+&#39;12300&#39;, &#39;00456&#39;, &#39;***abc****&#39;
+&amp;gt;&amp;gt;&amp;gt; &amp;quot;123&amp;quot;.zfill(6), &amp;quot;123456&amp;quot;.zfill(4) # 数字填充
+&#39;000123&#39;, &#39;123456&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;string.Template可以处理较复杂的需求&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&#34;池化:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;池化&lt;/h3&gt;
+
+&lt;p&gt;池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。&lt;/p&gt;
+
+&lt;h3 id=&#34;list:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;List&lt;/h3&gt;
+
+&lt;p&gt;可用bisect 向有序列表中插入元素。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;性能&lt;/strong&gt;
+1. 列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。
+2. 某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。&lt;/p&gt;
+
+&lt;p&gt;###tuple
+在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。&lt;/p&gt;
+
+&lt;p&gt;###dict
+字典 (dict) 采用用开放地址法的哈希表实现。
+• 自带元素容量为 8 的 smalltable,只有 &amp;ldquo;超出&amp;rdquo;时才到堆上额外分配元素表内存。
+• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。
+• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。
+• 删除元素操作不会立立即收缩内存。&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减
+少内存开销。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&#34;视图:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;视图&lt;/h4&gt;
+
+&lt;p&gt;要判断两个字典间的差异,使用用视图是最简便的做法。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; d1 = dict(a = 1, b = 2)
+&amp;gt;&amp;gt;&amp;gt; d2 = dict(b = 2, c = 3)
+&amp;gt;&amp;gt;&amp;gt; d1 &amp;amp; d2 # 字典不支支持该操作。
+TypeError: unsupported operand type(s) for &amp;amp;: &#39;dict&#39; and &#39;dict&#39;
+&amp;gt;&amp;gt;&amp;gt; v1 = d1.viewitems()
+&amp;gt;&amp;gt;&amp;gt; v2 = d2.viewitems()
+&amp;gt;&amp;gt;&amp;gt; v1 &amp;amp; v2  # 交集
+set([(&#39;b&#39;, 2)])
+&amp;gt;&amp;gt;&amp;gt; v1 | v2  #并
+set([(&#39;a&#39;, 1), (&#39;b&#39;, 2), (&#39;c&#39;, 3)])
+&amp;gt;&amp;gt;&amp;gt; v1 - v2  # 差集 (仅 v1 有,v2 没有的)
+set([(&#39;a&#39;, 1)])
+&amp;gt;&amp;gt;&amp;gt; v1 ^ v2  #对称差集 (不会同时出现在 v1 和 v2 中)
+set([(&#39;a&#39;, 1), (&#39;c&#39;, 3)])
+&amp;gt;&amp;gt;&amp;gt; (&#39;a&#39;, 1) in v1
+True
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;set:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;set&lt;/h3&gt;
+
+&lt;p&gt;集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 &amp;ldquo;值&amp;rdquo; 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。&lt;/p&gt;
+
+&lt;p&gt;运算： ==， ！=， &amp;gt;, |, &amp;amp; ,-, ^&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;数据结构很重要,这几个内置类型并不足以完成全部工作。像 C、数据结构、常用算法这类基础是每个程序开发人员都应该掌握的。&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Concurrent on Grey Times</title>
+    <link>http://localhost:1313/tags/concurrent/</link>
+    <description>Recent content in Concurrent on Grey Times</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 28 Nov 2014 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/concurrent/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Go实践之并发初体验</title>
+      <link>http://localhost:1313/posts/concurrent-in-go/</link>
+      <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/concurrent-in-go/</guid>
+      <description>
+
+&lt;p&gt;golang的一大卖点是并发模型基于CPS(continuation passing style)，使用起来比较简单。刚开始我也觉得比较简单，但使用之后发现，你必须很清楚golang的并发机制才能使用自如，在需要同步尤甚，一不小心就会陷入罪恶的渊薮。&lt;/p&gt;
+
+&lt;h2 id=&#34;sharing-vs-communicating:e3781e9f61b43c7620c38c8d3327fe1d&#34;&gt;Sharing VS Communicating&lt;/h2&gt;
+
+&lt;p&gt;如何我们想从1顺序打印到10000，可能会&lt;a href=&#34;http://play.golang.org/p/ZG5EihF4PU&#34;&gt;这样&lt;/a&gt;写：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;package main
+
+import (
+	&amp;quot;fmt&amp;quot;
+)
+
+var messages chan int
+var done chan bool
+
+func main() {
+	messages = make(chan int)
+	done = make(chan bool)
+	times := 10000
+	for i := 0; i &amp;lt; times; i++ {
+		go func() {
+			messages &amp;lt;- i
+			done &amp;lt;- true
+		}()
+	}
+
+	go func() {
+		for i := range messages {
+			fmt.Println(i)
+		}
+	}()
+
+	for i := 0; i &amp;lt; times; i++ {
+		&amp;lt;-done
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但事实上，打印的结果的是&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;10000
+10000
+....
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;由于10000个for循环执行地相当快， 很可能在for已经循环结束， i的值增长到10000时， gorountines的调度才完成，i此时作为逃逸变量为goroutines共享，所以gorountines看到的i都是10000,打印的也都是10000。&lt;/p&gt;
+
+&lt;p&gt;以上共享变量的方式我们称之为Share，要解决这个问题，只能把main的i通过消息传递的方式Communicate给每个gorountines &lt;a href=&#34;http://play.golang.org/p/lppU7mFsRh&#34;&gt;例子&lt;/a&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;	for i := 0; i &amp;lt; times; i++ {
+		go func(v int) {
+			messages &amp;lt;- v
+			done &amp;lt;- true
+		}(i)
+	}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;运行一下，结果是正确的。这时候才真正体会到那句话的奥妙：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Don’t communicate by shared memory. Instead, share memory by communicating. 
+
+	                                                                             —— Rob Pike
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;synchronization:e3781e9f61b43c7620c38c8d3327fe1d&#34;&gt;Synchronization&lt;/h2&gt;
+
+&lt;p&gt;golang没有join，无法直接在程序中设置等待点。实现同步通常有两种做法：&lt;/p&gt;
+
+&lt;h3 id=&#34;使用channel:e3781e9f61b43c7620c38c8d3327fe1d&#34;&gt;使用channel&lt;/h3&gt;
+
+&lt;p&gt;由于channel分为阻塞和非阻塞的，使用阻塞的channel时就能达到同步的目的。上面两个例子都使用了channel进行同步。&lt;/p&gt;
+
+&lt;h3 id=&#34;使用waitgroup:e3781e9f61b43c7620c38c8d3327fe1d&#34;&gt;使用WaitGroup&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://play.golang.org/p/k440dqN3Ai&#34;&gt;示例如下&lt;/a&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;func main() {
+	var wg sync.WaitGroup
+	wg.Add(1000)
+
+	for i := 0; i &amp;lt; 1000; i++ {
+		go func(v int) {
+			defer wg.Done()
+			fmt.Println(v)
+		}(i)
+	}
+	wg.Wait()
+	fmt.Println(&amp;quot;exit&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Add操作设置要等待的gorountine个数，每执行一次Done，waitgroup就会减1, 执行Wait的地方就相当于join。&lt;/p&gt;
+
+&lt;p&gt;两种操作的本质都是设置一个计数器，每个gorountine执行完都会通知一下主程序，直到所以gorountine完全dead，main才会往下走。&lt;/p&gt;
+
+&lt;p&gt;当不清楚gorountines的数目时，在&lt;a href=&#34;http://segmentfault.com/q/1010000000487990&#34;&gt;网上&lt;/a&gt;看到的一种做法是可以设置一个远大于gorountines的数目的&lt;a href=&#34;http://play.golang.org/p/jb1wJaQJZ0&#34;&gt;阈值&lt;/a&gt;：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;L: for { 
+           select { 
+               case &amp;lt;- done:
+                   i++ 
+                   if i &amp;gt; 10000 {
+                         break L
+                            }
+                   }
+            }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;concurrent-data-structure:e3781e9f61b43c7620c38c8d3327fe1d&#34;&gt;Concurrent Data Structure&lt;/h2&gt;
+
+&lt;p&gt;在并发环境下，数据结构往往也需要设计成并发的，比如一个并发的Map可以这样设计：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type CorrMap struct {
+	line2BusId  map[string][]string
+	sync.RWMutex
+}
+
+func NewCorrMap() *CorrMap {
+	return &amp;amp;CorrMap{line2BusId :  map[string][]string{}}
+}
+
+func (c *CorrMap) Add(line string, busId string) {
+	c.Lock()
+	defer c.Unlock()
+	busIds, exists := c.line2BusId[line]
+	if exists {
+		c.line2BusId[line] = append(busIds, busId)
+	} else {
+		var tmp []string
+		c.line2BusId[line] = append(tmp, busId)
+	}
+}
+
+func (c CorrMap) Size() int {
+	count := 0
+	for _, v := range c.line2BusId {
+		count+= len(v)
+	}
+	return count
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;不过利用Lock可能没有充分发挥golang的优势，更好的方法可以参考&lt;a href=&#34;http://se77en.cc/2014/04/08/share-by-communicating-the-concurrency-slogan-in-golang/&#34;&gt;这篇博客&lt;/a&gt;。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

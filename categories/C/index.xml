@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>C on Grey Times</title>
+    <link>http://localhost:1313/categories/c/</link>
+    <description>Recent content in C on Grey Times</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Thu, 07 Nov 2013 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/c/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Struct Hack</title>
+      <link>http://localhost:1313/posts/struct-hack/</link>
+      <pubDate>Thu, 07 Nov 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://localhost:1313/posts/struct-hack/</guid>
+      <description>&lt;p&gt;最近在搞&lt;strong&gt;Compiler&lt;/strong&gt;的&lt;strong&gt;CodeGenerator&lt;/strong&gt;实验，有一部分需要把Java程序翻译成C程序，比如:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; int [] array;
+ array = new int[10];
+ System.out.println(array.length); //10
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这段代码翻译成C很自然的想法是：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; int * array; // int array[] not support in C
+ array = (int*)malloc(sizof(int)*10);
+ printf(&amp;quot;%d\n&amp;quot;,sizof(array)/sizeof(int)); // 1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但很可惜这样是错误的，因为malloc操作在堆上分配空间，不一定是连续的，sizof(array)得到的是指针本身所占的单元，和sizeof(int)相等，无法通过sizof求得数组长度。它和下面还不一样：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; int array[10];
+ printf(&amp;quot;%d\n&amp;quot;,sizof(array)/sizeof(int)); // 10
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这里&lt;code&gt;array&lt;/code&gt;是数组，是指向整个连续存储空间的常量，所以&lt;code&gt;sizeof&lt;/code&gt;对其操作求得的是整个区域的长度。但是当数组名作为函数的参数传递时，数组就退化为指针，又回到了刚才问题。&lt;/p&gt;
+
+&lt;p&gt;我们应该怎么做？&lt;/p&gt;
+
+&lt;p&gt;在 &lt;a href=&#34;http://stackoverflow.com/&#34;&gt;StackOverflow&lt;/a&gt; 搜了一下，发现&lt;code&gt;ANSI C&lt;/code&gt;根本没有直接办法通过指向内存的指针求得分配长度。但&lt;code&gt;Windows&lt;/code&gt;下提供了计算指针指向的内存大小的方法[&lt;a href=&#34;http://msdn.microsoft.com/zh-cn/library/vstudio/z2s077bc(v=vs.80).aspx#feedback&#34;&gt;malloc.h&lt;/a&gt;]：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;msize: returns the size (in bytes) as an unsigned integer.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;pre&gt;&lt;code&gt; size_t _msize(
+ void *memblock
+ );
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但由于操作系统策略的原因，实际分配到的大小可能会比指定的大一些&lt;a href=&#34;http://jiaqinxu.info/tag/_msize&#34;&gt;here&lt;/a&gt;。&lt;/p&gt;
+
+&lt;p&gt;在Linux下，指针往前偏移一个整形大小的单元也会记录实际分配的大小，我们来窥探一下那个单元的内容：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;//test.c
+int main(){
+ int * p;
+ int i;
+ int size;
+ for (i=1;i&amp;lt;11;i++)
+ printf(&amp;quot;%d &amp;quot;,i);
+ printf(&amp;quot;\n&amp;quot;);
+ for (i=0;i&amp;lt;10;i++){
+ p = (int*)malloc(sizeof(int)*i);
+ size = *(int*)((char*)p-sizeof(int));
+ printf(&amp;quot;size:%d &amp;quot;,size);
+ free(p);
+ }
+ printf(&amp;quot;\n&amp;quot;);
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;$gcc test.c
+$./a.out
+1  2  3  4  5  6  7  8  9  10
+17 17 17 17 25 25 33 33 41 41
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看来Linux的分配策略不能使得内存大小和元素个数一一对应，此法不可用。
+后来发现在Linux下原来也有类似&lt;code&gt;_msize&lt;/code&gt;的函数[&lt;a href=&#34;http://www.linuxidc.com/Linux/2011-12/48624.htm&#34;&gt;malloc.h&lt;/a&gt;]：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;int * array;
+int size;
+array = (int*)malloc(sizof(50);
+size = malloc_usable_size(array);
+printf(&amp;quot;%d\n&amp;quot;,size);//50
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是malloc.h不属于标准C，我们还要继续寻找通用之法。经过大量查阅，终于发现了一种code trick,称作&lt;a href=&#34;http://tonybai.com/2013/03/07/struct-hack-in-c/&#34;&gt;&lt;strong&gt;struct-hack&lt;/strong&gt;&lt;/a&gt;. 前面提到过，在C语言中，&lt;code&gt;int a[]&lt;/code&gt;是违法的，但是把它作为struct的最后一个成员却是可以的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;typedef struct array{
+ int size;
+ int free;
+ int buf[];
+ }array,*Tiger_array;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这是在C语言的后期加入的特性，目的就是为了实现&lt;strong&gt;flexible array&lt;/strong&gt;， 这样每次给数组分配空间时，需要同步记录size大小。而求size的时候，直接取出来即可：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Tiger_array ta;
+ta = (int*)malloc(sizeof(array)+100);
+ta-&amp;gt;size = 100;
+ta-&amp;gt;free = 0;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;需要注意一点，这时分配的大小应该是sizeof(struct)加上需求的数组大小。&lt;/p&gt;
+
+&lt;p&gt;这个问题就说到这里。&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
