@@ -28,7 +28,7 @@ a:hover {
 }
 a:hover,
 a:focus {
-    text-decoration: underline;
+    text-decoration: none;
 }
 a.pure-button:hover, a.pure-button:focus {
 	color: inherit;
