@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Grey Times</title>
-    <link>http://kangkona.githuo.io/</link>
+    <link>http://kangkona.github.io/</link>
     <description>Recent content on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Fri, 13 Mar 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://kangkona.githuo.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>JCommander：Java外部参数解析利器</title>
-      <link>http://kangkona.githuo.io/posts/jcommander-using-example/</link>
+      <link>http://kangkona.github.io/posts/jcommander-using-example/</link>
       <pubDate>Fri, 13 Mar 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/jcommander-using-example/</guid>
+      <guid>http://kangkona.github.io/posts/jcommander-using-example/</guid>
       <description>&lt;p&gt;最近需要把项目交给别人进行运维，为了不让接手之人涉及太多繁琐细节，我把一些定义在final类中的不可变量抽取出来，把项目变成可外部配置的。用配置文件可以达到这个目的，但由于配置之间有相互依赖关系，比如：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;public static boolean local = false;
@@ -116,10 +116,10 @@ public static class DirValidator implements IParameterValidator {
     
     <item>
       <title>Go实践之并发初体验</title>
-      <link>http://kangkona.githuo.io/posts/concurrent-in-go/</link>
+      <link>http://kangkona.github.io/posts/concurrent-in-go/</link>
       <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/concurrent-in-go/</guid>
+      <guid>http://kangkona.github.io/posts/concurrent-in-go/</guid>
       <description>
 
 &lt;p&gt;golang的一大卖点是并发模型基于CPS(continuation passing style)，使用起来比较简单。刚开始我也觉得比较简单，但使用之后发现，你必须很清楚golang的并发机制才能使用自如，在需要同步尤甚，一不小心就会陷入罪恶的渊薮。&lt;/p&gt;
@@ -270,10 +270,10 @@ func (c CorrMap) Size() int {
     
     <item>
       <title>Go实践之JSON解析</title>
-      <link>http://kangkona.githuo.io/posts/json-and-go/</link>
+      <link>http://kangkona.github.io/posts/json-and-go/</link>
       <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/json-and-go/</guid>
+      <guid>http://kangkona.github.io/posts/json-and-go/</guid>
       <description>
 
 &lt;p&gt;当我们开发了一个新版本的软件时，通常需要和稳定版进行对比，进行QoS评估。对实时性网络服务而言，比较客观的做法是同时请求相同的服务，然后对比返回结果。&lt;/p&gt;
@@ -345,10 +345,10 @@ err := json.Unmarshal([]byte(bodystr), &amp;amp;person)
     
     <item>
       <title>Storm集群的安装与配置</title>
-      <link>http://kangkona.githuo.io/posts/storm-cluster-install-config/</link>
+      <link>http://kangkona.github.io/posts/storm-cluster-install-config/</link>
       <pubDate>Sun, 02 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/storm-cluster-install-config/</guid>
+      <guid>http://kangkona.github.io/posts/storm-cluster-install-config/</guid>
       <description>
 
 &lt;h2 id=&#34;1-infrastructure:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;1. Infrastructure&lt;/h2&gt;
@@ -634,10 +634,10 @@ export PATH=${STORM_HOME}/bin:$PATH
     
     <item>
       <title>人性化排序</title>
-      <link>http://kangkona.githuo.io/posts/friendly-sort/</link>
+      <link>http://kangkona.github.io/posts/friendly-sort/</link>
       <pubDate>Mon, 27 Oct 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/friendly-sort/</guid>
+      <guid>http://kangkona.github.io/posts/friendly-sort/</guid>
       <description>&lt;p&gt;对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;    1. 按自然顺序排列；
@@ -709,10 +709,10 @@ export PATH=${STORM_HOME}/bin:$PATH
     
     <item>
       <title>借力数据结构</title>
-      <link>http://kangkona.githuo.io/posts/data-struct-powerful/</link>
+      <link>http://kangkona.github.io/posts/data-struct-powerful/</link>
       <pubDate>Thu, 18 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/data-struct-powerful/</guid>
+      <guid>http://kangkona.github.io/posts/data-struct-powerful/</guid>
       <description>
 
 &lt;p&gt;做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:&lt;/p&gt;
@@ -817,10 +817,10 @@ type TrackPoint struct {
     
     <item>
       <title>互联网之子:亚伦·斯沃茨的故事</title>
-      <link>http://kangkona.githuo.io/posts/the-story-of-aaron-swartz/</link>
+      <link>http://kangkona.github.io/posts/the-story-of-aaron-swartz/</link>
       <pubDate>Sat, 13 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/the-story-of-aaron-swartz/</guid>
+      <guid>http://kangkona.github.io/posts/the-story-of-aaron-swartz/</guid>
       <description>&lt;p&gt;今天看了&lt;a href=&#34;http://movie.douban.com/subject/25785114/&#34;&gt;The Internet&amp;rsquo;s Own Boy: The Story of Aaron Swartz&lt;/a&gt;，主人公&lt;a href=&#34;https://en.wikipedia.org/wiki/Aaron_Swartz&#34;&gt;Aaron Swartz&lt;/a&gt;是一个英年早逝的天才黑客，或者可以称其为一个致力于推动世界进步的人。
 Aaron做过很多非凡的事：不到14岁就和互联网之父蒂姆·伯纳斯-李这些互联网大佬们一起工作，参与基础互联网协议RSS的制定，之后创办过TheInfo.org，一个比维基百科还早的知识创建平台。Aaron年幼时就对版权问题感兴趣，以致于飞到华盛顿参与最高法院关于版权的听证会。之后参与Creative-Commons项目，致力于提供一种互联网知识共享的解决方案。你一定听说过Reddit这个网站，没错，这个游走在恶趣味与严肃议题之间的神奇网站也是这个家伙创办的。哦，对了，我正在使用的&lt;code&gt;Markdown&lt;/code&gt;同样也是出自Aaron之手。&lt;/p&gt;
 
@@ -861,10 +861,10 @@ we have lost a child.&lt;/p&gt;
     
     <item>
       <title>八一八浏览器缓存</title>
-      <link>http://kangkona.githuo.io/posts/818-browser-caching/</link>
+      <link>http://kangkona.github.io/posts/818-browser-caching/</link>
       <pubDate>Wed, 10 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/818-browser-caching/</guid>
+      <guid>http://kangkona.github.io/posts/818-browser-caching/</guid>
       <description>
 
 &lt;p&gt;今天由于需求变更，修改了部分前端代码，测试没问题之后进行了部署。交付测试时，发现修改的代码不起作用。而且比较奇怪的是一般手机浏览器没有问题，但微信内嵌浏览器内的结果还停留在部署之前的状态。分析后得知应该是缓存机制引起的。这里总结一下关于浏览器缓存的知识。&lt;/p&gt;
@@ -953,20 +953,20 @@ we have lost a child.&lt;/p&gt;
     
     <item>
       <title>写博客的意义</title>
-      <link>http://kangkona.githuo.io/posts/the-meaning-of-blogging/</link>
+      <link>http://kangkona.github.io/posts/the-meaning-of-blogging/</link>
       <pubDate>Sun, 07 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/the-meaning-of-blogging/</guid>
+      <guid>http://kangkona.github.io/posts/the-meaning-of-blogging/</guid>
       <description>&lt;p&gt;Thought in The Mirror.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>模式匹配大法好</title>
-      <link>http://kangkona.githuo.io/posts/pattern-match-is-good/</link>
+      <link>http://kangkona.github.io/posts/pattern-match-is-good/</link>
       <pubDate>Sat, 06 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/pattern-match-is-good/</guid>
+      <guid>http://kangkona.github.io/posts/pattern-match-is-good/</guid>
       <description>
 
 &lt;h2 id=&#34;if-while-for:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;if, while, for&lt;/h2&gt;
@@ -1057,10 +1057,10 @@ qsort([Pivot|T]) -&amp;gt;
     
     <item>
       <title>Storm实时处理案例(1)</title>
-      <link>http://kangkona.githuo.io/posts/storm-real-time-case-1/</link>
+      <link>http://kangkona.github.io/posts/storm-real-time-case-1/</link>
       <pubDate>Thu, 04 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/storm-real-time-case-1/</guid>
+      <guid>http://kangkona.github.io/posts/storm-real-time-case-1/</guid>
       <description>&lt;p&gt;在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,
 Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截
 出一个单位数据。&lt;/p&gt;
@@ -1109,10 +1109,10 @@ Spout对流入的数据进行检查，如果是符合要求的数据(好比质�
     
     <item>
       <title>Tomcat 并发调优</title>
-      <link>http://kangkona.githuo.io/posts/tomcat-tune/</link>
+      <link>http://kangkona.github.io/posts/tomcat-tune/</link>
       <pubDate>Wed, 06 Aug 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/tomcat-tune/</guid>
+      <guid>http://kangkona.github.io/posts/tomcat-tune/</guid>
       <description>
 
 &lt;h2 id=&#34;一-linux系统配置:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;一. Linux系统配置&lt;/h2&gt;
@@ -1379,10 +1379,10 @@ Spout对流入的数据进行检查，如果是符合要求的数据(好比质�
     
     <item>
       <title>NLPNote</title>
-      <link>http://kangkona.githuo.io/posts/nlp-note/</link>
+      <link>http://kangkona.github.io/posts/nlp-note/</link>
       <pubDate>Thu, 06 Feb 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/nlp-note/</guid>
+      <guid>http://kangkona.github.io/posts/nlp-note/</guid>
       <description>
 
 &lt;h2 id=&#34;1-python自然语言处理-笔记:f4f67061fc493a4c2b2b421639ba2c55&#34;&gt;1.《Python自然语言处理》笔记&lt;/h2&gt;
@@ -1647,10 +1647,10 @@ Spout对流入的数据进行检查，如果是符合要求的数据(好比质�
     
     <item>
       <title>Struct Hack</title>
-      <link>http://kangkona.githuo.io/posts/struct-hack/</link>
+      <link>http://kangkona.github.io/posts/struct-hack/</link>
       <pubDate>Thu, 07 Nov 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/struct-hack/</guid>
+      <guid>http://kangkona.github.io/posts/struct-hack/</guid>
       <description>&lt;p&gt;最近在搞&lt;strong&gt;Compiler&lt;/strong&gt;的&lt;strong&gt;CodeGenerator&lt;/strong&gt;实验，有一部分需要把Java程序翻译成C程序，比如:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt; int [] array;
@@ -1749,10 +1749,10 @@ ta-&amp;gt;free = 0;
     
     <item>
       <title>冥想5分钟, 沉睡1小时</title>
-      <link>http://kangkona.githuo.io/posts/muse-5-minutes/</link>
+      <link>http://kangkona.github.io/posts/muse-5-minutes/</link>
       <pubDate>Sat, 16 Mar 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.githuo.io/posts/muse-5-minutes/</guid>
+      <guid>http://kangkona.github.io/posts/muse-5-minutes/</guid>
       <description>
 
 &lt;p&gt;这是一本心灵读物，有一个很滥俗的名字：《冥想5分钟，等于熟睡一小时》。作者对于人脑，记忆的认识还是比较深刻的，但内容稍显虎头蛇尾。&lt;/p&gt;
