@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Nlp on Grey Times</title>
-    <link>http://kangkona.github.io/categories/nlp/</link>
+    <link>http://kangkona.tk/categories/nlp/</link>
     <description>Recent content in Nlp on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Thu, 06 Feb 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://kangkona.github.io/categories/nlp/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.tk/categories/nlp/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>NLPNote</title>
-      <link>http://kangkona.github.io/posts/nlp-note/</link>
+      <link>http://kangkona.tk/posts/nlp-note/</link>
       <pubDate>Thu, 06 Feb 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.github.io/posts/nlp-note/</guid>
+      <guid>http://kangkona.tk/posts/nlp-note/</guid>
       <description>
 
 &lt;h2 id=&#34;1-python自然语言处理-笔记:f4f67061fc493a4c2b2b421639ba2c55&#34;&gt;1.《Python自然语言处理》笔记&lt;/h2&gt;

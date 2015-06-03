@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Storm on Grey Times</title>
-    <link>http://kangkona.github.io/tags/storm/</link>
+    <link>http://kangkona.tk/tags/storm/</link>
     <description>Recent content in Storm on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sun, 02 Nov 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://kangkona.github.io/tags/storm/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.tk/tags/storm/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Storm集群的安装与配置</title>
-      <link>http://kangkona.github.io/posts/storm-cluster-install-config/</link>
+      <link>http://kangkona.tk/posts/storm-cluster-install-config/</link>
       <pubDate>Sun, 02 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.github.io/posts/storm-cluster-install-config/</guid>
+      <guid>http://kangkona.tk/posts/storm-cluster-install-config/</guid>
       <description>
 
 &lt;h2 id=&#34;1-infrastructure:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;1. Infrastructure&lt;/h2&gt;
@@ -300,10 +300,10 @@ export PATH=${STORM_HOME}/bin:$PATH
     
     <item>
       <title>Storm实时处理案例(1)</title>
-      <link>http://kangkona.github.io/posts/storm-real-time-case-1/</link>
+      <link>http://kangkona.tk/posts/storm-real-time-case-1/</link>
       <pubDate>Thu, 04 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.github.io/posts/storm-real-time-case-1/</guid>
+      <guid>http://kangkona.tk/posts/storm-real-time-case-1/</guid>
       <description>&lt;p&gt;在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,
 Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截
 出一个单位数据。&lt;/p&gt;

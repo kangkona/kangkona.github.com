@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Fp on Grey Times</title>
-    <link>http://kangkona.github.io/categories/fp/</link>
+    <link>http://kangkona.tk/categories/fp/</link>
     <description>Recent content in Fp on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sat, 06 Sep 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://kangkona.github.io/categories/fp/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.tk/categories/fp/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>模式匹配大法好</title>
-      <link>http://kangkona.github.io/posts/pattern-match-is-good/</link>
+      <link>http://kangkona.tk/posts/pattern-match-is-good/</link>
       <pubDate>Sat, 06 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.github.io/posts/pattern-match-is-good/</guid>
+      <guid>http://kangkona.tk/posts/pattern-match-is-good/</guid>
       <description>
 
 &lt;h2 id=&#34;if-while-for:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;if, while, for&lt;/h2&gt;
