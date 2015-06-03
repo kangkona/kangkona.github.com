@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Grey Times</title>
-    <link>http://localhost:1313/</link>
+    <link>http://kangkona.githuo.io/</link>
     <description>Recent content on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Fri, 13 Mar 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.githuo.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>JCommander：Java外部参数解析利器</title>
-      <link>http://localhost:1313/posts/jcommander-using-example/</link>
+      <link>http://kangkona.githuo.io/posts/jcommander-using-example/</link>
       <pubDate>Fri, 13 Mar 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/jcommander-using-example/</guid>
+      <guid>http://kangkona.githuo.io/posts/jcommander-using-example/</guid>
       <description>&lt;p&gt;最近需要把项目交给别人进行运维，为了不让接手之人涉及太多繁琐细节，我把一些定义在final类中的不可变量抽取出来，把项目变成可外部配置的。用配置文件可以达到这个目的，但由于配置之间有相互依赖关系，比如：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;public static boolean local = false;
@@ -116,10 +116,10 @@ public static class DirValidator implements IParameterValidator {
     
     <item>
       <title>Go实践之并发初体验</title>
-      <link>http://localhost:1313/posts/concurrent-in-go/</link>
+      <link>http://kangkona.githuo.io/posts/concurrent-in-go/</link>
       <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/concurrent-in-go/</guid>
+      <guid>http://kangkona.githuo.io/posts/concurrent-in-go/</guid>
       <description>
 
 &lt;p&gt;golang的一大卖点是并发模型基于CPS(continuation passing style)，使用起来比较简单。刚开始我也觉得比较简单，但使用之后发现，你必须很清楚golang的并发机制才能使用自如，在需要同步尤甚，一不小心就会陷入罪恶的渊薮。&lt;/p&gt;
@@ -270,10 +270,10 @@ func (c CorrMap) Size() int {
     
     <item>
       <title>Go实践之JSON解析</title>
-      <link>http://localhost:1313/posts/json-and-go/</link>
+      <link>http://kangkona.githuo.io/posts/json-and-go/</link>
       <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/json-and-go/</guid>
+      <guid>http://kangkona.githuo.io/posts/json-and-go/</guid>
       <description>
 
 &lt;p&gt;当我们开发了一个新版本的软件时，通常需要和稳定版进行对比，进行QoS评估。对实时性网络服务而言，比较客观的做法是同时请求相同的服务，然后对比返回结果。&lt;/p&gt;
@@ -345,10 +345,10 @@ err := json.Unmarshal([]byte(bodystr), &amp;amp;person)
     
     <item>
       <title>Storm集群的安装与配置</title>
-      <link>http://localhost:1313/posts/storm-cluster-install-config/</link>
+      <link>http://kangkona.githuo.io/posts/storm-cluster-install-config/</link>
       <pubDate>Sun, 02 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/storm-cluster-install-config/</guid>
+      <guid>http://kangkona.githuo.io/posts/storm-cluster-install-config/</guid>
       <description>
 
 &lt;h2 id=&#34;1-infrastructure:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;1. Infrastructure&lt;/h2&gt;
@@ -634,10 +634,10 @@ export PATH=${STORM_HOME}/bin:$PATH
     
     <item>
       <title>人性化排序</title>
-      <link>http://localhost:1313/posts/friendly-sort/</link>
+      <link>http://kangkona.githuo.io/posts/friendly-sort/</link>
       <pubDate>Mon, 27 Oct 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/friendly-sort/</guid>
+      <guid>http://kangkona.githuo.io/posts/friendly-sort/</guid>
       <description>&lt;p&gt;对于大部分产品来说，搜索功能是必不可少的。有搜索的地方，就有排序。对文本信息的排序没有数值排序来的那么直观，对搜索到的信息，通常的展示策略有三种：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;    1. 按自然顺序排列；
@@ -709,10 +709,10 @@ export PATH=${STORM_HOME}/bin:$PATH
     
     <item>
       <title>借力数据结构</title>
-      <link>http://localhost:1313/posts/data-struct-powerful/</link>
+      <link>http://kangkona.githuo.io/posts/data-struct-powerful/</link>
       <pubDate>Thu, 18 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/data-struct-powerful/</guid>
+      <guid>http://kangkona.githuo.io/posts/data-struct-powerful/</guid>
       <description>
 
 &lt;p&gt;做实时公交查询服务时，最重要的能够实时跟踪每一辆车的时空信息，并结合静态数据，准确刻画出一个城市每一时刻所有公交线路的状态。由于基础数据只有线路，站点这样的信息，做时间预测，位置计算便只能依赖这些信息。比较关键的思路大致如下:&lt;/p&gt;
@@ -817,10 +817,10 @@ type TrackPoint struct {
     
     <item>
       <title>互联网之子:亚伦·斯沃茨的故事</title>
-      <link>http://localhost:1313/posts/the-story-of-aaron-swartz/</link>
+      <link>http://kangkona.githuo.io/posts/the-story-of-aaron-swartz/</link>
       <pubDate>Sat, 13 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/the-story-of-aaron-swartz/</guid>
+      <guid>http://kangkona.githuo.io/posts/the-story-of-aaron-swartz/</guid>
       <description>&lt;p&gt;今天看了&lt;a href=&#34;http://movie.douban.com/subject/25785114/&#34;&gt;The Internet&amp;rsquo;s Own Boy: The Story of Aaron Swartz&lt;/a&gt;，主人公&lt;a href=&#34;https://en.wikipedia.org/wiki/Aaron_Swartz&#34;&gt;Aaron Swartz&lt;/a&gt;是一个英年早逝的天才黑客，或者可以称其为一个致力于推动世界进步的人。
 Aaron做过很多非凡的事：不到14岁就和互联网之父蒂姆·伯纳斯-李这些互联网大佬们一起工作，参与基础互联网协议RSS的制定，之后创办过TheInfo.org，一个比维基百科还早的知识创建平台。Aaron年幼时就对版权问题感兴趣，以致于飞到华盛顿参与最高法院关于版权的听证会。之后参与Creative-Commons项目，致力于提供一种互联网知识共享的解决方案。你一定听说过Reddit这个网站，没错，这个游走在恶趣味与严肃议题之间的神奇网站也是这个家伙创办的。哦，对了，我正在使用的&lt;code&gt;Markdown&lt;/code&gt;同样也是出自Aaron之手。&lt;/p&gt;
 
@@ -861,10 +861,10 @@ we have lost a child.&lt;/p&gt;
     
     <item>
       <title>八一八浏览器缓存</title>
-      <link>http://localhost:1313/posts/818-browser-caching/</link>
+      <link>http://kangkona.githuo.io/posts/818-browser-caching/</link>
       <pubDate>Wed, 10 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/818-browser-caching/</guid>
+      <guid>http://kangkona.githuo.io/posts/818-browser-caching/</guid>
       <description>
 
 &lt;p&gt;今天由于需求变更，修改了部分前端代码，测试没问题之后进行了部署。交付测试时，发现修改的代码不起作用。而且比较奇怪的是一般手机浏览器没有问题，但微信内嵌浏览器内的结果还停留在部署之前的状态。分析后得知应该是缓存机制引起的。这里总结一下关于浏览器缓存的知识。&lt;/p&gt;
@@ -953,20 +953,20 @@ we have lost a child.&lt;/p&gt;
     
     <item>
       <title>写博客的意义</title>
-      <link>http://localhost:1313/posts/the-meaning-of-blogging/</link>
+      <link>http://kangkona.githuo.io/posts/the-meaning-of-blogging/</link>
       <pubDate>Sun, 07 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/the-meaning-of-blogging/</guid>
+      <guid>http://kangkona.githuo.io/posts/the-meaning-of-blogging/</guid>
       <description>&lt;p&gt;Thought in The Mirror.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>模式匹配大法好</title>
-      <link>http://localhost:1313/posts/pattern-match-is-good/</link>
+      <link>http://kangkona.githuo.io/posts/pattern-match-is-good/</link>
       <pubDate>Sat, 06 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/pattern-match-is-good/</guid>
+      <guid>http://kangkona.githuo.io/posts/pattern-match-is-good/</guid>
       <description>
 
 &lt;h2 id=&#34;if-while-for:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;if, while, for&lt;/h2&gt;
@@ -1057,10 +1057,10 @@ qsort([Pivot|T]) -&amp;gt;
     
     <item>
       <title>Storm实时处理案例(1)</title>
-      <link>http://localhost:1313/posts/storm-real-time-case-1/</link>
+      <link>http://kangkona.githuo.io/posts/storm-real-time-case-1/</link>
       <pubDate>Thu, 04 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/storm-real-time-case-1/</guid>
+      <guid>http://kangkona.githuo.io/posts/storm-real-time-case-1/</guid>
       <description>&lt;p&gt;在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,
 Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截
 出一个单位数据。&lt;/p&gt;
@@ -1109,10 +1109,10 @@ Spout对流入的数据进行检查，如果是符合要求的数据(好比质�
     
     <item>
       <title>Tomcat 并发调优</title>
-      <link>http://localhost:1313/posts/tomcat-tune/</link>
+      <link>http://kangkona.githuo.io/posts/tomcat-tune/</link>
       <pubDate>Wed, 06 Aug 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/tomcat-tune/</guid>
+      <guid>http://kangkona.githuo.io/posts/tomcat-tune/</guid>
       <description>
 
 &lt;h2 id=&#34;一-linux系统配置:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;一. Linux系统配置&lt;/h2&gt;
@@ -1379,10 +1379,10 @@ Spout对流入的数据进行检查，如果是符合要求的数据(好比质�
     
     <item>
       <title>NLPNote</title>
-      <link>http://localhost:1313/posts/nlp-note/</link>
+      <link>http://kangkona.githuo.io/posts/nlp-note/</link>
       <pubDate>Thu, 06 Feb 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/nlp-note/</guid>
+      <guid>http://kangkona.githuo.io/posts/nlp-note/</guid>
       <description>
 
 &lt;h2 id=&#34;1-python自然语言处理-笔记:f4f67061fc493a4c2b2b421639ba2c55&#34;&gt;1.《Python自然语言处理》笔记&lt;/h2&gt;
@@ -1647,10 +1647,10 @@ Spout对流入的数据进行检查，如果是符合要求的数据(好比质�
     
     <item>
       <title>Struct Hack</title>
-      <link>http://localhost:1313/posts/struct-hack/</link>
+      <link>http://kangkona.githuo.io/posts/struct-hack/</link>
       <pubDate>Thu, 07 Nov 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/struct-hack/</guid>
+      <guid>http://kangkona.githuo.io/posts/struct-hack/</guid>
       <description>&lt;p&gt;最近在搞&lt;strong&gt;Compiler&lt;/strong&gt;的&lt;strong&gt;CodeGenerator&lt;/strong&gt;实验，有一部分需要把Java程序翻译成C程序，比如:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt; int [] array;
@@ -1748,132 +1748,184 @@ ta-&amp;gt;free = 0;
     </item>
     
     <item>
-      <title>《Python学习笔记》的笔记</title>
-      <link>http://localhost:1313/posts/python-note-1/</link>
+      <title>冥想5分钟, 沉睡1小时</title>
+      <link>http://kangkona.githuo.io/posts/muse-5-minutes/</link>
       <pubDate>Sat, 16 Mar 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/python-note-1/</guid>
+      <guid>http://kangkona.githuo.io/posts/muse-5-minutes/</guid>
       <description>
 
-&lt;p&gt;这是对雨痕写的Python学习笔记的学习。&lt;/p&gt;
+&lt;p&gt;这是一本心灵读物，有一个很滥俗的名字：《冥想5分钟，等于熟睡一小时》。作者对于人脑，记忆的认识还是比较深刻的，但内容稍显虎头蛇尾。&lt;/p&gt;
 
-&lt;h2 id=&#34;基本环境:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;基本环境&lt;/h2&gt;
+&lt;h3 id=&#34;初学冥想5分钟:242554eeec3f821b572590f841a06f41&#34;&gt;初学冥想5分钟&lt;/h3&gt;
 
-&lt;p&gt;对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。
-因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。&lt;/p&gt;
+&lt;hr /&gt;
 
-&lt;h3 id=&#34;引用计数:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;引用计数&lt;/h3&gt;
+&lt;h4 id=&#34;冥想初尝试:242554eeec3f821b572590f841a06f41&#34;&gt;冥想初尝试&lt;/h4&gt;
 
-&lt;p&gt;除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。&lt;/p&gt;
+&lt;p&gt;试着做5个深呼吸，让自己完全沉浸在呼吸的感觉之中
+1. 吸气，比以往都深一些，数1,2,3,4,5。
+2. 停顿一下，呼气，将刚才吸入的空气排出，数1,2,3,4,5。
+3. 让吸气与呼气保持同样的节奏。
+4. 停顿一下，再次深呼吸。&lt;/p&gt;
 
-&lt;h3 id=&#34;垃圾回收:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;垃圾回收&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt; 深呼吸可以启动你的副交感神经(PNS)的镇定机制。
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 &amp;ldquo;Reference Cycle Garbage Collection&amp;rdquo;。&lt;/p&gt;
-
-&lt;p&gt;能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。&lt;/p&gt;
-
-&lt;p&gt;#世代回收&lt;/p&gt;
-
-&lt;h2 id=&#34;内置类型:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;内置类型&lt;/h2&gt;
+&lt;h4 id=&#34;冥想准备:242554eeec3f821b572590f841a06f41&#34;&gt;冥想准备&lt;/h4&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;尽量使用xrange代替range&lt;/strong&gt;，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。&lt;/li&gt;
+&lt;li&gt;找一个不易被打扰的地方。&lt;/li&gt;
+&lt;li&gt;利用不易被急事缠身的时间。&lt;/li&gt;
+&lt;li&gt;坐直，背挺直。&lt;/li&gt;
+&lt;li&gt;穿着宽松舒适。&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;字符串:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;字符串&lt;/h3&gt;
+&lt;p&gt;人的大脑重约3磅，状若豆腐，共1,1万亿个细胞，包括1000亿个神经元。平均每个神经元会连接5000个其他神经元。&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;&amp;gt;&amp;gt;&amp;gt; &amp;quot;,&amp;quot;.join([&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;])
-&#39;a,b,c&#39;
-&amp;gt;&amp;gt;&amp;gt; &amp;quot;a,b,c&amp;quot;.split(&amp;quot;,&amp;quot;)
-!
-[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
-&amp;gt;&amp;gt;&amp;gt; &amp;quot;a\nb\r\nc&amp;quot;.splitlines()
-[&#39;a&#39;, &#39;b&#39;, &#39;c&#39;]
-&amp;gt;&amp;gt;&amp;gt;&amp;quot;a\nb\r\nc&amp;quot;.splitlines(True)
-[&#39;a\n&#39;, &#39;b\r\n&#39;, &#39;c&#39;]
-&amp;gt;&amp;gt;&amp;gt; &amp;quot;abc&amp;quot;.startswith(&amp;quot;ab&amp;quot;), &amp;quot;abc&amp;quot;.endswith(&amp;quot;bc&amp;quot;)
-True, True
-&amp;gt;&amp;gt;&amp;gt; &amp;quot;abc&amp;quot;.upper(), &amp;quot;Abc&amp;quot;.lower()
-&#39;ABC&#39;, &#39;abc&#39;
+&lt;p&gt;人的意识很奇妙，只要你产生过的想法和感觉，即使你自己遗忘了，他们也会在你的大脑里留下印记。 你的大脑就是被各种想法和感觉不断塑造出来的，正因如此，你才可以运用你的意识来改善你的大脑。&lt;/p&gt;
 
-&amp;gt;&amp;gt;&amp;gt; &amp;quot;abcabc&amp;quot;.find(&amp;quot;bc&amp;quot;), &amp;quot;abcabc&amp;quot;.find(&amp;quot;bc&amp;quot;, 2) # 可指定查找起始结束位置。
-1, 4
-&amp;gt;&amp;gt;&amp;gt; &amp;quot; abc&amp;quot;.lstrip(), &amp;quot;abc &amp;quot;.rstrip(), &amp;quot; abc &amp;quot;.strip() # 剔除前后空格。
-&#39;abc&#39;, &#39;abc&#39;, &#39;abc&#39;
-&amp;gt;&amp;gt;&amp;gt; &amp;quot;abc&amp;quot;.strip(&amp;quot;ac&amp;quot;)  # 可删除指定的前后缀字符。
-&#39;b&#39;
-&amp;gt;&amp;gt;&amp;gt; &amp;quot;abcabc&amp;quot;.replace(&amp;quot;bc&amp;quot;, &amp;quot;BC&amp;quot;)# 可指定替换次数。
-&#39;aBCaBC&#39;
-&amp;gt;&amp;gt;&amp;gt; &amp;quot;a\tbc&amp;quot;.expandtabs(4)
-&#39;a  bc&#39;
-&amp;gt;&amp;gt;&amp;gt; &amp;quot;123&amp;quot;.ljust(5, &#39;0&#39;), &amp;quot;456&amp;quot;.rjust(5, &#39;0&#39;), &amp;quot;abc&amp;quot;.center(10, &#39;*&#39;) # 填充
-&#39;12300&#39;, &#39;00456&#39;, &#39;***abc****&#39;
-&amp;gt;&amp;gt;&amp;gt; &amp;quot;123&amp;quot;.zfill(6), &amp;quot;123456&amp;quot;.zfill(4) # 数字填充
-&#39;000123&#39;, &#39;123456&#39;
+&lt;p&gt;&lt;strong&gt;怀着平静的心情仰望星空，你就在体验冥想。&lt;/strong&gt; 冥想就是大脑的觉醒。&lt;/p&gt;
+
+&lt;h4 id=&#34;佛陀的启迪:242554eeec3f821b572590f841a06f41&#34;&gt;佛陀的启迪&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;道德，在行为，语言和思想上为自己和他人谋利，避害。&lt;/li&gt;
+&lt;li&gt;静观(mindful)，如何技巧性地关注人类的内在世界和外界环境。&lt;/li&gt;
+&lt;li&gt;智慧，首先搞清楚痛苦的根源是什么以及如何终结痛苦；然后努力摆脱那些害你的东西，加强那些对你有帮助的东西。渐渐感受和万物的紧密联系，更加平静。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;道德，静观和智慧实际由大脑的三个基本功能支撑：约束，学习和选择。&lt;/p&gt;
+
+&lt;p&gt;对于过去和现在，全盘接受是我们唯一的选择，但对于未来，学会冥想，进而优化大脑，的确可以播撒美好的种子。&lt;strong&gt;生活就掌握在你自己的手中，将来会怎样，完全取决于你自己，取决于你到底有多在乎它。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; 站在自己的一边，大多数人对待自己都没有像对待他人那样细腻。
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;blockquote&gt;
-&lt;p&gt;string.Template可以处理较复杂的需求&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;在所有的事物中，最重要的是我们应该想一下，我们自身的发展会给这个世界带来什么。&lt;/p&gt;
 
-&lt;h3 id=&#34;池化:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;池化&lt;/h3&gt;
+&lt;h3 id=&#34;定-的冥想法-让痛苦靠边站:242554eeec3f821b572590f841a06f41&#34;&gt;“定”的冥想法：让痛苦靠边站&lt;/h3&gt;
 
-&lt;p&gt;池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。&lt;/p&gt;
+&lt;hr /&gt;
 
-&lt;h3 id=&#34;list:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;List&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;闭上眼睛，深呼吸几分钟，把注意力集中在肚子，胸口或者嘴唇上，感受起伏。&lt;/li&gt;
+&lt;li&gt;集中注意力，静观以往经历的感情色彩，看它们是愉快的，不愉快的，还是中性的。要带着一种公正无私，不偏不倚的心态去体会，并让公正无私不断壮大(&lt;strong&gt;旁观自我&lt;/strong&gt;)。&lt;/li&gt;
+&lt;li&gt;体会内心的自在，轻松，安宁，让意识越来越稳定，安详，冷静。&lt;/li&gt;
+&lt;li&gt;倾听周遭的声音，体会各种感觉，但不要陷入。&lt;/li&gt;
+&lt;li&gt;在倾听，体会，思考时，注意各种想法和感觉附带的感情色彩。你是一个旁观者，体会它们的来来去去，不要认同他们，也不要和他们混在一起。&lt;/li&gt;
+&lt;li&gt;体会自己和这些想法和感觉逐渐脱离，让自己既不会试图去捕捉快乐，也不会拼命抗拒痛苦。&lt;/li&gt;
+&lt;li&gt;睁开眼睛，把周围的事物都带入“定境”，不带偏好，不做任何反应。&lt;/li&gt;
+&lt;li&gt;冥想结束时，体验身体各部分的感觉，同样不带偏好，不去评价。&lt;/li&gt;
+&lt;/ol&gt;
 
-&lt;p&gt;可用bisect 向有序列表中插入元素。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;那些在生命中经历的人和事，塑造了你的观点，人格和情感。&lt;/strong&gt;
+     保持身体对周围环境的开放状态，并维持相对稳定，就是健康。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;性能&lt;/strong&gt;
-1. 列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。
-2. 某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。&lt;/p&gt;
+&lt;h3 id=&#34;数呼吸冥想法-掌握慢生活的节奏:242554eeec3f821b572590f841a06f41&#34;&gt;数呼吸冥想法：掌握慢生活的节奏&lt;/h3&gt;
 
-&lt;p&gt;###tuple
-在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。&lt;/p&gt;
+&lt;hr /&gt;
 
-&lt;p&gt;###dict
-字典 (dict) 采用用开放地址法的哈希表实现。
-• 自带元素容量为 8 的 smalltable,只有 &amp;ldquo;超出&amp;rdquo;时才到堆上额外分配元素表内存。
-• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。
-• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。
-• 删除元素操作不会立立即收缩内存。&lt;/p&gt;
+&lt;p&gt;不强求自己，让自己舒适，关注呼吸，体会不急不缓的慢节奏。
+     环境本身不是痛苦的，是我们自己加上去的。&lt;/p&gt;
 
-&lt;blockquote&gt;
-&lt;p&gt;对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减
-少内存开销。&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;痛苦是通过交感神经系统(SNS)和内分泌(荷尔蒙)系统的下丘脑-垂体-性腺轴(HPAA)贯穿你的整个身体的。&lt;/p&gt;
 
-&lt;h4 id=&#34;视图:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;视图&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;同样的事情在心烦意乱时思考和平静下来思考，结果肯定完全不同。&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;要判断两个字典间的差异,使用用视图是最简便的做法。&lt;/p&gt;
+&lt;h3 id=&#34;甜蜜冥想法-批量生产快乐:242554eeec3f821b572590f841a06f41&#34;&gt;甜蜜冥想法：批量生产快乐&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;&amp;gt;&amp;gt;&amp;gt; d1 = dict(a = 1, b = 2)
-&amp;gt;&amp;gt;&amp;gt; d2 = dict(b = 2, c = 3)
-&amp;gt;&amp;gt;&amp;gt; d1 &amp;amp; d2 # 字典不支支持该操作。
-TypeError: unsupported operand type(s) for &amp;amp;: &#39;dict&#39; and &#39;dict&#39;
-&amp;gt;&amp;gt;&amp;gt; v1 = d1.viewitems()
-&amp;gt;&amp;gt;&amp;gt; v2 = d2.viewitems()
-&amp;gt;&amp;gt;&amp;gt; v1 &amp;amp; v2  # 交集
-set([(&#39;b&#39;, 2)])
-&amp;gt;&amp;gt;&amp;gt; v1 | v2  #并
-set([(&#39;a&#39;, 1), (&#39;b&#39;, 2), (&#39;c&#39;, 3)])
-&amp;gt;&amp;gt;&amp;gt; v1 - v2  # 差集 (仅 v1 有,v2 没有的)
-set([(&#39;a&#39;, 1)])
-&amp;gt;&amp;gt;&amp;gt; v1 ^ v2  #对称差集 (不会同时出现在 v1 和 v2 中)
-set([(&#39;a&#39;, 1), (&#39;c&#39;, 3)])
-&amp;gt;&amp;gt;&amp;gt; (&#39;a&#39;, 1) in v1
-True
+&lt;hr /&gt;
+
+&lt;p&gt;让正能量的事物感染你，沉浸其中，尽量长时间保持积极乐观的态度。把积极快乐的经验保存下来，成为你永久的一部分。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;当你回想某段记忆的时候，大脑并非像电脑从硬盘里读取所有原始数据那样，而是用存储的关键特征重新构建
+内隐记忆和外显记忆，再利用大脑的模拟能力去查缺补漏，最终重现你的记忆。
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;set:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;set&lt;/h3&gt;
+&lt;p&gt;痛苦的经历通常需要刚好与之相对应的乐观情绪来治愈。&lt;/p&gt;
 
-&lt;p&gt;集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 &amp;ldquo;值&amp;rdquo; 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。&lt;/p&gt;
+&lt;h3 id=&#34;强化内心冥想法-改变你的弱势:242554eeec3f821b572590f841a06f41&#34;&gt;强化内心冥想法：改变你的弱势&lt;/h3&gt;
 
-&lt;p&gt;运算： ==， ！=， &amp;gt;, |, &amp;amp; ,-, ^&lt;/p&gt;
+&lt;hr /&gt;
 
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;数据结构很重要,这几个内置类型并不足以完成全部工作。像 C、数据结构、常用算法这类基础是每个程序开发人员都应该掌握的。&lt;/strong&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;跟着感觉走，让身体处于&amp;rdquo;离线&amp;rdquo;状态，自动放松&lt;/li&gt;
+&lt;li&gt;膈式呼吸法&lt;/li&gt;
+&lt;li&gt;深呼吸&lt;/li&gt;
+&lt;li&gt;摸嘴唇&lt;/li&gt;
+&lt;li&gt;身体静观&lt;/li&gt;
+&lt;li&gt;图景想象&lt;/li&gt;
+&lt;li&gt;平静心跳&lt;/li&gt;
+&lt;li&gt;冥想，是个天坛坚持的动作&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;保持对恐惧感的客观观察者身份，缓缓退回到自己广大的识海中，同时看着恐惧感像一阵风一样消失。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt; 无论如何，只要做点什么，就能对解决问题有所帮助。
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;内心强大体现在两个方面：体力和决心。&lt;/p&gt;
+
+&lt;h3 id=&#34;宇宙冥想法:242554eeec3f821b572590f841a06f41&#34;&gt;宇宙冥想法&lt;/h3&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li&gt;关注自己的身体感觉，在这种体察的基础上，再建立一个新的第三者身份来感受自己的体察行为本身。&lt;/li&gt;
+&lt;li&gt;观察感知空间深处的各种意识客体，只是观察，不要被同化。&lt;/li&gt;
+&lt;li&gt;关注当下这个时刻，不要管过去，不要管未来。抛开当下时刻和其他时刻的联结。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;在心理学上，这种在特定情况下驱使你必须做出反映的局面，我们称之为需求性特征。处于“定境”时，这种局面只有特征，没有需求。处于“定境”，大脑就会有超常理解力。&lt;/p&gt;
+
+&lt;p&gt;能体会到愉悦，却不去追逐这种愉悦；能体会到厌烦，但不去抗拒厌烦；能体会到中性，但也不去忽视这种中性——那么，你就打断了痛苦形成的机制，至少在相当长的一段时间内你都不会受到困扰。
+     逐渐让你的价值观和道德情操来指引你的行为，而不是让你的欲望来指引。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;别给别人贴标签&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;自我同情冥想法:242554eeec3f821b572590f841a06f41&#34;&gt;自我同情冥想法&lt;/h3&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;移情能力&lt;/li&gt;
+&lt;li&gt;用脑就像磨刀，越磨越锋利&lt;/li&gt;
+&lt;li&gt;承担责任，沟通的时候说出真实的想法&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;善意回归冥想法:242554eeec3f821b572590f841a06f41&#34;&gt;善意回归冥想法&lt;/h3&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;扩大“我们”的圈子，把&amp;rdquo;他们&amp;rdquo;都放进来，多关注共同点。&lt;/p&gt;
+
+&lt;h3 id=&#34;专注冥想法:242554eeec3f821b572590f841a06f41&#34;&gt;专注冥想法&lt;/h3&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;静观就是保持对注意力的良好控制。&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;把信息导入意识，获取新信息&lt;/li&gt;
+&lt;li&gt;调整感知内容，新信息覆盖旧信息&lt;/li&gt;
+&lt;li&gt;找到合理的刺激量，保持有效的刺激
+ 让生活简单一点儿，每次只做一件事，你会获得更集中的注意力和更多的快乐。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;和自己定个约，别让嘴巴唠叨个不停。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;忘我冥想法:242554eeec3f821b572590f841a06f41&#34;&gt;忘我冥想法&lt;/h3&gt;
+
+&lt;hr /&gt;
+
+&lt;ul&gt;
+&lt;li&gt;痛苦最深层次的根源——自我。&lt;/li&gt;
+&lt;li&gt;自我并不是你的长官，大部分的功能都是在没有“我”的指导下自行运转。&lt;/li&gt;
+&lt;li&gt;谦卑，意味着自然，谦逊，不装腔做势。但并不意味着任人欺凌，羞辱，也不意味着自卑。&lt;/li&gt;
+&lt;li&gt;不要太在意别人对你的看法。&lt;/li&gt;
+&lt;li&gt;你不需要与众不同。&lt;/li&gt;
+&lt;/ul&gt;
 </description>
     </item>
     

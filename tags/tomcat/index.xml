@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tomcat on Grey Times</title>
-    <link>http://localhost:1313/tags/tomcat/</link>
+    <link>http://kangkona.githuo.io/tags/tomcat/</link>
     <description>Recent content in Tomcat on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Wed, 06 Aug 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/tomcat/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.githuo.io/tags/tomcat/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Tomcat 并发调优</title>
-      <link>http://localhost:1313/posts/tomcat-tune/</link>
+      <link>http://kangkona.githuo.io/posts/tomcat-tune/</link>
       <pubDate>Wed, 06 Aug 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/tomcat-tune/</guid>
+      <guid>http://kangkona.githuo.io/posts/tomcat-tune/</guid>
       <description>
 
 &lt;h2 id=&#34;一-linux系统配置:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;一. Linux系统配置&lt;/h2&gt;

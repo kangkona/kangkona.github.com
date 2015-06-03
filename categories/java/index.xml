@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Java on Grey Times</title>
-    <link>http://localhost:1313/categories/java/</link>
+    <link>http://kangkona.githuo.io/categories/java/</link>
     <description>Recent content in Java on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Fri, 13 Mar 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.githuo.io/categories/java/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>JCommander：Java外部参数解析利器</title>
-      <link>http://localhost:1313/posts/jcommander-using-example/</link>
+      <link>http://kangkona.githuo.io/posts/jcommander-using-example/</link>
       <pubDate>Fri, 13 Mar 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/jcommander-using-example/</guid>
+      <guid>http://kangkona.githuo.io/posts/jcommander-using-example/</guid>
       <description>&lt;p&gt;最近需要把项目交给别人进行运维，为了不让接手之人涉及太多繁琐细节，我把一些定义在final类中的不可变量抽取出来，把项目变成可外部配置的。用配置文件可以达到这个目的，但由于配置之间有相互依赖关系，比如：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;public static boolean local = false;
@@ -116,10 +116,10 @@ public static class DirValidator implements IParameterValidator {
     
     <item>
       <title>Tomcat 并发调优</title>
-      <link>http://localhost:1313/posts/tomcat-tune/</link>
+      <link>http://kangkona.githuo.io/posts/tomcat-tune/</link>
       <pubDate>Wed, 06 Aug 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/tomcat-tune/</guid>
+      <guid>http://kangkona.githuo.io/posts/tomcat-tune/</guid>
       <description>
 
 &lt;h2 id=&#34;一-linux系统配置:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;一. Linux系统配置&lt;/h2&gt;

@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Concurrent on Grey Times</title>
-    <link>http://localhost:1313/tags/concurrent/</link>
+    <link>http://kangkona.githuo.io/tags/concurrent/</link>
     <description>Recent content in Concurrent on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Fri, 28 Nov 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/concurrent/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.githuo.io/tags/concurrent/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Go实践之并发初体验</title>
-      <link>http://localhost:1313/posts/concurrent-in-go/</link>
+      <link>http://kangkona.githuo.io/posts/concurrent-in-go/</link>
       <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/concurrent-in-go/</guid>
+      <guid>http://kangkona.githuo.io/posts/concurrent-in-go/</guid>
       <description>
 
 &lt;p&gt;golang的一大卖点是并发模型基于CPS(continuation passing style)，使用起来比较简单。刚开始我也觉得比较简单，但使用之后发现，你必须很清楚golang的并发机制才能使用自如，在需要同步尤甚，一不小心就会陷入罪恶的渊薮。&lt;/p&gt;
