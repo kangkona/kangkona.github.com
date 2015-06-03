@@ -102,11 +102,21 @@ h2.brand-tagline {
 	color: #8b8b8b;
 }
 .sidebar a {
+  background: transparent;
   color: #fff;
+  text-decoration: none;
 }
+.sidebar a:link,
+.sidebar a:visited,
+.sidebar a:active {
+ text-decoration: none;
+}
+
 .sidebar a:hover {
-	color:#E54028;
+ text-decoration: none;
+ color:#E54028;
 }
+
 
 /* Nav */
 .nav-list {
