@@ -6,8 +6,59 @@
     <description>Recent content on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Fri, 13 Mar 2015 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Jun 2015 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://kangkona.tk/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>PL Meets AI</title>
+      <link>http://kangkona.tk/pl-meets-ai/</link>
+      <pubDate>Thu, 04 Jun 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://kangkona.tk/pl-meets-ai/</guid>
+      <description>&lt;p&gt;编程语言是很善变的，一旦用其编程，它便不再是你头脑中的那个语言。&lt;/p&gt;
+
+&lt;p&gt;上面这句话是我瞎掰的，不过确实是最近的一些体会。编程语言是高度形式化的产物，一旦用于实际生产，便免不了受到现实条件的制约。比如下面这个条件语句&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;	if c1:
+		s1
+	elif c2:
+		s2
+	else c3:
+		s3
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;三个分支在逻辑上是平行的，本来无所谓先后，但在现在语言实现大都是从前往后依次判断每个分支。如果c1, c2, c3实际发生的概率为1％，1%，98%，很显然这种写法给每次执行都增加了不必要的判断。&lt;/p&gt;
+
+&lt;p&gt;下面这种代码片段也是随处可见的：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;for i in range(n):
+	if i == 0:
+		coldStart
+	else:
+		doSth
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;程序员为了保持代码的优雅性，会把一些初始启动的代码放在循环体的内部，有时保持这种优雅性会更好，但遇到性能要求较高的场景时，这便是可以优化的地方。&lt;/p&gt;
+
+&lt;p&gt;举上面两个例子，是为了说明在实际编码过程中，人为造成的顺序性和代码结构上的依赖关系。目前解决这类问题的方法大多是根据经验，老程序猿会告诉新手说，你应该把最先发生的事情放在最开始。这种先针对一般场景编程，然后再处理特许情况的编程策略虽然可行，但对程序员的要求较高，而且在具体的行业里很大程度就要看对业务的理解程度是否深刻了。“人肉优化”往往周期较长，缺乏系统性，而且需要大量的试错成本。&lt;/p&gt;
+
+&lt;p&gt;那么问题来了，我们能否先写一个一般的代码，然后采集一些执行期间的状态数据，然后让程序自动进化呢？PL和AI是计算机科学的两大学科分支，如果将AI的方法引入PL领域，应该会带来一些根本性的变革。我设想的一种结合方式如下：
+- 给编译器增加一个监控模块，以代码块为单位，记录每个代码块的执行情况；
+- 再增加一个调整模块，结合代码块之间的结构关系，去做一些块间结构调整，调整过程中唯一的不变式是程序的执行语义。&lt;/p&gt;
+
+&lt;p&gt;由于这些模块本身也是具有开销的，所以可以做成可插拔的，等程序进化得足够好时，便可以关掉这些模块。整个执行流程如下：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../../images/plmeetsai-1.png&#34; alt=&#34;plmeetsai-1&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;其中，markBlock作用是标记代码块，可能会在原来程序基础上增加一些类似于脚手架的东西。Monitor和Interexchanger即上面提到的两个模块，将其作为Runtime的一部分编译进源程序。 在程序运行期，Monitor对程序状态进行监控，Interexchanger会在达到某些条件时对程序结构进行微调。当程序被优化得足够好(例如很长时间没有发生调整)，便可以拆掉BlockMark脚手架，卸去Monitor和Interexchanger两大器械。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&#34;../../images/plmeetsai-2.png&#34; alt=&#34;plmeetsai-2&#34; /&gt;
+&lt;/p&gt;
+
+&lt;p&gt;我创建了&lt;a href=&#34;http://www.github.com/kangkona/ProPro&#34;&gt;ProPro&lt;/a&gt;来实践这个想法，希望通过写写画画，思路可以越来越清晰。等到有些眉目的时候，再进行一次新的总结。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>JCommander：Java外部参数解析利器</title>
@@ -1744,188 +1795,6 @@ ta-&amp;gt;free = 0;
 &lt;p&gt;需要注意一点，这时分配的大小应该是sizeof(struct)加上需求的数组大小。&lt;/p&gt;
 
 &lt;p&gt;这个问题就说到这里。&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>冥想5分钟, 沉睡1小时</title>
-      <link>http://kangkona.tk/muse-5-minutes/</link>
-      <pubDate>Sat, 16 Mar 2013 00:00:00 +0000</pubDate>
-      
-      <guid>http://kangkona.tk/muse-5-minutes/</guid>
-      <description>
-
-&lt;p&gt;这是一本心灵读物，有一个很滥俗的名字：《冥想5分钟，等于熟睡一小时》。作者对于人脑，记忆的认识还是比较深刻的，但内容稍显虎头蛇尾。&lt;/p&gt;
-
-&lt;h3 id=&#34;初学冥想5分钟:242554eeec3f821b572590f841a06f41&#34;&gt;初学冥想5分钟&lt;/h3&gt;
-
-&lt;hr /&gt;
-
-&lt;h4 id=&#34;冥想初尝试:242554eeec3f821b572590f841a06f41&#34;&gt;冥想初尝试&lt;/h4&gt;
-
-&lt;p&gt;试着做5个深呼吸，让自己完全沉浸在呼吸的感觉之中
-1. 吸气，比以往都深一些，数1,2,3,4,5。
-2. 停顿一下，呼气，将刚才吸入的空气排出，数1,2,3,4,5。
-3. 让吸气与呼气保持同样的节奏。
-4. 停顿一下，再次深呼吸。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; 深呼吸可以启动你的副交感神经(PNS)的镇定机制。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;冥想准备:242554eeec3f821b572590f841a06f41&#34;&gt;冥想准备&lt;/h4&gt;
-
-&lt;ol&gt;
-&lt;li&gt;找一个不易被打扰的地方。&lt;/li&gt;
-&lt;li&gt;利用不易被急事缠身的时间。&lt;/li&gt;
-&lt;li&gt;坐直，背挺直。&lt;/li&gt;
-&lt;li&gt;穿着宽松舒适。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;人的大脑重约3磅，状若豆腐，共1,1万亿个细胞，包括1000亿个神经元。平均每个神经元会连接5000个其他神经元。&lt;/p&gt;
-
-&lt;p&gt;人的意识很奇妙，只要你产生过的想法和感觉，即使你自己遗忘了，他们也会在你的大脑里留下印记。 你的大脑就是被各种想法和感觉不断塑造出来的，正因如此，你才可以运用你的意识来改善你的大脑。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;怀着平静的心情仰望星空，你就在体验冥想。&lt;/strong&gt; 冥想就是大脑的觉醒。&lt;/p&gt;
-
-&lt;h4 id=&#34;佛陀的启迪:242554eeec3f821b572590f841a06f41&#34;&gt;佛陀的启迪&lt;/h4&gt;
-
-&lt;ul&gt;
-&lt;li&gt;道德，在行为，语言和思想上为自己和他人谋利，避害。&lt;/li&gt;
-&lt;li&gt;静观(mindful)，如何技巧性地关注人类的内在世界和外界环境。&lt;/li&gt;
-&lt;li&gt;智慧，首先搞清楚痛苦的根源是什么以及如何终结痛苦；然后努力摆脱那些害你的东西，加强那些对你有帮助的东西。渐渐感受和万物的紧密联系，更加平静。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;道德，静观和智慧实际由大脑的三个基本功能支撑：约束，学习和选择。&lt;/p&gt;
-
-&lt;p&gt;对于过去和现在，全盘接受是我们唯一的选择，但对于未来，学会冥想，进而优化大脑，的确可以播撒美好的种子。&lt;strong&gt;生活就掌握在你自己的手中，将来会怎样，完全取决于你自己，取决于你到底有多在乎它。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; 站在自己的一边，大多数人对待自己都没有像对待他人那样细腻。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;在所有的事物中，最重要的是我们应该想一下，我们自身的发展会给这个世界带来什么。&lt;/p&gt;
-
-&lt;h3 id=&#34;定-的冥想法-让痛苦靠边站:242554eeec3f821b572590f841a06f41&#34;&gt;“定”的冥想法：让痛苦靠边站&lt;/h3&gt;
-
-&lt;hr /&gt;
-
-&lt;ol&gt;
-&lt;li&gt;闭上眼睛，深呼吸几分钟，把注意力集中在肚子，胸口或者嘴唇上，感受起伏。&lt;/li&gt;
-&lt;li&gt;集中注意力，静观以往经历的感情色彩，看它们是愉快的，不愉快的，还是中性的。要带着一种公正无私，不偏不倚的心态去体会，并让公正无私不断壮大(&lt;strong&gt;旁观自我&lt;/strong&gt;)。&lt;/li&gt;
-&lt;li&gt;体会内心的自在，轻松，安宁，让意识越来越稳定，安详，冷静。&lt;/li&gt;
-&lt;li&gt;倾听周遭的声音，体会各种感觉，但不要陷入。&lt;/li&gt;
-&lt;li&gt;在倾听，体会，思考时，注意各种想法和感觉附带的感情色彩。你是一个旁观者，体会它们的来来去去，不要认同他们，也不要和他们混在一起。&lt;/li&gt;
-&lt;li&gt;体会自己和这些想法和感觉逐渐脱离，让自己既不会试图去捕捉快乐，也不会拼命抗拒痛苦。&lt;/li&gt;
-&lt;li&gt;睁开眼睛，把周围的事物都带入“定境”，不带偏好，不做任何反应。&lt;/li&gt;
-&lt;li&gt;冥想结束时，体验身体各部分的感觉，同样不带偏好，不去评价。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;strong&gt;那些在生命中经历的人和事，塑造了你的观点，人格和情感。&lt;/strong&gt;
-     保持身体对周围环境的开放状态，并维持相对稳定，就是健康。&lt;/p&gt;
-
-&lt;h3 id=&#34;数呼吸冥想法-掌握慢生活的节奏:242554eeec3f821b572590f841a06f41&#34;&gt;数呼吸冥想法：掌握慢生活的节奏&lt;/h3&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;不强求自己，让自己舒适，关注呼吸，体会不急不缓的慢节奏。
-     环境本身不是痛苦的，是我们自己加上去的。&lt;/p&gt;
-
-&lt;p&gt;痛苦是通过交感神经系统(SNS)和内分泌(荷尔蒙)系统的下丘脑-垂体-性腺轴(HPAA)贯穿你的整个身体的。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;同样的事情在心烦意乱时思考和平静下来思考，结果肯定完全不同。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;甜蜜冥想法-批量生产快乐:242554eeec3f821b572590f841a06f41&#34;&gt;甜蜜冥想法：批量生产快乐&lt;/h3&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;让正能量的事物感染你，沉浸其中，尽量长时间保持积极乐观的态度。把积极快乐的经验保存下来，成为你永久的一部分。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;当你回想某段记忆的时候，大脑并非像电脑从硬盘里读取所有原始数据那样，而是用存储的关键特征重新构建
-内隐记忆和外显记忆，再利用大脑的模拟能力去查缺补漏，最终重现你的记忆。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;痛苦的经历通常需要刚好与之相对应的乐观情绪来治愈。&lt;/p&gt;
-
-&lt;h3 id=&#34;强化内心冥想法-改变你的弱势:242554eeec3f821b572590f841a06f41&#34;&gt;强化内心冥想法：改变你的弱势&lt;/h3&gt;
-
-&lt;hr /&gt;
-
-&lt;ol&gt;
-&lt;li&gt;跟着感觉走，让身体处于&amp;rdquo;离线&amp;rdquo;状态，自动放松&lt;/li&gt;
-&lt;li&gt;膈式呼吸法&lt;/li&gt;
-&lt;li&gt;深呼吸&lt;/li&gt;
-&lt;li&gt;摸嘴唇&lt;/li&gt;
-&lt;li&gt;身体静观&lt;/li&gt;
-&lt;li&gt;图景想象&lt;/li&gt;
-&lt;li&gt;平静心跳&lt;/li&gt;
-&lt;li&gt;冥想，是个天坛坚持的动作&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;保持对恐惧感的客观观察者身份，缓缓退回到自己广大的识海中，同时看着恐惧感像一阵风一样消失。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt; 无论如何，只要做点什么，就能对解决问题有所帮助。
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;内心强大体现在两个方面：体力和决心。&lt;/p&gt;
-
-&lt;h3 id=&#34;宇宙冥想法:242554eeec3f821b572590f841a06f41&#34;&gt;宇宙冥想法&lt;/h3&gt;
-
-&lt;hr /&gt;
-
-&lt;ol&gt;
-&lt;li&gt;关注自己的身体感觉，在这种体察的基础上，再建立一个新的第三者身份来感受自己的体察行为本身。&lt;/li&gt;
-&lt;li&gt;观察感知空间深处的各种意识客体，只是观察，不要被同化。&lt;/li&gt;
-&lt;li&gt;关注当下这个时刻，不要管过去，不要管未来。抛开当下时刻和其他时刻的联结。&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;在心理学上，这种在特定情况下驱使你必须做出反映的局面，我们称之为需求性特征。处于“定境”时，这种局面只有特征，没有需求。处于“定境”，大脑就会有超常理解力。&lt;/p&gt;
-
-&lt;p&gt;能体会到愉悦，却不去追逐这种愉悦；能体会到厌烦，但不去抗拒厌烦；能体会到中性，但也不去忽视这种中性——那么，你就打断了痛苦形成的机制，至少在相当长的一段时间内你都不会受到困扰。
-     逐渐让你的价值观和道德情操来指引你的行为，而不是让你的欲望来指引。&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;别给别人贴标签&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;自我同情冥想法:242554eeec3f821b572590f841a06f41&#34;&gt;自我同情冥想法&lt;/h3&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-&lt;li&gt;移情能力&lt;/li&gt;
-&lt;li&gt;用脑就像磨刀，越磨越锋利&lt;/li&gt;
-&lt;li&gt;承担责任，沟通的时候说出真实的想法&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;善意回归冥想法:242554eeec3f821b572590f841a06f41&#34;&gt;善意回归冥想法&lt;/h3&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;扩大“我们”的圈子，把&amp;rdquo;他们&amp;rdquo;都放进来，多关注共同点。&lt;/p&gt;
-
-&lt;h3 id=&#34;专注冥想法:242554eeec3f821b572590f841a06f41&#34;&gt;专注冥想法&lt;/h3&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;静观就是保持对注意力的良好控制。&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;把信息导入意识，获取新信息&lt;/li&gt;
-&lt;li&gt;调整感知内容，新信息覆盖旧信息&lt;/li&gt;
-&lt;li&gt;找到合理的刺激量，保持有效的刺激
- 让生活简单一点儿，每次只做一件事，你会获得更集中的注意力和更多的快乐。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;和自己定个约，别让嘴巴唠叨个不停。&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&#34;忘我冥想法:242554eeec3f821b572590f841a06f41&#34;&gt;忘我冥想法&lt;/h3&gt;
-
-&lt;hr /&gt;
-
-&lt;ul&gt;
-&lt;li&gt;痛苦最深层次的根源——自我。&lt;/li&gt;
-&lt;li&gt;自我并不是你的长官，大部分的功能都是在没有“我”的指导下自行运转。&lt;/li&gt;
-&lt;li&gt;谦卑，意味着自然，谦逊，不装腔做势。但并不意味着任人欺凌，羞辱，也不意味着自卑。&lt;/li&gt;
-&lt;li&gt;不要太在意别人对你的看法。&lt;/li&gt;
-&lt;li&gt;你不需要与众不同。&lt;/li&gt;
-&lt;/ul&gt;
 </description>
     </item>
     

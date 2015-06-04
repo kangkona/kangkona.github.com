@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
 <head>
   <title>
-    JCommander：Java外部参数解析利器 // Grey Times
+    PL Meets AI // Grey Times
   </title>
 
   <link href="http://gmpg.org/xfn/11" rel="profile">
@@ -15,11 +15,11 @@
 <meta name="keywords" content="">
 <meta name="author" content="">
 
-  <meta property="og:title" content="JCommander：Java外部参数解析利器" />
+  <meta property="og:title" content="PL Meets AI" />
 <meta property="og:description" content="" />
 <meta property="og:type" content="website" />
 <meta property="og:locale" content="en_US" />
-<meta property="og:url" content="http://kangkona.tk/jcommander-using-example/" />
+<meta property="og:url" content="http://kangkona.tk/pl-meets-ai/" />
 
 
   
@@ -220,14 +220,14 @@
 
   		<section class="post">
             <h1 class="post-title">
-              <a href="http://kangkona.tk/jcommander-using-example">JCommander：Java外部参数解析利器</a>
+              <a href="http://kangkona.tk/pl-meets-ai">PL Meets AI</a>
             </h1>
             <h3 class="post-subtitle">
             	
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>13</sup></span><span class="post-date-separator">/</span><span>&nbsp;</span><span class="post-date-month">Mar</span> <span class="post-date-year">2015</span>
+                	<span class="post-date-day"><sup>4</sup></span><span class="post-date-separator">/</span><span>&nbsp;</span><span class="post-date-month">Jun</span> <span class="post-date-year">2015</span>
             	</span>
             	
             
@@ -238,7 +238,9 @@
 			
 				<div class="post-categories">
 				
-					<a class="post-category post-category-java" href="http://kangkona.tk//categories/java">Java</a>
+					<a class="post-category post-category-pl" href="http://kangkona.tk//categories/pl">PL</a>
+				
+					<a class="post-category post-category-ml" href="http://kangkona.tk//categories/ml">ML</a>
 				
 				</div>
 			
@@ -247,102 +249,48 @@
 
 			
 
-            <p>最近需要把项目交给别人进行运维，为了不让接手之人涉及太多繁琐细节，我把一些定义在final类中的不可变量抽取出来，把项目变成可外部配置的。用配置文件可以达到这个目的，但由于配置之间有相互依赖关系，比如：</p>
+            <p>编程语言是很善变的，一旦用其编程，它便不再是你头脑中的那个语言。</p>
 
-<pre><code>public static boolean local = false;
-public static String host =  (local) ? &quot;127.0.0.1&quot; : &quot;172.16.3.142&quot;;
-public static int port = (local) ? 6379 : 6380; 
+<p>上面这句话是我瞎掰的，不过确实是最近的一些体会。编程语言是高度形式化的产物，一旦用于实际生产，便免不了受到现实条件的制约。比如下面这个条件语句</p>
+
+<pre><code class="language-python">	if c1:
+		s1
+	elif c2:
+		s2
+	else c3:
+		s3
 </code></pre>
 
-<p>原本只需要改变local, 用配置文件的话与local值有依赖关系的地方都要面临修改。</p>
+<p>三个分支在逻辑上是平行的，本来无所谓先后，但在现在语言实现大都是从前往后依次判断每个分支。如果c1, c2, c3实际发生的概率为1％，1%，98%，很显然这种写法给每次执行都增加了不必要的判断。</p>
 
-<p>后来打算用命令行参数实现可外部动态配置，如果自己动手实现完善的命令行参数解析，可不是一项little job。 比较了几款开源的工具，还是选择了<a href="http://www.jcommander.org/">JCommander</a>。主要原因是被它官网的slogan打动了：</p>
+<p>下面这种代码片段也是随处可见的：</p>
 
-<pre><code>Because life is too short to parse command line parameters.
+<pre><code class="language-python">for i in range(n):
+	if i == 0:
+		coldStart
+	else:
+		doSth
 </code></pre>
 
-<p>项目是maven构建的，使用JCommander的方式十分简单:</p>
+<p>程序员为了保持代码的优雅性，会把一些初始启动的代码放在循环体的内部，有时保持这种优雅性会更好，但遇到性能要求较高的场景时，这便是可以优化的地方。</p>
 
-<pre><code>&lt;dependency&gt;
-&lt;groupId&gt;com.beust&lt;/groupId&gt;
-&lt;artifactId&gt;jcommander&lt;/artifactId&gt;
-&lt;/dependency&gt;
-</code></pre>
+<p>举上面两个例子，是为了说明在实际编码过程中，人为造成的顺序性和代码结构上的依赖关系。目前解决这类问题的方法大多是根据经验，老程序猿会告诉新手说，你应该把最先发生的事情放在最开始。这种先针对一般场景编程，然后再处理特许情况的编程策略虽然可行，但对程序员的要求较高，而且在具体的行业里很大程度就要看对业务的理解程度是否深刻了。“人肉优化”往往周期较长，缺乏系统性，而且需要大量的试错成本。</p>
 
-<p>使用JCommander的方式也很简单，给需要外部传参的变量加Parameter标注：</p>
+<p>那么问题来了，我们能否先写一个一般的代码，然后采集一些执行期间的状态数据，然后让程序自动进化呢？PL和AI是计算机科学的两大学科分支，如果将AI的方法引入PL领域，应该会带来一些根本性的变革。我设想的一种结合方式如下：
+- 给编译器增加一个监控模块，以代码块为单位，记录每个代码块的执行情况；
+- 再增加一个调整模块，结合代码块之间的结构关系，去做一些块间结构调整，调整过程中唯一的不变式是程序的执行语义。</p>
 
-<pre><code> @Parameter(names = { &quot;-topologyName&quot;}, description = &quot;Topology name.&quot;)
- private static String TOP_NAME = &quot;sz-train&quot;;
-</code></pre>
+<p>由于这些模块本身也是具有开销的，所以可以做成可插拔的，等程序进化得足够好时，便可以关掉这些模块。整个执行流程如下：</p>
 
-<p>一般类型参数后面都要跟值，JCommander会根据对应变量做类型检查和转换，不合法时会抛出异常错误。</p>
+<p><img src="../../images/plmeetsai-1.png" alt="plmeetsai-1" />
+</p>
 
-<p>boolean类型有点特殊，后面不需要跟一个值，输入<code>-local</code>之后，local值即为true：</p>
+<p>其中，markBlock作用是标记代码块，可能会在原来程序基础上增加一些类似于脚手架的东西。Monitor和Interexchanger即上面提到的两个模块，将其作为Runtime的一部分编译进源程序。 在程序运行期，Monitor对程序状态进行监控，Interexchanger会在达到某些条件时对程序结构进行微调。当程序被优化得足够好(例如很长时间没有发生调整)，便可以拆掉BlockMark脚手架，卸去Monitor和Interexchanger两大器械。</p>
 
-<pre><code>@Parameter(names = { &quot;-local&quot;}, description = &quot;Local model, default cluster Model.&quot;)
-public static boolean LOCAL_MODE = false;
-</code></pre>
+<p><img src="../../images/plmeetsai-2.png" alt="plmeetsai-2" />
+</p>
 
-<p>如果一个boolean变量的默认值为true，而想通过参数设置为false，可以指定元数：</p>
-
-<pre><code>@Parameter(names = { &quot;-log&quot;, &quot;-verbose&quot;}, description = &quot; Wheather to write system log.&quot;, arity = 1)
-public static boolean LOG = true;
-</code></pre>
-
-<p>默认情况下，参数是可选的，如果要求必须指定参数，可以设置required：</p>
-
-<pre><code>@Parameter(names = &quot;-operator&quot;, required = true)
-private String operator;
-</code></pre>
-
-<p>有时仅仅依靠JCommander的类型检查还不够，还需要自定义检查器提前发现不合法的输入：</p>
-
-<pre><code>@Parameter(names = { &quot;-redisPort&quot;}, description = &quot;Redis port.&quot;, validateWith = PortValidator.class)
-public static int REDIS_PORT=(LOCAL_MODE) ? 6379:6380;
-
-public static class PortValidator implements IParameterValidator {
-           public void validate(String name, String value)
-            throws ParameterException {
-          Pattern pattern = Pattern.compile(&quot;[1-9]\\d*&quot;);
-          Matcher matcher = pattern.matcher(value);
-          if (matcher.matches()) {
-              int n = Integer.parseInt(value);
-              if (n &lt; 65536) {
-                  return;
-              }
-          }
-          throw new ParameterException(&quot;Parameter &quot; + name 
-                    + &quot; should be a number(0~65535) (found &quot; + value +&quot;)&quot;);
-        }
-      }
-</code></pre>
-
-<p>如果是一个写日志的目录，可以提前发现该目录是否可写，这是配置文件无法做到的：</p>
-
-<pre><code>@Parameter(names = { &quot;-logDir&quot;}, description = &quot;Dir to write log file.&quot;, 
-                                          validateWith = DirValidator.class)
-public static String LOG_DIR = &quot;/logs/your_project/&quot;; 
-
-public static class DirValidator implements IParameterValidator {
-           public void validate(String name, String value)
-            throws ParameterException {
-            File file = new File(value);
-            if (!file.isDirectory() || !file.canWrite()) {
-                  throw new ParameterException(&quot;Parameter &quot; + name 
-                         + &quot; should be a writable folder(found &quot; + value +&quot;)&quot;);
-                  }
-            }
-      }
-</code></pre>
-
-<p>对于IP地址，不仅可以通过正则表达式进行匹配，还可以进行简单的网络连通性探测等。相比基于文本的配置文件，JCommander显示出了强大的优势。</p>
-
-<p>但更多的项目可能还是更适合用配置文件的方式进行外部配置，如果配置文件如果可以吸收JCommander的特点，那就perfect了。我理想中的配置文件应该有如下特性：
-- 配置文件本身是programmable
-- 可以进行上下文联系
-- 自动类型检查和转换
-- 可以自定义语义检查器
-- 所使用的弱语言可以方便嵌入</p>
+<p>我创建了<a href="http://www.github.com/kangkona/ProPro">ProPro</a>来实践这个想法，希望通过写写画画，思路可以越来越清晰。等到有些眉目的时候，再进行一次新的总结。</p>
 
 	
 			
@@ -351,7 +299,9 @@ public static class DirValidator implements IParameterValidator {
 				<div class="tags-list">
 					<span class="dark-red">Tags</span><span class="decorative-marker">//</span>
 					
-	                <a class="post-tag post-tag-java" href="http://kangkona.tk//tags/java">java</a>,
+	                <a class="post-tag post-tag-pl" href="http://kangkona.tk//tags/pl">PL</a>,
+	                
+	                <a class="post-tag post-tag-ml" href="http://kangkona.tk//tags/ml">ML</a>,
 	                
 				</div>
 			
@@ -360,16 +310,11 @@ public static class DirValidator implements IParameterValidator {
 				<div class="paging">
 					<span class="paging-label">More Reading</span>
 					
-					<div class="paging-newer">
-						<span class="dark-red">Newer</span><span class="decorative-marker">//</span>
-						<a class="paging-link" href="http://kangkona.tk/pl-meets-ai">PL Meets AI</a>
-		            </div>
-		            
 
 					
 					<div class="paging-older">
 						<span class="dark-red">Older</span><span class="decorative-marker">//</span>
-			            <a class="paging-link" href="http://kangkona.tk/concurrent-in-go">Go实践之并发初体验</a>
+			            <a class="paging-link" href="http://kangkona.tk/jcommander-using-example">JCommander：Java外部参数解析利器</a>
 		            </div>
 		            
 	            </div>
