@@ -282,12 +282,12 @@
 
 <p>由于这些模块本身也是具有开销的，所以可以做成可插拔的，等程序进化得足够好时，便可以关掉这些模块。整个执行流程如下：</p>
 
-<p><img src="../../images/plmeetsai-1.png" alt="plmeetsai-1" />
+<p><img src="../images/plmeetsai-1.png" alt="plmeetsai-1" />
 </p>
 
 <p>其中，markBlock作用是标记代码块，可能会在原来程序基础上增加一些类似于脚手架的东西。Monitor和Interexchanger即上面提到的两个模块，将其作为Runtime的一部分编译进源程序。 在程序运行期，Monitor对程序状态进行监控，Interexchanger会在达到某些条件时对程序结构进行微调。当程序被优化得足够好(例如很长时间没有发生调整)，便可以拆掉BlockMark脚手架，卸去Monitor和Interexchanger两大器械。</p>
 
-<p><img src="../../images/plmeetsai-2.png" alt="plmeetsai-2" />
+<p><img src="../images/plmeetsai-2.png" alt="plmeetsai-2" />
 </p>
 
 <p>我创建了<a href="http://www.github.com/kangkona/ProPro">ProPro</a>来实践这个想法，希望通过写写画画，思路可以越来越清晰。等到有些眉目的时候，再进行一次新的总结。</p>
