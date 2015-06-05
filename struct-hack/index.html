@@ -227,7 +227,7 @@
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>7</sup></span><span class="post-date-separator">/</span><span>&nbsp;</span><span class="post-date-month">Nov</span> <span class="post-date-year">2013</span>
+                	<span class="post-date-day"><sup>7</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Nov</span> <span class="post-date-year">2013</span>
             	</span>
             	
             
@@ -310,7 +310,7 @@ $./a.out
 17 17 17 17 25 25 33 33 41 41
 </code></pre>
 
-<p>看来Linux的分配策略不能使得内存大小和元素个数一一对应，此法不可用。
+<p>看来Linux的分配策略不能使得内存大小和元素个数一一对应，此法不可用。<br />
 后来发现在Linux下原来也有类似<code>_msize</code>的函数[<a href="http://www.linuxidc.com/Linux/2011-12/48624.htm">malloc.h</a>]：</p>
 
 <pre><code>int * array;

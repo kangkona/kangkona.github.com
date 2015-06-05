@@ -227,7 +227,7 @@
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>4</sup></span><span class="post-date-separator">/</span><span>&nbsp;</span><span class="post-date-month">Sep</span> <span class="post-date-year">2014</span>
+                	<span class="post-date-day"><sup>4</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Sep</span> <span class="post-date-year">2014</span>
             	</span>
             	
             
@@ -247,8 +247,8 @@
 
 			
 
-            <p>在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,
-Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截
+            <p>在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,<br />
+Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截<br />
 出一个单位数据。</p>
 
 <p>通常会对流入的数据源定好协议，比如一个单位数据的header是FAFB, tail是EAEB：</p>
@@ -266,12 +266,12 @@ Spout对流入的数据进行检查，如果是符合要求的数据(好比质�
     }
 </code></pre>
 
-<p>其实上段代码不够严谨，比如出现0xFA0xFA0xFB&hellip;这样的流，就可能会丢弃正常的流。
+<p>其实上段代码不够严谨，比如出现0xFA0xFA0xFB&hellip;这样的流，就可能会丢弃正常的流。<br />
 询问得知正文和头部是正交的, 暂时按下不表。</p>
 
 <p>之后对截断的流进行基础性的检查，emit出去，交给Bolt处理。</p>
 
-<p>Spout只管喷射出一个个截断的数据流，Bolt(螺栓)把自己拧在Spout的接口上, 对输出
+<p>Spout只管喷射出一个个截断的数据流，Bolt(螺栓)把自己拧在Spout的接口上, 对输出<br />
 的元组进行必要的处理。</p>
 
 <p>Storm的一大卖点是高度的稳定性，所以往往异常处理代码量比正常逻辑代码要多很多。</p>

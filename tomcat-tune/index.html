@@ -227,7 +227,7 @@
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>6</sup></span><span class="post-date-separator">/</span><span>&nbsp;</span><span class="post-date-month">Aug</span> <span class="post-date-year">2014</span>
+                	<span class="post-date-day"><sup>6</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Aug</span> <span class="post-date-year">2014</span>
             	</span>
             	
             
@@ -249,9 +249,9 @@
 
             
 
-<h2 id="一-linux系统配置:62a8702d27a37b20fd84d36dbcffd74a">一. Linux系统配置</h2>
+<h2 id="一-linux系统配置">一. Linux系统配置</h2>
 
-<h3 id="1-增大最大打开文件数限制:62a8702d27a37b20fd84d36dbcffd74a">1. 增大最大打开文件数限制</h3>
+<h3 id="1-增大最大打开文件数限制">1. 增大最大打开文件数限制</h3>
 
 <pre><code> $ sudo vim /etc/sysctl.conf 
  # add &quot;fs.file-max = 8061540&quot;
@@ -259,7 +259,7 @@
  # add &quot;* soft nofile 8192&quot;  and &quot;* hard nofile 16384&quot;
 </code></pre>
 
-<h3 id="2-优化网络:62a8702d27a37b20fd84d36dbcffd74a">2. 优化网络</h3>
+<h3 id="2-优化网络">2. 优化网络</h3>
 
 <pre><code>$ sudo vim /etc/sysctl.conf
 </code></pre>
@@ -317,9 +317,9 @@
  net.ipv4.netfilter.ip_conntrack_max = 1000000
 </code></pre>
 
-<h2 id="二-tomcat内存优化:62a8702d27a37b20fd84d36dbcffd74a">二. Tomcat内存优化</h2>
+<h2 id="二-tomcat内存优化">二. Tomcat内存优化</h2>
 
-<h4 id="tomcat内存优化主要是对-tomcat-启动参数优化-我们可以在-tomcat-的启动脚本-catalina-sh-中设置-java-opts-参数:62a8702d27a37b20fd84d36dbcffd74a"><strong>Tomcat内存优化主要是对 Tomcat 启动参数优化，我们可以在 Tomcat 的启动脚本 catalina.sh 中设置 JAVA_OPTS 参数</strong></h4>
+<h4 id="tomcat内存优化主要是对-tomcat-启动参数优化-我们可以在-tomcat-的启动脚本-catalina-sh-中设置-java-opts-参数"><strong>Tomcat内存优化主要是对 Tomcat 启动参数优化，我们可以在 Tomcat 的启动脚本 catalina.sh 中设置 JAVA_OPTS 参数</strong></h4>
 
 <pre><code>-server:  启用jdk的server版,一定要作为第一个参数，在多个CPU时性能佳 
 -Xms： 初始Heap大小，使用的最小内存,cpu性能高时此值应设的大一些 
@@ -339,9 +339,9 @@
 提示：此选项在Heap Size 比较大而且Major收集时间较长的情况下使用更合适。
 </code></pre>
 
-<h2 id="三-tomcat并发优化:62a8702d27a37b20fd84d36dbcffd74a">三. Tomcat并发优化</h2>
+<h2 id="三-tomcat并发优化">三. Tomcat并发优化</h2>
 
-<h3 id="1-tomcat连接相关参数:62a8702d27a37b20fd84d36dbcffd74a">1.Tomcat连接相关参数</h3>
+<h3 id="1-tomcat连接相关参数">1.Tomcat连接相关参数</h3>
 
 <p>在Tomcat配置文件conf/server.xml 中的Connector配置中</p>
 
@@ -351,7 +351,7 @@
  其中和最大连接数相关的参数为maxProcessors 和 acceptCount。如果要加大并发连接数，应同时加大这两个参数。
 </code></pre>
 
-<h3 id="2-调整连接器connector的并发处理能力:62a8702d27a37b20fd84d36dbcffd74a">2.调整连接器connector的并发处理能力</h3>
+<h3 id="2-调整连接器connector的并发处理能力">2.调整连接器connector的并发处理能力</h3>
 
 <pre><code>  maxThreads        客户请求最大线程数
   minSpareThreads   Tomcat初始化时创建的 socket 线程数
@@ -363,7 +363,7 @@
   URIEncoding    URL统一编码
 </code></pre>
 
-<h3 id="3-tomcat缓存优化:62a8702d27a37b20fd84d36dbcffd74a">3.Tomcat缓存优化</h3>
+<h3 id="3-tomcat缓存优化">3.Tomcat缓存优化</h3>
 
 <pre><code>      compression 打开压缩功能   
       compressionMinSize   启用压缩的输出内容大小，这里面默认为2KB
@@ -408,19 +408,19 @@
                 prestartminSpareThreads=&quot;true&quot; /&gt;
 </code></pre>
 
-<h2 id="四-tomcat-native:62a8702d27a37b20fd84d36dbcffd74a">四. Tomcat Native</h2>
+<h2 id="四-tomcat-native">四. Tomcat Native</h2>
 
-<p><strong>Tomcat可以使用APR来提供超强的可伸缩性和性能，更好地集成本地服务器技术。APR(Apache Portable Runtime)
- 是一个高可移植库，它是Apache HTTP Server 2.x的核心。APR有很多用途，包括访问高级IO功能(例如sendfile,
- epoll和OpenSSL)，OS级别功能(随机数生成，系统状态等等)，本地进程管理(共享内存，NT管道和UNIX sockets)。这些功能可以
- 使Tomcat作为一个通常的前台WEB服务器，能更好地和其它本地web技术集成，总体上让Java更有效率作为一个高性能web服务器
+<p><strong>Tomcat可以使用APR来提供超强的可伸缩性和性能，更好地集成本地服务器技术。APR(Apache Portable Runtime)<br />
+ 是一个高可移植库，它是Apache HTTP Server 2.x的核心。APR有很多用途，包括访问高级IO功能(例如sendfile,<br />
+ epoll和OpenSSL)，OS级别功能(随机数生成，系统状态等等)，本地进程管理(共享内存，NT管道和UNIX sockets)。这些功能可以<br />
+ 使Tomcat作为一个通常的前台WEB服务器，能更好地和其它本地web技术集成，总体上让Java更有效率作为一个高性能web服务器<br />
  平台而不是简单作为后台容器</strong>。</p>
 
-<p>在产品环境中，特别是直接使用Tomcat做WEB服务器的时候，应该使用Tomcat Native来提高其性能。
+<p>在产品环境中，特别是直接使用Tomcat做WEB服务器的时候，应该使用Tomcat Native来提高其性能。<br />
 说白了，就是如何 在Tomcat中使用JNI的方式来读取文件以及进行网络传输。这个东西可以大大提升Tomcat对静态文件的处理性能，同时如果你使用了HTTPS方式 传输的话，也可以提升SSL的处理性能。</p>
 
 <ul>
-<li>a. 安装 apr</li>
+<li>a. 安装 apr<br /></li>
 </ul>
 
 <pre><code class="language-shell">     $ sudo ./configure --prefix=/opt/apr
@@ -429,7 +429,7 @@
 </code></pre>
 
 <ul>
-<li>b. 安装 apr-iconv</li>
+<li>b. 安装 apr-iconv<br /></li>
 </ul>
 
 <pre><code class="language-shell">     $ sudo ./configure --prefix=/opt/apr-iconv --with-apr=/opt/apr 
@@ -438,7 +438,7 @@
 </code></pre>
 
 <ul>
-<li>c. 安装 apr-util</li>
+<li>c. 安装 apr-util<br /></li>
 </ul>
 
 <pre><code class="language-shell">     $ sudo  ./configure --prefix=/opt/apr-util  --with-apr=/opt/apr --with-apr-iconv=/opt/apr-iconv/bin/apriconv 
@@ -447,7 +447,7 @@
 </code></pre>
 
 <ul>
-<li>d. 安装 tomcat-native</li>
+<li>d. 安装 tomcat-native<br /></li>
 </ul>
 
 <pre><code class="language-shell">     $ cd $TOMCAT_HOME/bin/tomcat-native-1.1.30-src/jni/native
@@ -456,7 +456,7 @@
      $ sudo make install
 </code></pre>
 
-<h2 id="五-总结:62a8702d27a37b20fd84d36dbcffd74a">五. 总结</h2>
+<h2 id="五-总结">五. 总结</h2>
 
 <p>为了提高Tomcat的并发处理能力，我从以上几个方面进行了逐步的增量调优，每次优化或者做出改变之后，都从Client用ab模拟并发，观察QPS等指标，并同时在Server端监控各种系统信息：</p>
 

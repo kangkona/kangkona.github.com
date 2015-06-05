@@ -189,6 +189,7 @@ h1.post-title a {
 }
 .post-date-month {
 	font-size: 0.8rem;
+	margin-left: 0.2rem;
 	color: #7F1000;
 }
 .post-date-year {
@@ -668,5 +669,3 @@ hr.thin {
     -webkit-transform: rotateZ(360deg);   
     -moz-transform: rotateZ(360deg);   
 }
-
-

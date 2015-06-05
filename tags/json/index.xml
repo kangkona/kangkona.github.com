@@ -21,7 +21,7 @@
 
 &lt;p&gt;首先，我们对一些常用的函数进行包裹，简化操作：&lt;/p&gt;
 
-&lt;h2 id=&#34;发送http请求:1cbd46da2c17c1ba4bcf718d25d25046&#34;&gt;发送Http请求&lt;/h2&gt;
+&lt;h2 id=&#34;发送http请求&#34;&gt;发送Http请求&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;func sendHttpRequest(url string) string {
 	response, _ := http.Get(url)
@@ -37,7 +37,7 @@
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;获取json数据:1cbd46da2c17c1ba4bcf718d25d25046&#34;&gt;获取Json数据&lt;/h2&gt;
+&lt;h2 id=&#34;获取json数据&#34;&gt;获取Json数据&lt;/h2&gt;
 
 &lt;p&gt;如果你知道返回的json数据的格式，可以事先定义好对应的数据结构。例如json返回内容为&lt;/p&gt;
 

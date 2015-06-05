@@ -17,31 +17,31 @@
       <guid>http://kangkona.tk/storm-cluster-install-config/</guid>
       <description>
 
-&lt;h2 id=&#34;1-infrastructure:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;1. Infrastructure&lt;/h2&gt;
+&lt;h2 id=&#34;1-infrastructure&#34;&gt;1. Infrastructure&lt;/h2&gt;
 
-&lt;p&gt;3台流处理Server
-- CPU : 3 Core
-- Memory : 3G
-- Disk : 300G
+&lt;p&gt;3台流处理Server&lt;br /&gt;
+- CPU : 3 Core&lt;br /&gt;
+- Memory : 3G&lt;br /&gt;
+- Disk : 300G&lt;br /&gt;
 - OS : Ubuntu Server 12.04 64bit&lt;/p&gt;
 
-&lt;h2 id=&#34;2-depended-software:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;2. Depended Software&lt;/h2&gt;
+&lt;h2 id=&#34;2-depended-software&#34;&gt;2. Depended Software&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;built-essential&lt;/li&gt;
-&lt;li&gt;Python 2.7&lt;/li&gt;
-&lt;li&gt;Java 1.7.0_71(最低要求1.6)&lt;/li&gt;
-&lt;li&gt;Zookeeeper 3.4.6&lt;/li&gt;
-&lt;li&gt;ZeroMQ 4.0.5&lt;/li&gt;
-&lt;li&gt;jzmq github-master&lt;/li&gt;
-&lt;li&gt;Storm 0.9.1-incubating&lt;/li&gt;
+&lt;li&gt;built-essential&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;Python 2.7&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;Java 1.7.0_71(最低要求1.6)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;Zookeeeper 3.4.6&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;ZeroMQ 4.0.5&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;jzmq github-master&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;Storm 0.9.1-incubating&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;3-install-config:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3. Install &amp;amp;&amp;amp; Config&lt;/h2&gt;
+&lt;h2 id=&#34;3-install-config&#34;&gt;3. Install &amp;amp;&amp;amp; Config&lt;/h2&gt;
 
 &lt;p&gt;几乎所有软件对集群中的机器来说，安装过程都是完全一致的，所有没有必要在每台机器重复安装过程，可以使用Puppet或者Docker这些工具来提高效率。但由于操作的集群网络环境受限，最终利用Xshell可以一次向多个会话发送命令的功能，做到了完全同步的安装和配置。&lt;/p&gt;
 
-&lt;h3 id=&#34;3-1-修改-etc-hosts:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.1 修改/etc/hosts&lt;/h3&gt;
+&lt;h3 id=&#34;3-1-修改-etc-hosts&#34;&gt;3.1 修改/etc/hosts&lt;/h3&gt;
 
 &lt;p&gt;使用名称来代表机器会带来很多方便，在/etc/hosts中追加如下内容：&lt;/p&gt;
 
@@ -50,14 +50,14 @@
 172.21.1.170	node2
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;3-2-build-essential:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.2 build-essential&lt;/h3&gt;
+&lt;h3 id=&#34;3-2-build-essential&#34;&gt;3.2 build-essential&lt;/h3&gt;
 
 &lt;p&gt;&lt;a href=&#34;http://packages.ubuntu.com/lucid/amd64/build-essential/filelist&#34;&gt;build-essential&lt;/a&gt;作用是提供编译程序必须软件包的列表信息, 编译程序有了这个软件包, 才知道 头文件和库函数的位置，还会下载依赖的软件包，组成一个基本的开发环境&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;  $ sudo apt-get install build-essential
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;3-3-安装jdk:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.3 安装JDK&lt;/h3&gt;
+&lt;h3 id=&#34;3-3-安装jdk&#34;&gt;3.3 安装JDK&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;$ tar zxvf jdk-7u71-linux-x86.tar.gz
 # mv jdk1.7.0_71 /usr/lib/jvm
@@ -75,7 +75,7 @@ export PATH=${JAVA_HOME}/bin:${JRE_HOME}/bin:$PATH
 &lt;pre&gt;&lt;code&gt;$source /etc/profile
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;3-4-安装zookeeper-3-4-6:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.4 安装Zookeeper 3.4.6&lt;/h3&gt;
+&lt;h3 id=&#34;3-4-安装zookeeper-3-4-6&#34;&gt;3.4 安装Zookeeper 3.4.6&lt;/h3&gt;
 
 &lt;p&gt;详细内容可以参考 &lt;a href=&#34;http://www.iteblog.com/archives/904&#34;&gt;Zookeeper 3.4.5分布式安装手册&lt;/a&gt; 这篇文章， 这里简要描述：&lt;/p&gt;
 
@@ -86,7 +86,7 @@ $ vim zoo.cfg
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;将里面的默认配置修改为如下（具体配置可以根据你机器来定）：&lt;/li&gt;
+&lt;li&gt;将里面的默认配置修改为如下（具体配置可以根据你机器来定）：&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code&gt;tickTime=2000
@@ -109,7 +109,7 @@ server.3 = node2:2888:3888
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;在刚刚zoo.cfg文件中dataDir属性指定的目录（本文中为/logs/zookeeper）下创建一个myid，在里面添加你指定的server编号，因为这台机器是master，而zoo.cfg中master编号为1(server.1=master:2888:3888)，所以myid内容只需要为1即可。&lt;/li&gt;
+&lt;li&gt;在刚刚zoo.cfg文件中dataDir属性指定的目录（本文中为/logs/zookeeper）下创建一个myid，在里面添加你指定的server编号，因为这台机器是master，而zoo.cfg中master编号为1(server.1=master:2888:3888)，所以myid内容只需要为1即可。&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code&gt;$ mkdir -p /logs/zookeeper
@@ -121,7 +121,7 @@ $ echo 1   &amp;gt; /logs/zookeeper/myid
 
 &lt;p&gt;&lt;strong&gt;不要忘记在node1的/logs/zookeeper/myid文件中添加2。node2的/logs/zookeeper/myid文件中添加3。&lt;/strong&gt;&lt;/p&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;将每个机器的zookeeper的路径添加到Path
+&lt;li&gt;&lt;p&gt;将每个机器的zookeeper的路径添加到Path&lt;br /&gt;
 在/etc/profile追加如下内容：&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
@@ -133,7 +133,7 @@ export PATH=${ZOOKEEPER_HOME}/bin:$PATH
 &lt;p&gt;&lt;strong&gt;不要忘记在三台机器 &lt;code&gt;source /etc/profile&lt;/code&gt; 使之生效。&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;分别在master、node1、node2机器上启动Zookeeper相关服务：&lt;/li&gt;
+&lt;li&gt;分别在master、node1、node2机器上启动Zookeeper相关服务：&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code&gt;$ZOOKEEPER_HOME/bin/zkServer.sh start
@@ -143,11 +143,11 @@ Starting zookeeper ... STARTED
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;测试Zookeeper是否安装成功：
-参见 &lt;a href=&#34;http://www.iteblog.com/archives/904&#34;&gt;Zookeeper 3.4.5分布式安装手册&lt;/a&gt; 第7点 。&lt;/li&gt;
+&lt;li&gt;测试Zookeeper是否安装成功：&lt;br /&gt;
+参见 &lt;a href=&#34;http://www.iteblog.com/archives/904&#34;&gt;Zookeeper 3.4.5分布式安装手册&lt;/a&gt; 第7点 。&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h3 id=&#34;3-5-安装zmq:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.5 安装ZMQ&lt;/h3&gt;
+&lt;h3 id=&#34;3-5-安装zmq&#34;&gt;3.5 安装ZMQ&lt;/h3&gt;
 
 &lt;p&gt;默认安装在/usr/local/lib位置，后面会比较省劲：&lt;/p&gt;
 
@@ -158,7 +158,7 @@ $ make
 $ sudo make install
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;3-6-安装-jzmq:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.6 安装 jzmq&lt;/h3&gt;
+&lt;h3 id=&#34;3-6-安装-jzmq&#34;&gt;3.6 安装 jzmq&lt;/h3&gt;
 
 &lt;p&gt;最开始装&lt;a href=&#34;https://github.com/nathanmarz/jzmq&#34;&gt;nathanmarz&lt;/a&gt;的分支，一直无法make，最后下载了zeromq的&lt;a href=&#34;https://github.com/zeromq/jzmq&#34;&gt;master&lt;/a&gt;分支。  make过程中提示安装libtool, pkg-config, autoconf几个工具:&lt;/p&gt;
 
@@ -171,29 +171,29 @@ $ make
 $ sudo make install
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;3-7-storm-install-config:cb311eb8dc04c7f9620c5e97632331c7&#34;&gt;3.7 Storm install &amp;amp;&amp;amp; config&lt;/h3&gt;
+&lt;h3 id=&#34;3-7-storm-install-config&#34;&gt;3.7 Storm install &amp;amp;&amp;amp; config&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;安装之前的调研&lt;/li&gt;
+&lt;li&gt;安装之前的调研&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;在官网下载了storm-0.9.1-incubating 版本解压到安装位置。 该版本的一大亮点是采用了Netty做消息传输层，在以前的版本里，Storm只能依赖ZeroMQ做消息的传输，但其实并不适合,  &lt;a href=&#34;http://www.cnblogs.com/alephsoul-alephsoul/p/3467651.html&#34;&gt;理由&lt;/a&gt;：&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;ZeroMQ是一个本地化的消息库，它过度依赖操作系统环境；&lt;/li&gt;
-&lt;li&gt;安装起来比较麻烦；(有了Netty可以不要ZeroMQ和jzmq)&lt;/li&gt;
-&lt;li&gt;ZeroMQ的稳定性在不同版本之间差异巨大，并且目前只有2.1.7版本的ZeroMQ能与Storm协调的工作(写文档才注意到这句话。。。后面需要测试一下)。&lt;/li&gt;
+&lt;li&gt;ZeroMQ是一个本地化的消息库，它过度依赖操作系统环境；&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;安装起来比较麻烦；(有了Netty可以不要ZeroMQ和jzmq)&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;ZeroMQ的稳定性在不同版本之间差异巨大，并且目前只有2.1.7版本的ZeroMQ能与Storm协调的工作(写文档才注意到这句话。。。后面需要测试一下)。&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;引入Netty的原因是：
-  - 平台隔离，Netty是一个纯Java实现的消息队列，可以帮助Storm实现更好的跨平台特性，同时基于JVM的实现可以让我们对消息有更好的控制；
-  - 高性能，Netty的性能要比ZeroMQ快两倍左右，&lt;a href=&#34;http://yahooeng.tumblr.com/post/64758709722/making-storm-fly-with-netty&#34;&gt;让Storm飞&lt;/a&gt; 专门比较了ZeroMQ和Netty的性能。
+&lt;p&gt;引入Netty的原因是：&lt;br /&gt;
+  - 平台隔离，Netty是一个纯Java实现的消息队列，可以帮助Storm实现更好的跨平台特性，同时基于JVM的实现可以让我们对消息有更好的控制；&lt;br /&gt;
+  - 高性能，Netty的性能要比ZeroMQ快两倍左右，&lt;a href=&#34;http://yahooeng.tumblr.com/post/64758709722/making-storm-fly-with-netty&#34;&gt;让Storm飞&lt;/a&gt; 专门比较了ZeroMQ和Netty的性能。&lt;br /&gt;
   -  安全性认证，使得我们将来要做的 worker 进程之间的认证授权机制成为可能。&lt;/p&gt;
 
 &lt;p&gt;主要参考&lt;a href=&#34;http://www.cnblogs.com/panfeng412/archive/2012/11/30/how-to-install-and-deploy-storm-cluster.html&#34;&gt;Storm集群安装部署步骤【详细版】&lt;/a&gt; 和其他集群的经验对conf/storm.yaml进行如下配置：&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;storm.zookeeper.servers: Storm集群使用的Zookeeper集群地址，其格式如下：&lt;/li&gt;
+&lt;li&gt;storm.zookeeper.servers: Storm集群使用的Zookeeper集群地址，其格式如下：&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code&gt;storm.zookeeper.servers:
@@ -205,14 +205,14 @@ $ sudo make install
 &lt;p&gt;如果Zookeeper集群使用的不是默认端口，那么还需要storm.zookeeper.port选项。&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;storm.local.dir: Nimbus和Supervisor进程用于存储少量状态，如jars、confs等的本地磁盘目录，需要提前创建该目录并给以足够的访问权限。然后在storm.yaml中配置该目录，如：&lt;/li&gt;
+&lt;li&gt;storm.local.dir: Nimbus和Supervisor进程用于存储少量状态，如jars、confs等的本地磁盘目录，需要提前创建该目录并给以足够的访问权限。然后在storm.yaml中配置该目录，如：&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code&gt;storm.local.dir: &amp;quot;/logs/storm/workdir&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;java.library.path: Storm使用的本地库(ZMQ和JZMQ)加载路径，默认为&amp;rdquo;/usr/local/lib:/opt/local/lib:/usr/lib&amp;rdquo;，一般来说ZMQ和JZMQ默认安装在/usr/local/lib 下，因此不需要配置即可。&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;java.library.path: Storm使用的本地库(ZMQ和JZMQ)加载路径，默认为&amp;raquo;/usr/local/lib:/opt/local/lib:/usr/lib&amp;raquo;，一般来说ZMQ和JZMQ默认安装在/usr/local/lib 下，因此不需要配置即可。&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;nimbus.host: Storm集群Nimbus机器地址，各个Supervisor工作节点需要知道哪个机器是Nimbus，以便下载Topologies的jars、confs等文件，如：&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -221,7 +221,7 @@ $ sudo make install
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;supervisor.slots.ports: 对于每个Supervisor工作节点，需要配置该工作节点可以运行的worker数量。每个worker占用一个单独的端口用于接收消息，该配置选项即用于定义哪些端口是可被worker使用的。默认情况下，每个节点上可运行4个workers，分别在6700、6701、6702和6703端口，我配置了80个：&lt;/li&gt;
+&lt;li&gt;supervisor.slots.ports: 对于每个Supervisor工作节点，需要配置该工作节点可以运行的worker数量。每个worker占用一个单独的端口用于接收消息，该配置选项即用于定义哪些端口是可被worker使用的。默认情况下，每个节点上可运行4个workers，分别在6700、6701、6702和6703端口，我配置了80个：&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code&gt;supervisor.slots.ports:
@@ -234,14 +234,14 @@ $ sudo make install
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;storm UI端口&lt;/li&gt;
+&lt;li&gt;storm UI端口&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code&gt;ui.port: 8088
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;如果要在Storm里使用Netty做传输层，只需要简单的把下面的内容加入到storm.yaml中，并根据你的实际情况调整参数即可：&lt;/li&gt;
+&lt;li&gt;如果要在Storm里使用Netty做传输层，只需要简单的把下面的内容加入到storm.yaml中，并根据你的实际情况调整参数即可：&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code&gt;storm.messaging.transport: &amp;quot;backtype.storm.messaging.netty.Context&amp;quot;
@@ -254,7 +254,7 @@ storm.messaging.netty.min_wait_ms: 100
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;为了方便使用，可以将Storm位置加入到系统环境变量中&lt;/li&gt;
+&lt;li&gt;为了方便使用，可以将Storm位置加入到系统环境变量中&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;在/etc/profile追加如下内容：&lt;/p&gt;
@@ -267,18 +267,18 @@ export PATH=${STORM_HOME}/bin:$PATH
 &lt;p&gt;&lt;strong&gt;不要忘记在三台机器 &lt;code&gt;source /etc/profile&lt;/code&gt; 使之生效。&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;启动Storm各个后台进程&lt;/li&gt;
+&lt;li&gt;启动Storm各个后台进程&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;最后一步，启动Storm的所有后台进程。和Zookeeper一样，Storm也是快速失败（fail-fast)的系统，这样Storm才能在任意时刻被停止，并且当进程重启后被正确地恢复执行。这也是为什么Storm不在进程内保存状态的原因，即使Nimbus或    Supervisors被重启，运行中的Topologies不会受到影响。&lt;/p&gt;
 
-&lt;p&gt;以下是启动Storm各个后台进程的方式：
-  - Nimbus: 在Storm主控节点上运行&amp;rdquo;bin/storm nimbus &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;ldquo;启动Nimbus后台程序，并放到后台执行；
-  - Supervisor: 在Storm各个工作节点上运行&amp;rdquo;bin/storm supervisor &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;ldquo;启动Supervisor后台程序，并放到后台执行；
-  - UI: 在Storm主控节点上运行&amp;rdquo;bin/storm ui &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;ldquo;启动UI后台程序，并放到后台执行，启动后可以通过http://{nimbus host}:8080观察集群的worker资源使用情况、Topologies的运行状态等信息。&lt;/p&gt;
+&lt;p&gt;以下是启动Storm各个后台进程的方式：&lt;br /&gt;
+  - Nimbus: 在Storm主控节点上运行&amp;raquo;bin/storm nimbus &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;laquo;启动Nimbus后台程序，并放到后台执行；&lt;br /&gt;
+  - Supervisor: 在Storm各个工作节点上运行&amp;raquo;bin/storm supervisor &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;laquo;启动Supervisor后台程序，并放到后台执行；&lt;br /&gt;
+  - UI: 在Storm主控节点上运行&amp;raquo;bin/storm ui &amp;gt;/dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;laquo;启动UI后台程序，并放到后台执行，启动后可以通过http://{nimbus host}:8080观察集群的worker资源使用情况、Topologies的运行状态等信息。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;注意事项&lt;/strong&gt;：
-  - Storm后台进程被启动后，将在Storm安装部署目录下的logs/子目录下生成各个进程的日志文件。
+&lt;p&gt;&lt;strong&gt;注意事项&lt;/strong&gt;：&lt;br /&gt;
+  - Storm后台进程被启动后，将在Storm安装部署目录下的logs/子目录下生成各个进程的日志文件。&lt;br /&gt;
   - 经测试，Storm UI必须和Storm Nimbus部署在同一台机器上，否则UI无法正常工作，因为UI进程会检查本机是否存在Nimbus链接。&lt;/p&gt;
 
 &lt;p&gt;至此，Storm集群已经部署、配置完毕，可以向集群提交拓扑运行了。&lt;/p&gt;
@@ -287,11 +287,11 @@ export PATH=${STORM_HOME}/bin:$PATH
 &lt;li&gt;&lt;p&gt;向集群提交任务&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;启动Storm Topology：&lt;/li&gt;
+&lt;li&gt;启动Storm Topology：&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;code&gt;storm jar allmycode.jar org.me.MyTopology arg1 arg2 arg3&lt;/code&gt;
+&lt;p&gt;&lt;code&gt;storm jar allmycode.jar org.me.MyTopology arg1 arg2 arg3&lt;/code&gt;&lt;br /&gt;
  - 停止Storm Topology：&lt;/p&gt;
 
 &lt;p&gt;&lt;code&gt;storm kill {toponame}&lt;/code&gt;&lt;/p&gt;
@@ -313,12 +313,12 @@ export PATH=${STORM_HOME}/bin:$PATH
 
 &lt;p&gt;当然，最糟糕也最常见的是下面这种方式：完全不做任何排序。&lt;/p&gt;
 
-&lt;p&gt;最近碰到的一个应用场景让我对此进行了反思。我们的实时公交查询系统为其他App开发者提供了这样的一个API：根据用户的搜索内容返回线路名称。现在不妨假设用户输入了一个 &amp;ldquo;1&amp;rdquo;，后台进行查询，找到所有与 &amp;ldquo;1&amp;rdquo; 有关的线路，最开始我们的输出是无序的:&lt;/p&gt;
+&lt;p&gt;最近碰到的一个应用场景让我对此进行了反思。我们的实时公交查询系统为其他App开发者提供了这样的一个API：根据用户的搜索内容返回线路名称。现在不妨假设用户输入了一个 &amp;laquo;1&amp;raquo;，后台进行查询，找到所有与 &amp;laquo;1&amp;raquo; 有关的线路，最开始我们的输出是无序的:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;               81,  17, 201路， 快线1号, 11, 1路, 168 , 高快巴士1号线 ....
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;结果竟然返回了221个与1有关的线路，这样的展示结果显然是会让用户骂人的。后来决定先返回所有 &amp;ldquo;1&amp;rdquo; 开头的线路，其余自然排序:&lt;/p&gt;
+&lt;p&gt;结果竟然返回了221个与1有关的线路，这样的展示结果显然是会让用户骂人的。后来决定先返回所有 &amp;laquo;1&amp;raquo; 开头的线路，其余自然排序:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;              11, 17, 168, 1路，201路， 81, 高快巴士1号线，快线1号 ...
 &lt;/code&gt;&lt;/pre&gt;
@@ -328,7 +328,7 @@ export PATH=${STORM_HOME}/bin:$PATH
 &lt;pre&gt;&lt;code&gt;              11，17，81，1路，168，201路，.... 快线1号，高快巴士1号线
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;这次达到了预想的效果，但把快线1号，高快巴士1号线这样比较难记，难输入的线路放到了最后，实际上用户如果只输入 &amp;ldquo;1&amp;rdquo; 进行查询，很可能要找的就是 “快线1号” 或者 “高快巴士1号线”，所以把这种输入成本高的线路挪到了前面:&lt;/p&gt;
+&lt;p&gt;这次达到了预想的效果，但把快线1号，高快巴士1号线这样比较难记，难输入的线路放到了最后，实际上用户如果只输入 &amp;laquo;1&amp;raquo; 进行查询，很可能要找的就是 “快线1号” 或者 “高快巴士1号线”，所以把这种输入成本高的线路挪到了前面:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;              11, 17, 1路，168，快线1号，高快巴士1号线，201路，81 ....
 &lt;/code&gt;&lt;/pre&gt;
@@ -379,8 +379,8 @@ export PATH=${STORM_HOME}/bin:$PATH
       <pubDate>Thu, 04 Sep 2014 00:00:00 +0000</pubDate>
       
       <guid>http://kangkona.tk/storm-real-time-case-1/</guid>
-      <description>&lt;p&gt;在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,
-Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截
+      <description>&lt;p&gt;在Storm里面，用水流来比作数据流真是再合适不过了。 raw数据源源不断地流向Spout,&lt;br /&gt;
+Spout对流入的数据进行检查，如果是符合要求的数据(好比质检合格的水),则从流中截&lt;br /&gt;
 出一个单位数据。&lt;/p&gt;
 
 &lt;p&gt;通常会对流入的数据源定好协议，比如一个单位数据的header是FAFB, tail是EAEB：&lt;/p&gt;
@@ -398,12 +398,12 @@ Spout对流入的数据进行检查，如果是符合要求的数据(好比质�
     }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;其实上段代码不够严谨，比如出现0xFA0xFA0xFB&amp;hellip;这样的流，就可能会丢弃正常的流。
+&lt;p&gt;其实上段代码不够严谨，比如出现0xFA0xFA0xFB&amp;hellip;这样的流，就可能会丢弃正常的流。&lt;br /&gt;
 询问得知正文和头部是正交的, 暂时按下不表。&lt;/p&gt;
 
 &lt;p&gt;之后对截断的流进行基础性的检查，emit出去，交给Bolt处理。&lt;/p&gt;
 
-&lt;p&gt;Spout只管喷射出一个个截断的数据流，Bolt(螺栓)把自己拧在Spout的接口上, 对输出
+&lt;p&gt;Spout只管喷射出一个个截断的数据流，Bolt(螺栓)把自己拧在Spout的接口上, 对输出&lt;br /&gt;
 的元组进行必要的处理。&lt;/p&gt;
 
 &lt;p&gt;Storm的一大卖点是高度的稳定性，所以往往异常处理代码量比正常逻辑代码要多很多。&lt;/p&gt;

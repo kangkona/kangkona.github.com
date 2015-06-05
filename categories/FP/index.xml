@@ -17,7 +17,7 @@
       <guid>http://kangkona.tk/pattern-match-is-good/</guid>
       <description>
 
-&lt;h2 id=&#34;if-while-for:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;if, while, for&lt;/h2&gt;
+&lt;h2 id=&#34;if-while-for&#34;&gt;if, while, for&lt;/h2&gt;
 
 &lt;p&gt;除了Hello,world之外的任何程序，几乎都离不开控制结构。比如if-then-else, while,for，其实这三种的基础说白了还是加了一层语法塘的goto语句。不过相比直接使用goto而言，程序的流程走向更容易被程序员掌握。for主要用于重复次数明确的情形，while在循环条件已知时很合适。由于二者完全是在做同样的事情，以至于Rob Pike在Go中统一命名为for。&lt;/p&gt;
 
@@ -43,7 +43,7 @@
 
 &lt;p&gt;这种简洁的选择方式和if-then-else是等价的，这种表达方式来自于ML, 一般称之为&lt;code&gt;模式匹配&lt;/code&gt;。简洁带来的好处一是代码上的整洁，舒适。 二是把很多dirty的细节隐匿起来，直达问题本身，这样我们就可以前进的更快，想象力就会飘的更远。。。举个快速排序的栗子:&lt;/p&gt;
 
-&lt;h3 id=&#34;命令式语言-go实现-https-github-com-kangkona-1day1algorithm-blob-master-qsort2-go:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;命令式语言 &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsort2.go&#34;&gt;Go实现&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&#34;命令式语言-go实现-https-github-com-kangkona-1day1algorithm-blob-master-qsort2-go&#34;&gt;命令式语言 &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsort2.go&#34;&gt;Go实现&lt;/a&gt;&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func partition(A []int, low int, high int) int {
 	x := A[high]
@@ -71,7 +71,7 @@ func QuickSort(A []int) {
 }
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;不带模式匹配的lisp-scheme实现-https-github-com-kangkona-1day1algorithm-blob-master-qsortv3-scm:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;不带模式匹配的Lisp &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsortv3.scm&#34;&gt;Scheme实现&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&#34;不带模式匹配的lisp-scheme实现-https-github-com-kangkona-1day1algorithm-blob-master-qsortv3-scm&#34;&gt;不带模式匹配的Lisp &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsortv3.scm&#34;&gt;Scheme实现&lt;/a&gt;&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-scheme&#34;&gt;(define (qsort lst)
 (if (&amp;lt;= (length lst) 1)
@@ -80,7 +80,7 @@ lst
 (cons (car lst) (qsort (filter (cdr lst) (lambda (x) (&amp;gt; x (car lst)))))))))
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;带模式匹配的语言-erlang实现-https-github-com-kangkona-1day1algorithm-blob-master-qsortv4-erl:ba5f1ab36d0f7be3ce8b0cb66e2373b1&#34;&gt;带模式匹配的语言  &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsortv4.erl&#34;&gt;Erlang实现&lt;/a&gt;&lt;/h3&gt;
+&lt;h3 id=&#34;带模式匹配的语言-erlang实现-https-github-com-kangkona-1day1algorithm-blob-master-qsortv4-erl&#34;&gt;带模式匹配的语言  &lt;a href=&#34;https://github.com/kangkona/1day1algorithm/blob/master/qsortv4.erl&#34;&gt;Erlang实现&lt;/a&gt;&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;qsort([]) -&amp;gt; [];
 qsort([Pivot|T]) -&amp;gt;

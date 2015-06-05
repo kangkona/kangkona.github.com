@@ -227,7 +227,7 @@
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>28</sup></span><span class="post-date-separator">/</span><span>&nbsp;</span><span class="post-date-month">Nov</span> <span class="post-date-year">2014</span>
+                	<span class="post-date-day"><sup>28</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Nov</span> <span class="post-date-year">2014</span>
             	</span>
             	
             
@@ -251,7 +251,7 @@
 
 <p>golang的一大卖点是并发模型基于CPS(continuation passing style)，使用起来比较简单。刚开始我也觉得比较简单，但使用之后发现，你必须很清楚golang的并发机制才能使用自如，在需要同步尤甚，一不小心就会陷入罪恶的渊薮。</p>
 
-<h2 id="sharing-vs-communicating:e3781e9f61b43c7620c38c8d3327fe1d">Sharing VS Communicating</h2>
+<h2 id="sharing-vs-communicating">Sharing VS Communicating</h2>
 
 <p>如何我们想从1顺序打印到10000，可能会<a href="http://play.golang.org/p/ZG5EihF4PU">这样</a>写：</p>
 
@@ -313,15 +313,15 @@ func main() {
 	                                                                             —— Rob Pike
 </code></pre>
 
-<h2 id="synchronization:e3781e9f61b43c7620c38c8d3327fe1d">Synchronization</h2>
+<h2 id="synchronization">Synchronization</h2>
 
 <p>golang没有join，无法直接在程序中设置等待点。实现同步通常有两种做法：</p>
 
-<h3 id="使用channel:e3781e9f61b43c7620c38c8d3327fe1d">使用channel</h3>
+<h3 id="使用channel">使用channel</h3>
 
 <p>由于channel分为阻塞和非阻塞的，使用阻塞的channel时就能达到同步的目的。上面两个例子都使用了channel进行同步。</p>
 
-<h3 id="使用waitgroup:e3781e9f61b43c7620c38c8d3327fe1d">使用WaitGroup</h3>
+<h3 id="使用waitgroup">使用WaitGroup</h3>
 
 <p><a href="http://play.golang.org/p/k440dqN3Ai">示例如下</a></p>
 
@@ -357,7 +357,7 @@ func main() {
             }
 </code></pre>
 
-<h2 id="concurrent-data-structure:e3781e9f61b43c7620c38c8d3327fe1d">Concurrent Data Structure</h2>
+<h2 id="concurrent-data-structure">Concurrent Data Structure</h2>
 
 <p>在并发环境下，数据结构往往也需要设计成并发的，比如一个并发的Map可以这样设计：</p>
 

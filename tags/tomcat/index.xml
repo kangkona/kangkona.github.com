@@ -17,9 +17,9 @@
       <guid>http://kangkona.tk/tomcat-tune/</guid>
       <description>
 
-&lt;h2 id=&#34;一-linux系统配置:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;一. Linux系统配置&lt;/h2&gt;
+&lt;h2 id=&#34;一-linux系统配置&#34;&gt;一. Linux系统配置&lt;/h2&gt;
 
-&lt;h3 id=&#34;1-增大最大打开文件数限制:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;1. 增大最大打开文件数限制&lt;/h3&gt;
+&lt;h3 id=&#34;1-增大最大打开文件数限制&#34;&gt;1. 增大最大打开文件数限制&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt; $ sudo vim /etc/sysctl.conf 
  # add &amp;quot;fs.file-max = 8061540&amp;quot;
@@ -27,7 +27,7 @@
  # add &amp;quot;* soft nofile 8192&amp;quot;  and &amp;quot;* hard nofile 16384&amp;quot;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;2-优化网络:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;2. 优化网络&lt;/h3&gt;
+&lt;h3 id=&#34;2-优化网络&#34;&gt;2. 优化网络&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;$ sudo vim /etc/sysctl.conf
 &lt;/code&gt;&lt;/pre&gt;
@@ -85,9 +85,9 @@
  net.ipv4.netfilter.ip_conntrack_max = 1000000
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;二-tomcat内存优化:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;二. Tomcat内存优化&lt;/h2&gt;
+&lt;h2 id=&#34;二-tomcat内存优化&#34;&gt;二. Tomcat内存优化&lt;/h2&gt;
 
-&lt;h4 id=&#34;tomcat内存优化主要是对-tomcat-启动参数优化-我们可以在-tomcat-的启动脚本-catalina-sh-中设置-java-opts-参数:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;&lt;strong&gt;Tomcat内存优化主要是对 Tomcat 启动参数优化，我们可以在 Tomcat 的启动脚本 catalina.sh 中设置 JAVA_OPTS 参数&lt;/strong&gt;&lt;/h4&gt;
+&lt;h4 id=&#34;tomcat内存优化主要是对-tomcat-启动参数优化-我们可以在-tomcat-的启动脚本-catalina-sh-中设置-java-opts-参数&#34;&gt;&lt;strong&gt;Tomcat内存优化主要是对 Tomcat 启动参数优化，我们可以在 Tomcat 的启动脚本 catalina.sh 中设置 JAVA_OPTS 参数&lt;/strong&gt;&lt;/h4&gt;
 
 &lt;pre&gt;&lt;code&gt;-server:  启用jdk的server版,一定要作为第一个参数，在多个CPU时性能佳 
 -Xms： 初始Heap大小，使用的最小内存,cpu性能高时此值应设的大一些 
@@ -107,9 +107,9 @@
 提示：此选项在Heap Size 比较大而且Major收集时间较长的情况下使用更合适。
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;三-tomcat并发优化:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;三. Tomcat并发优化&lt;/h2&gt;
+&lt;h2 id=&#34;三-tomcat并发优化&#34;&gt;三. Tomcat并发优化&lt;/h2&gt;
 
-&lt;h3 id=&#34;1-tomcat连接相关参数:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;1.Tomcat连接相关参数&lt;/h3&gt;
+&lt;h3 id=&#34;1-tomcat连接相关参数&#34;&gt;1.Tomcat连接相关参数&lt;/h3&gt;
 
 &lt;p&gt;在Tomcat配置文件conf/server.xml 中的Connector配置中&lt;/p&gt;
 
@@ -119,7 +119,7 @@
  其中和最大连接数相关的参数为maxProcessors 和 acceptCount。如果要加大并发连接数，应同时加大这两个参数。
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;2-调整连接器connector的并发处理能力:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;2.调整连接器connector的并发处理能力&lt;/h3&gt;
+&lt;h3 id=&#34;2-调整连接器connector的并发处理能力&#34;&gt;2.调整连接器connector的并发处理能力&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;  maxThreads        客户请求最大线程数
   minSpareThreads   Tomcat初始化时创建的 socket 线程数
@@ -131,7 +131,7 @@
   URIEncoding    URL统一编码
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;3-tomcat缓存优化:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;3.Tomcat缓存优化&lt;/h3&gt;
+&lt;h3 id=&#34;3-tomcat缓存优化&#34;&gt;3.Tomcat缓存优化&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code&gt;      compression 打开压缩功能   
       compressionMinSize   启用压缩的输出内容大小，这里面默认为2KB
@@ -176,19 +176,19 @@
                 prestartminSpareThreads=&amp;quot;true&amp;quot; /&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;四-tomcat-native:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;四. Tomcat Native&lt;/h2&gt;
+&lt;h2 id=&#34;四-tomcat-native&#34;&gt;四. Tomcat Native&lt;/h2&gt;
 
-&lt;p&gt;&lt;strong&gt;Tomcat可以使用APR来提供超强的可伸缩性和性能，更好地集成本地服务器技术。APR(Apache Portable Runtime)
- 是一个高可移植库，它是Apache HTTP Server 2.x的核心。APR有很多用途，包括访问高级IO功能(例如sendfile,
- epoll和OpenSSL)，OS级别功能(随机数生成，系统状态等等)，本地进程管理(共享内存，NT管道和UNIX sockets)。这些功能可以
- 使Tomcat作为一个通常的前台WEB服务器，能更好地和其它本地web技术集成，总体上让Java更有效率作为一个高性能web服务器
+&lt;p&gt;&lt;strong&gt;Tomcat可以使用APR来提供超强的可伸缩性和性能，更好地集成本地服务器技术。APR(Apache Portable Runtime)&lt;br /&gt;
+ 是一个高可移植库，它是Apache HTTP Server 2.x的核心。APR有很多用途，包括访问高级IO功能(例如sendfile,&lt;br /&gt;
+ epoll和OpenSSL)，OS级别功能(随机数生成，系统状态等等)，本地进程管理(共享内存，NT管道和UNIX sockets)。这些功能可以&lt;br /&gt;
+ 使Tomcat作为一个通常的前台WEB服务器，能更好地和其它本地web技术集成，总体上让Java更有效率作为一个高性能web服务器&lt;br /&gt;
  平台而不是简单作为后台容器&lt;/strong&gt;。&lt;/p&gt;
 
-&lt;p&gt;在产品环境中，特别是直接使用Tomcat做WEB服务器的时候，应该使用Tomcat Native来提高其性能。
+&lt;p&gt;在产品环境中，特别是直接使用Tomcat做WEB服务器的时候，应该使用Tomcat Native来提高其性能。&lt;br /&gt;
 说白了，就是如何 在Tomcat中使用JNI的方式来读取文件以及进行网络传输。这个东西可以大大提升Tomcat对静态文件的处理性能，同时如果你使用了HTTPS方式 传输的话，也可以提升SSL的处理性能。&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;a. 安装 apr&lt;/li&gt;
+&lt;li&gt;a. 安装 apr&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ sudo ./configure --prefix=/opt/apr
@@ -197,7 +197,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;b. 安装 apr-iconv&lt;/li&gt;
+&lt;li&gt;b. 安装 apr-iconv&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ sudo ./configure --prefix=/opt/apr-iconv --with-apr=/opt/apr 
@@ -206,7 +206,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;c. 安装 apr-util&lt;/li&gt;
+&lt;li&gt;c. 安装 apr-util&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ sudo  ./configure --prefix=/opt/apr-util  --with-apr=/opt/apr --with-apr-iconv=/opt/apr-iconv/bin/apriconv 
@@ -215,7 +215,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;d. 安装 tomcat-native&lt;/li&gt;
+&lt;li&gt;d. 安装 tomcat-native&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-shell&#34;&gt;     $ cd $TOMCAT_HOME/bin/tomcat-native-1.1.30-src/jni/native
@@ -224,7 +224,7 @@
      $ sudo make install
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h2 id=&#34;五-总结:62a8702d27a37b20fd84d36dbcffd74a&#34;&gt;五. 总结&lt;/h2&gt;
+&lt;h2 id=&#34;五-总结&#34;&gt;五. 总结&lt;/h2&gt;
 
 &lt;p&gt;为了提高Tomcat的并发处理能力，我从以上几个方面进行了逐步的增量调优，每次优化或者做出改变之后，都从Client用ab模拟并发，观察QPS等指标，并同时在Server端监控各种系统信息：&lt;/p&gt;
 

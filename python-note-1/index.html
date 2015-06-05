@@ -227,7 +227,7 @@
             </h3>
             
             	<span class="post-date">
-                	<span class="post-date-day"><sup>16</sup></span><span class="post-date-separator">/</span><span>&nbsp;</span><span class="post-date-month">Mar</span> <span class="post-date-year">2013</span>
+                	<span class="post-date-day"><sup>16</sup></span><span class="post-date-separator">/</span><span class="post-date-month">Mar</span> <span class="post-date-year">2013</span>
             	</span>
             	
             
@@ -251,30 +251,30 @@
 
 <p>这是对雨痕写的Python学习笔记的学习。</p>
 
-<h2 id="基本环境:92ca2ff6f04c0f4fcf9327caf7cf2980">基本环境</h2>
+<h2 id="基本环境">基本环境</h2>
 
-<p>对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。
+<p>对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。<br />
 因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。</p>
 
-<h3 id="引用计数:92ca2ff6f04c0f4fcf9327caf7cf2980">引用计数</h3>
+<h3 id="引用计数">引用计数</h3>
 
 <p>除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。</p>
 
-<h3 id="垃圾回收:92ca2ff6f04c0f4fcf9327caf7cf2980">垃圾回收</h3>
+<h3 id="垃圾回收">垃圾回收</h3>
 
-<p>Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 &ldquo;Reference Cycle Garbage Collection&rdquo;。</p>
+<p>Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 &laquo;Reference Cycle Garbage Collection&raquo;。</p>
 
 <p>能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。</p>
 
 <p>#世代回收</p>
 
-<h2 id="内置类型:92ca2ff6f04c0f4fcf9327caf7cf2980">内置类型</h2>
+<h2 id="内置类型">内置类型</h2>
 
 <ol>
-<li><strong>尽量使用xrange代替range</strong>，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。</li>
+<li><strong>尽量使用xrange代替range</strong>，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。<br /></li>
 </ol>
 
-<h3 id="字符串:92ca2ff6f04c0f4fcf9327caf7cf2980">字符串</h3>
+<h3 id="字符串">字符串</h3>
 
 <pre><code class="language-python">&gt;&gt;&gt; &quot;,&quot;.join([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;])
 'a,b,c'
@@ -310,34 +310,34 @@ True, True
 <p>string.Template可以处理较复杂的需求</p>
 </blockquote>
 
-<h3 id="池化:92ca2ff6f04c0f4fcf9327caf7cf2980">池化</h3>
+<h3 id="池化">池化</h3>
 
 <p>池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。</p>
 
-<h3 id="list:92ca2ff6f04c0f4fcf9327caf7cf2980">List</h3>
+<h3 id="list">List</h3>
 
 <p>可用bisect 向有序列表中插入元素。</p>
 
-<p><strong>性能</strong>
-1. 列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。
+<p><strong>性能</strong><br />
+1. 列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。<br />
 2. 某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。</p>
 
-<p>###tuple
+<p>###tuple<br />
 在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。</p>
 
-<p>###dict
-字典 (dict) 采用用开放地址法的哈希表实现。
-• 自带元素容量为 8 的 smalltable,只有 &ldquo;超出&rdquo;时才到堆上额外分配元素表内存。
-• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。
-• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。
+<p>###dict<br />
+字典 (dict) 采用用开放地址法的哈希表实现。<br />
+• 自带元素容量为 8 的 smalltable,只有 &laquo;超出&raquo;时才到堆上额外分配元素表内存。<br />
+• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。<br />
+• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。<br />
 • 删除元素操作不会立立即收缩内存。</p>
 
 <blockquote>
-<p>对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减
+<p>对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减<br />
 少内存开销。</p>
 </blockquote>
 
-<h4 id="视图:92ca2ff6f04c0f4fcf9327caf7cf2980">视图</h4>
+<h4 id="视图">视图</h4>
 
 <p>要判断两个字典间的差异,使用用视图是最简便的做法。</p>
 
@@ -359,9 +359,9 @@ set([('a', 1), ('c', 3)])
 True
 </code></pre>
 
-<h3 id="set:92ca2ff6f04c0f4fcf9327caf7cf2980">set</h3>
+<h3 id="set">set</h3>
 
-<p>集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 &ldquo;值&rdquo; 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。</p>
+<p>集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 &laquo;值&raquo; 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。</p>
 
 <p>运算： ==， ！=， &gt;, |, &amp; ,-, ^</p>
 

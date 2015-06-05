@@ -78,7 +78,7 @@ $./a.out
 17 17 17 17 25 25 33 33 41 41
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;看来Linux的分配策略不能使得内存大小和元素个数一一对应，此法不可用。
+&lt;p&gt;看来Linux的分配策略不能使得内存大小和元素个数一一对应，此法不可用。&lt;br /&gt;
 后来发现在Linux下原来也有类似&lt;code&gt;_msize&lt;/code&gt;的函数[&lt;a href=&#34;http://www.linuxidc.com/Linux/2011-12/48624.htm&#34;&gt;malloc.h&lt;/a&gt;]：&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt;int * array;

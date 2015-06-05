@@ -17,10 +17,10 @@
       <guid>http://kangkona.tk/nlp-note/</guid>
       <description>
 
-&lt;h2 id=&#34;1-python自然语言处理-笔记:f4f67061fc493a4c2b2b421639ba2c55&#34;&gt;1.《Python自然语言处理》笔记&lt;/h2&gt;
+&lt;h2 id=&#34;1-python自然语言处理-笔记&#34;&gt;1.《Python自然语言处理》笔记&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;遍历序列的各种方式&lt;/li&gt;
+&lt;li&gt;遍历序列的各种方式&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    Python 表达式                       评论
@@ -35,7 +35,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;zip &amp;amp;&amp;amp; enumerate&lt;/li&gt;
+&lt;li&gt;zip &amp;amp;&amp;amp; enumerate&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    &amp;gt;&amp;gt;&amp;gt; words = [&#39;I&#39;, &#39;turned&#39;, &#39;off&#39;, &#39;the&#39;, &#39;spectroroute&#39;]
@@ -47,8 +47,8 @@
     [(0, &#39;I&#39;), (1, &#39;turned&#39;), (2, &#39;off&#39;), (3, &#39;the&#39;), (4, &#39;spectroroute&#39;)]
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;对于一些 NLP 的任务,有必要将一个序列分割成两个或两个以上的部分。例如:我们
-可能需要用 90%的数据来“训练”一个系统,剩余 10%进行测试。要做到这一点,我们指
+&lt;p&gt;对于一些 NLP 的任务,有必要将一个序列分割成两个或两个以上的部分。例如:我们&lt;br /&gt;
+可能需要用 90%的数据来“训练”一个系统,剩余 10%进行测试。要做到这一点,我们指&lt;br /&gt;
 定想要分割数据的位置,然后在这个位置分割序列。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    &amp;gt;&amp;gt;&amp;gt; text = nltk.corpus.nps_chat.words()
@@ -60,10 +60,10 @@
     9
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;我们可以验证在此过程中的原始数据没有丢失,也不是复制。我们也可以验证两块大
+&lt;p&gt;我们可以验证在此过程中的原始数据没有丢失,也不是复制。我们也可以验证两块大&lt;br /&gt;
 小的比例是我们预期的。&lt;/p&gt;
 
-&lt;p&gt;让我们综合关于这三种类型的序列的知识,一起使用链表推导处理一个字符串中的词,
+&lt;p&gt;让我们综合关于这三种类型的序列的知识,一起使用链表推导处理一个字符串中的词,&lt;br /&gt;
 按它们的长度排序。&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    &amp;gt;&amp;gt;&amp;gt; words = &#39;I turned off the spectroroute&#39;.split() 
@@ -74,7 +74,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;从html中提取信息的通用办法&lt;/li&gt;
+&lt;li&gt;从html中提取信息的通用办法&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    import re
@@ -87,7 +87,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;防御性编程&lt;/li&gt;
+&lt;li&gt;防御性编程&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;     def tag(word):
@@ -99,7 +99,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
-&lt;li&gt;FreqDist&lt;/li&gt;
+&lt;li&gt;FreqDist&lt;br /&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    def freq_words(file, min=1, num=10):
@@ -130,11 +130,11 @@
 &lt;/ul&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;动态规划是一种在 NLP 中广泛使用的算法设计技术,它存储以前的计算结果,
+&lt;p&gt;动态规划是一种在 NLP 中广泛使用的算法设计技术,它存储以前的计算结果,&lt;br /&gt;
 以避免不必要的重复计算。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h2 id=&#34;2-文本分类:f4f67061fc493a4c2b2b421639ba2c55&#34;&gt;2. 文本分类&lt;/h2&gt;
+&lt;h2 id=&#34;2-文本分类&#34;&gt;2. 文本分类&lt;/h2&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;过拟合： 如果你提供太多的特征,那么该算法将高度依赖你的训练数据的特性，而一般化到新的例子的效果不会很好。这个问题被称为过拟合。&lt;/p&gt;&lt;/li&gt;
@@ -158,11 +158,11 @@
 
 &lt;li&gt;&lt;p&gt;要不要走一条无监督学习之路，寻找不动点。&lt;/p&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;文本自动层级聚类
+&lt;li&gt;&lt;p&gt;文本自动层级聚类&lt;br /&gt;
 这种试探性的数据分析(exploratory data  analysis)来识别跑题作文,并辅以人工鉴别。这种内容评价方法的特点是不需要事先基于大规模标注训练集构建评价模型,并且有着层级聚合聚类法的突出优点,郎能够生成比较规整的类集合,聚类结果不依赖文档的初始排列或输入次序,与聚类过程的先后次序无关,聚类结果比较稳定,不易导致类的重构。并且对于作文i平价来讲,得到的结果比较容易解释。实验结果表明,该方法能比较清晰地识别与大多数作文内容不同的作文,再辅以人工鉴别,可准确识别跑题作文,从而在通用自动作文评价中实现作文内容的测量。&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;h2 id=&#34;3-代码工具库:f4f67061fc493a4c2b2b421639ba2c55&#34;&gt;3. 代码工具库&lt;/h2&gt;
+&lt;h2 id=&#34;3-代码工具库&#34;&gt;3. 代码工具库&lt;/h2&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;	# -*- coding: utf-8 -*-
 	&amp;quot;&amp;quot;&amp;quot;
@@ -287,30 +287,30 @@
 
 &lt;p&gt;这是对雨痕写的Python学习笔记的学习。&lt;/p&gt;
 
-&lt;h2 id=&#34;基本环境:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;基本环境&lt;/h2&gt;
+&lt;h2 id=&#34;基本环境&#34;&gt;基本环境&lt;/h2&gt;
 
-&lt;p&gt;对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。
+&lt;p&gt;对象总是按引用用传递,简单点说就是通过复制指针来实现多个名字指向同一一对象。&lt;br /&gt;
 因为 arena 也是在堆上分配的,所以无无论何种类型何种大大小小的对象,都存储在堆上。Python 没有值类型和引用用类型一一说,就算是最简单的整数也是拥有标准头的完整对象。&lt;/p&gt;
 
-&lt;h3 id=&#34;引用计数:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;引用计数&lt;/h3&gt;
+&lt;h3 id=&#34;引用计数&#34;&gt;引用计数&lt;/h3&gt;
 
 &lt;p&gt;除了直接引用用外,Python还支支持弱引用用。允许在不增加引用用计数,不妨碍对象回收的情况下间接引用用对象。但不是所有类型都支支持弱引用用,比比如 list、dict ,弱引用用会引发异常。&lt;/p&gt;
 
-&lt;h3 id=&#34;垃圾回收:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;垃圾回收&lt;/h3&gt;
+&lt;h3 id=&#34;垃圾回收&#34;&gt;垃圾回收&lt;/h3&gt;
 
-&lt;p&gt;Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 &amp;ldquo;Reference Cycle Garbage Collection&amp;rdquo;。&lt;/p&gt;
+&lt;p&gt;Python 拥有两套垃圾回收机制。除了引用计数,还有个专⻔门处理循环引用的 GC。通常我们提到垃圾回收时,都是指这个 &amp;laquo;Reference Cycle Garbage Collection&amp;raquo;。&lt;/p&gt;
 
 &lt;p&gt;能引发循环引用用问题的,都是那种容器类对象,比比如 list、set、object 等。对于这类对象,虚拟机在为其分配内存时,会额外添加用用于追踪的PyGC_Head。这些对象被添加到特殊链表里里,以便GC 进行行管理。 如果不存在循环引用,自然是积极性更高的引用计数机制抢先给处理掉。也就是说,只要不存在循环引用,理论上可以禁用GC。当执行行某些密集运算时,临时关掉GC有助于提升性能。&lt;/p&gt;
 
 &lt;p&gt;#世代回收&lt;/p&gt;
 
-&lt;h2 id=&#34;内置类型:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;内置类型&lt;/h2&gt;
+&lt;h2 id=&#34;内置类型&#34;&gt;内置类型&lt;/h2&gt;
 
 &lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;尽量使用xrange代替range&lt;/strong&gt;，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;尽量使用xrange代替range&lt;/strong&gt;，每次迭代后,数字对象被回收,其占用用内存空闲出来并被复用用,内存也就不会暴涨了。&lt;br /&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h3 id=&#34;字符串:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;字符串&lt;/h3&gt;
+&lt;h3 id=&#34;字符串&#34;&gt;字符串&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;&amp;gt;&amp;gt;&amp;gt; &amp;quot;,&amp;quot;.join([&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;, &amp;quot;c&amp;quot;])
 &#39;a,b,c&#39;
@@ -346,34 +346,34 @@ True, True
 &lt;p&gt;string.Template可以处理较复杂的需求&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h3 id=&#34;池化:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;池化&lt;/h3&gt;
+&lt;h3 id=&#34;池化&#34;&gt;池化&lt;/h3&gt;
 
 &lt;p&gt;池化有助于减少对象数量和内存消耗,提升性能。用 intern() 函数可以把运行期动态生成的字符串池化。&lt;/p&gt;
 
-&lt;h3 id=&#34;list:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;List&lt;/h3&gt;
+&lt;h3 id=&#34;list&#34;&gt;List&lt;/h3&gt;
 
 &lt;p&gt;可用bisect 向有序列表中插入元素。&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;性能&lt;/strong&gt;
-1. 列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。
+&lt;p&gt;&lt;strong&gt;性能&lt;/strong&gt;&lt;br /&gt;
+1. 列表用realloc()调整指针数组内存大小,可能需要复制数据。插入和删除操作,还会循环移动后续元素。这些都是潜在的性能隐患。对于频繁增删元素的大型列表,应该考虑用用链表等数据结构代替。&lt;br /&gt;
 2. 某些时候,可以考虑用数组代替列表。和列表存储对象指针不同,数组直接内嵌数据,既省了创建对象的内存开销,又提升了读写效率。&lt;/p&gt;
 
-&lt;p&gt;###tuple
+&lt;p&gt;###tuple&lt;br /&gt;
 在编码中,应该尽可能用用元组代替列表。除内存复用更高效外,其只读特征更利于并行开发。&lt;/p&gt;
 
-&lt;p&gt;###dict
-字典 (dict) 采用用开放地址法的哈希表实现。
-• 自带元素容量为 8 的 smalltable,只有 &amp;ldquo;超出&amp;rdquo;时才到堆上额外分配元素表内存。
-• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。
-• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。
+&lt;p&gt;###dict&lt;br /&gt;
+字典 (dict) 采用用开放地址法的哈希表实现。&lt;br /&gt;
+• 自带元素容量为 8 的 smalltable,只有 &amp;laquo;超出&amp;raquo;时才到堆上额外分配元素表内存。&lt;br /&gt;
+• 虚拟机缓存 80 个字典复用对象,但在堆上分配的元素表内存会被释放。&lt;br /&gt;
+• 按需动态调整容量。扩容或收缩操作都将重新分配内存,重新哈希。&lt;br /&gt;
 • 删除元素操作不会立立即收缩内存。&lt;/p&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减
+&lt;p&gt;对于大字典,调用 keys()、values()、items() 会构造同样巨大的列表。建议用用迭代器替代,以减&lt;br /&gt;
 少内存开销。&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;h4 id=&#34;视图:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;视图&lt;/h4&gt;
+&lt;h4 id=&#34;视图&#34;&gt;视图&lt;/h4&gt;
 
 &lt;p&gt;要判断两个字典间的差异,使用用视图是最简便的做法。&lt;/p&gt;
 
@@ -395,9 +395,9 @@ set([(&#39;a&#39;, 1), (&#39;c&#39;, 3)])
 True
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;h3 id=&#34;set:92ca2ff6f04c0f4fcf9327caf7cf2980&#34;&gt;set&lt;/h3&gt;
+&lt;h3 id=&#34;set&#34;&gt;set&lt;/h3&gt;
 
-&lt;p&gt;集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 &amp;ldquo;值&amp;rdquo; 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。&lt;/p&gt;
+&lt;p&gt;集合 (set) 用来存储无序不重复对象。所谓不重复对象,除了不是同一对象外,还包括 &amp;laquo;值&amp;raquo; 不能相同。集合只能存储可哈希对象,一样有只读版本 frozenset。&lt;/p&gt;
 
 &lt;p&gt;运算： ==， ！=， &amp;gt;, |, &amp;amp; ,-, ^&lt;/p&gt;
 
