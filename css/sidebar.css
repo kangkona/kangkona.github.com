@@ -1,9 +1,9 @@
 .gossip {
   width: auto;
-  font-size:40px;
+  font-size:34px;
   line-height: 50px;
   font-family: "PT Sans", Helvetica, Arial, sans-serif;
-  color: #ecf0f1;
+  color: #e50636;
   height: 320px;
   position: relative;
 /*  top: 50%;
@@ -44,16 +44,16 @@
   padding-left: 110px;
   text-align: left;
   list-style: none;
-  animation: 6s linear 1s normal none infinite change;
-  -webkit-animation: 6s linear 1s normal none infinite change;
-  -moz-animation: 6s linear 1s normal none infinite change;
-  -o-animation: 6s linear 1s normal none infinite change;
+  animation: 6s linear 0s normal none infinite change;
+  -webkit-animation: 6s linear 0s normal none infinite change;
+  -moz-animation: 6s linear 0s normal none infinite change;
+  -o-animation: 6s linear 0s normal none infinite change;
 }
 .gossip ul, .gossip li {
   line-height: 40px;
   margin: 0;
 }
-@-webkit-keyframes opacity {
+/*@-webkit-keyframes opacity {
   0% {
     opacity: 0;
   }
@@ -132,4 +132,4 @@
   100% {
     margin-top: 0;
   }
-}
+}*/
