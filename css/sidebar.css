@@ -4,33 +4,33 @@
   line-height: 50px;
   font-family: "PT Sans", Helvetica, Arial, sans-serif;
   color: #ecf0f1;
-  height: 800px;
+  height: 540px;
   position: relative;
   top: 50%;
   left: 50%;
   margin-top: 200px;
-  margin-left: -118px;
+  margin-left: 30px;
 }
 .gossip:before {
   content: '{';
-  position: relative;
+  position: auto;
   /*left: -30px;*/
-  /*line-height: 40px;*/
+  line-height: 50px;
 }
 .gossip:after {
   content: '}';
-  position: relative;
+  position: auto;
   /*right: -30px;*/
-  /*line-height: 40px;*/
+  line-height: 50px;
 }
 .gossip:after,
 .gossip:before {
   color: #16a085;
   font-size: 42px;
-  animation: 2s linear 0s normal none infinite opacity;
-  -webkit-animation: 2s ease-out 0s normal none infinite opacity;
-  -moz-animation: 2s ease-out 0s normal none infinite opacity;
-  -o-animation: 2s ease-out 0s normal none infinite opacity;
+  animation: 4s linear 0s normal none infinite opacity;
+  -webkit-animation: 4s ease-out 1s normal none infinite opacity;
+  -moz-animation: 4s ease-out 1s normal none infinite opacity;
+  -o-animation: 4s ease-out 1s normal none infinite opacity;
 }
 .visible {
   float: left;
@@ -44,10 +44,10 @@
   padding-left: 110px;
   text-align: left;
   list-style: none;
-  animation: 6s linear 0s normal none infinite change;
-  -webkit-animation: 6s linear 0s normal none infinite change;
-  -moz-animation: 6s linear 0s normal none infinite change;
-  -o-animation: 6s linear 0s normal none infinite change;
+  animation: 6s linear 1s normal none infinite change;
+  -webkit-animation: 6s linear 1s normal none infinite change;
+  -moz-animation: 6s linear 1s normal none infinite change;
+  -o-animation: 6s linear 1s normal none infinite change;
 }
 .gossip ul, .gossip li {
   line-height: 40px;
