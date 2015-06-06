@@ -8,7 +8,7 @@
   position: relative;
 /*  top: 50%;
   left: 50%;*/
-  margin-top: 120px;
+  margin-top: 30px;
   /*margin-left: 30px;*/
 }
 
@@ -22,7 +22,7 @@
   position: relative;
 /*  top: 50%;
   left: 50%;*/
-  margin-top: 120px;
+  margin-top: 30px;
   /*margin-left: 30px;*/
 }
 
@@ -60,12 +60,12 @@
   -moz-animation: 4s ease-out 1s normal none infinite opacity;
   -o-animation: 4s ease-out 1s normal none infinite opacity;
 }*/
-.visible {
+/*.visible {
   float: left;
   font-weight: 600;
   overflow: hidden;
   height: 40px;
-}
+}*/
 
 .gossip ul {
   margin-top: 0;
@@ -81,7 +81,7 @@
   line-height: 40px;
   margin: 0;
 }
-/*@-webkit-keyframes opacity {
+@-webkit-keyframes opacity {
   0% {
     opacity: 0;
   }
@@ -160,4 +160,4 @@
   100% {
     margin-top: 0;
   }
-}*/
+}
