@@ -1,43 +1,43 @@
 .about {
-  width: auto;
-  font-size:24px;
-  line-height: 30px;
-  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+  /*width: auto;*/
+  /*font-size:24px;*/
+  /*line-height: 30px;*/
+  /*font-family: "PT Sans", Helvetica, Arial, sans-serif;*/
   color: #e50636;
   height: 320px;
-  position: relative;
+  /*position: auto;*/
 /*  top: 50%;
   left: 50%;*/
   margin-top: 30px;
-  margin-left: 30px;
+  /*margin-left: 30px;*/
 }
 
 .contact {
-  width: auto;
-  font-size: 24px;
-  line-height: 30px;
-  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+  /*width: auto;*/
+/*  font-size: 24px;
+  line-height: 30px;*/
+  /*font-family: "PT Sans", Helvetica, Arial, sans-serif;*/
   color: #e50636;
   height: 320px;
-  position: relative;
+  /*position: relative;*/
 /*  top: 50%;
   left: 50%;*/
   margin-top: 30px;
-  margin-left: 30px;
+  /*margin-left: 30px;*/
 }
 
 .gossip {
-  width: auto;
+  /*width: auto;*/
   font-size:34px;
   line-height: 50px;
   font-family: "PT Sans", Helvetica, Arial, sans-serif;
   color: #e50636;
   height: 320px;
-  position: relative;
+  /*position: relative;*/
 /*  top: 50%;
   left: 50%;*/
   margin-top: 120px;
-  margin-left: 30px;
+  /*margin-left: 30px;*/
 }
 /*.gossip:before {
   content: '{';
