@@ -9,7 +9,7 @@
 /*  top: 50%;
   left: 50%;*/
   margin-top: 30px;
-  /*margin-left: 30px;*/
+  margin-left: 30px;
 }
 
 .contact {
@@ -23,7 +23,7 @@
 /*  top: 50%;
   left: 50%;*/
   margin-top: 30px;
-  /*margin-left: 30px;*/
+  margin-left: 30px;
 }
 
 .gossip {
@@ -37,7 +37,7 @@
 /*  top: 50%;
   left: 50%;*/
   margin-top: 120px;
-  /*margin-left: 30px;*/
+  margin-left: 30px;
 }
 /*.gossip:before {
   content: '{';
@@ -60,12 +60,12 @@
   -moz-animation: 4s ease-out 1s normal none infinite opacity;
   -o-animation: 4s ease-out 1s normal none infinite opacity;
 }*/
-/*.visible {
+.visible {
   float: left;
   font-weight: 600;
   overflow: hidden;
   height: 40px;
-}*/
+}
 
 .gossip ul {
   margin-top: 0;
