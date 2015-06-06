@@ -4,26 +4,26 @@
   line-height: 50px;
   font-family: "PT Sans", Helvetica, Arial, sans-serif;
   color: #ecf0f1;
-  height: 540px;
+  height: 320px;
   position: relative;
   top: 50%;
   left: 50%;
-  margin-top: 200px;
-  margin-left: 30px;
+  margin-top: 100px;
+  /*margin-left: 30px;*/
 }
-.gossip:before {
+/*.gossip:before {
   content: '{';
   position: auto;
-  /*left: -30px;*/
+  left: -30px;
   line-height: 50px;
 }
 .gossip:after {
   content: '}';
   position: auto;
-  /*right: -30px;*/
+  right: -30px;
   line-height: 50px;
-}
-.gossip:after,
+}*/
+/*.gossip:after,
 .gossip:before {
   color: #16a085;
   font-size: 42px;
@@ -31,7 +31,7 @@
   -webkit-animation: 4s ease-out 1s normal none infinite opacity;
   -moz-animation: 4s ease-out 1s normal none infinite opacity;
   -o-animation: 4s ease-out 1s normal none infinite opacity;
-}
+}*/
 .visible {
   float: left;
   font-weight: 600;
