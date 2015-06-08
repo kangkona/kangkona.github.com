@@ -6,8 +6,171 @@
     <description>Recent content in Pl on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Thu, 04 Jun 2015 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 08 Jun 2015 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://kangkona.tk/categories/pl/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Go语言中的面向对象</title>
+      <link>http://kangkona.tk/oo-in-golang/</link>
+      <pubDate>Mon, 08 Jun 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://kangkona.tk/oo-in-golang/</guid>
+      <description>
+
+&lt;p&gt;最近在思考Go语言中面向对象实现，感觉最初的设计者真是掐准了软件工程的命脉，优雅与实用恰到好处的结合，使得这门语言于平凡处见深刻。&lt;/p&gt;
+
+&lt;p&gt;下面来剖析一下其中的一些设计点。&lt;/p&gt;
+
+&lt;h1 id=&#34;类与类型&#34;&gt;类与类型&lt;/h1&gt;
+
+&lt;p&gt;golang中没有class关键字，却引入了type，二者不是简单的替换那么简单，type表达的涵义远比class要广。 主流的面向对象语言(C++, Java)不太强调类与类型的区别，本着一切皆对象的原则，类被设计成了一个对象生成器。这些语言中的类型是以类为基础的，即通过类来定义类型，类是这类语言的根基。与之不同，golang中更强调类型，你在这门语言中根本看不到类的影子。实现上述传统语言的class只是type功能的一部分：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;  type Mutex struct {
+      state int32
+      sema  uint32
+  }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;此外，type还可以扩展已经定义的类型：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;    type Num int32
+    func (num Num) IsBigger(otherNum Num) bool {
+        return num &amp;gt; otherNum
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这种灵活的定义方式可以很好地提高程序的可扩展性,通过重命名原有类型，也可以做到一定程序上的解耦。&lt;/p&gt;
+
+&lt;p&gt;传统对象型语言由于设计之初追求面向对象的彻底性，使得后来加入函数式对象时不得不Hack一把：C++很鸡贼地重载｀()` 实现:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-cpp&#34;&gt;class Adder{
+   public:
+     int operator() (int a, int b) {
+        return a+b;
+     }
+};
+int add(int a, int b, Adder&amp;amp; adder) {
+    return adder(a,b);
+}
+add(1, 3, new Adder);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Java则憋了很久才憋出FunctionalInterface(只有一个抽象方法的接口)可以无缝地与历史包袱兼容:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface Displayer {
+	void display();
+}
+
+//Test class to implement above interface
+public class FunctionInterfaceTestImpl {
+     public static void main(String[] args) {
+     //Old way using anonymous inner class
+     Displayer oldWay = new Displayer(){
+        public void display(){
+           System.out.println(&amp;quot;Display from old way&amp;quot;);
+        }};
+     OldWay.display();//outputs: Display from old way
+     
+     //Using lambda expression
+     Displayer newWay = () -&amp;gt; {System.out.println(&amp;quot;Display from new Lambda Expression&amp;quot;);}
+     newWay.display();//outputs : Display from new Lambda Expression
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;而在golang中，借助type的威力，定义函数式类型和定义一般类型并无区别：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;type Traveser func(ele interface{})
+type Filter func(ele interface{}) bool
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;方法放在哪里&#34;&gt;方法放在哪里&lt;/h1&gt;
+
+&lt;p&gt;golang与传统对象式语言的另一个不同是方法并不在类的定义范围之内，而是通过把类作为接收器(receiver)与方法进行绑定：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;// Once is an object that will perform exactly one action.
+type Once struct {
+	m    Mutex
+	done uint32
+}
+
+func (o *Once) Do(f func()) {
+	if atomic.LoadUint32(&amp;amp;o.done) == 1 {
+		return
+	}
+	// Slow-path.
+	o.m.Lock()
+	defer o.m.Unlock()
+	if o.done == 0 {
+		defer atomic.StoreUint32(&amp;amp;o.done, 1)
+		f()
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;看起来仅仅是放置位置的不同，其实是设计理念的不同。将方法放在类定义里面，意味着方法是类不可分割的一部分，类的最小单位就是数据成员和当前定义的所有操作，你要认识这个类，必须一次性认识这个类中定义的所有的东西。相反，先定义类的数据结构，然后像搭积木一样将目前需要的方法一个一个地进行绑定，你便可以根据需求对类进行扩展。传统的类定义是你必须一开始便想好这个类有哪些操作，一旦类定义好了，类就成了你定义的样子，再无其他可能。golang的这种开放式扩展定义方式，使得类更加具有生命力，你不必一开始就设计好一切(往往也很难做到)，类会随着你的实现思路逐渐成长为你想要的那个样子。&lt;/p&gt;
+
+&lt;h1 id=&#34;组合还是继承&#34;&gt;组合还是继承&lt;/h1&gt;
+
+&lt;p&gt;继承是面向对象鼓吹的三大特性之一，但经过多年的实践，业界普遍认识到继承带来的弊端：&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;破坏封装，子类与父类之间紧密耦合，子类依赖于父类的实现，子类缺乏独立性&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;对扩展支持不好，往往以增加系统结构的复杂度为代价&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;不支持动态继承。在运行时，子类无法选择不同的父类&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;子类不能改变父类的接口&lt;br /&gt;&lt;/li&gt;
+&lt;li&gt;对具体类的重载，重写会破会里氏替换原则&lt;br /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;golang的设计者意识到了继承的这些问题，在语言设计之初便拿掉了继承。其实也不能说golang里面没有继承，只不过继承是用匿名组合实现的，没有传统的的继承关系链(父类和子类完全是不同类型)， 同时还能重用父类的方法与成员。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;type Base struct{
+}
+
+func (b Base)Show(){
+   println(&amp;quot;Bazinga!&amp;quot;)
+}
+
+type Child struct{
+	Base
+}
+
+func main() {
+   child := Child{}
+   child.Show()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;这种用Has-A代替Is-A的模拟实现，既解决了一些软件工程问题，同时甩掉了很多困扰程序员的心智包袱。&lt;/p&gt;
+
+&lt;h1 id=&#34;非侵入式接口&#34;&gt;非侵入式接口&lt;/h1&gt;
+
+&lt;p&gt;学CS到现在，感觉计算机科学的精髓其实就两个字：&lt;code&gt;abstract&lt;/code&gt; 和 &lt;code&gt;tradeoff&lt;/code&gt;, golang中的非侵入式接口便很好地体现了这两点。传统对象式语言里面有一堆与接口相关的东西：抽象类，抽象接口，虚函数，纯虚函数等等。概念虽多，说起来不过是在不同&lt;code&gt;abstrct&lt;/code&gt;层面上进行&lt;code&gt;tradeoff&lt;/code&gt;而已。 golang的接口很彻底，就是一系列操作定义的集合，根本不允许进行实现，而且也不能定义变量或者常量这些东东:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-golang&#34;&gt;  type Interface interface {
+     // Len is the number of elements in the collection.
+     Len() int
+     // Less reports whether the element with
+     // index i should sort before the element with index j.
+     Less(i, j int) bool
+     // Swap swaps the elements with indexes i and j.
+     Swap(i, j int)
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;记得有位大学老师把Java中的接口比作资格证书，你要去考资格证书，并达到资格证书中的所有要求，才算具有某些资质。golang的接口则不太一样，只要你能做到资格证书中规定的那些事情，不管你去不去考这个资格证，都认为你具有了资质。其实这种想法在一些动态语言中实现过，且有诗为证：&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;如果一个人看起来像鸭子,走起来像鸭子,叫起来像鸭子,那么他就是个基佬。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;这种非侵入式的设计方式，很大程度上也是为了解耦。接口和类本就是不同的东西：类是为了把数据和代码包装在一起，是为了对内实现；接口则更像是一种契约，是为了对外展示。基于这种抽象层面的接口进行编程，很容易达到设计模式中的依赖倒置，接口隔离以及迪米特法则几个原则。&lt;/p&gt;
+
+&lt;p&gt;编程语言的进化固然可以带来一些工程上的进步， 但千万不要忘了那句古训：&lt;br /&gt;
+&amp;gt; There is no silver bullet.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>PL Meets AI</title>
