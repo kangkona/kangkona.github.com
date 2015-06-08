@@ -169,8 +169,9 @@ func main() {
 
 &lt;p&gt;编程语言的进化固然可以带来一些工程上的好处， 但千万不要忘了那句古训：&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt; There is no silver bullet.
-&lt;/code&gt;&lt;/pre&gt;
+&lt;blockquote&gt;
+&lt;p&gt;There is no silver bullet.&lt;/p&gt;
+&lt;/blockquote&gt;
 </description>
     </item>
     
