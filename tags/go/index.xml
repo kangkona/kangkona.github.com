@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Go on Grey Times</title>
-    <link>http://kangkona.tk/tags/go/</link>
+    <link>http://kangkona.github.io/tags/go/</link>
     <description>Recent content in Go on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Mon, 08 Jun 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://kangkona.tk/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.github.io/tags/go/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Go语言中的面向对象</title>
-      <link>http://kangkona.tk/oo-in-golang/</link>
+      <link>http://kangkona.github.io/oo-in-golang/</link>
       <pubDate>Mon, 08 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/oo-in-golang/</guid>
+      <guid>http://kangkona.github.io/oo-in-golang/</guid>
       <description>
 
 &lt;p&gt;最近在思考Go语言中面向对象实现，感觉最初的设计者真是掐准了软件工程的命脉，优雅与实用恰到好处的结合，使得这门语言于平凡处见深刻。&lt;/p&gt;

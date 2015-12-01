@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>C on Grey Times</title>
-    <link>http://kangkona.tk/categories/c/</link>
+    <link>http://kangkona.github.io/categories/c/</link>
     <description>Recent content in C on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Thu, 07 Nov 2013 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://kangkona.tk/categories/c/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.github.io/categories/c/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Struct Hack</title>
-      <link>http://kangkona.tk/struct-hack/</link>
+      <link>http://kangkona.github.io/struct-hack/</link>
       <pubDate>Thu, 07 Nov 2013 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/struct-hack/</guid>
+      <guid>http://kangkona.github.io/struct-hack/</guid>
       <description>&lt;p&gt;最近在搞&lt;strong&gt;Compiler&lt;/strong&gt;的&lt;strong&gt;CodeGenerator&lt;/strong&gt;实验，有一部分需要把Java程序翻译成C程序，比如:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code&gt; int [] array;

@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Go on Grey Times</title>
-    <link>http://kangkona.tk/categories/go/</link>
+    <link>http://kangkona.github.io/categories/go/</link>
     <description>Recent content in Go on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Mon, 08 Jun 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://kangkona.tk/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Go语言中的面向对象</title>
-      <link>http://kangkona.tk/oo-in-golang/</link>
+      <link>http://kangkona.github.io/oo-in-golang/</link>
       <pubDate>Mon, 08 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/oo-in-golang/</guid>
+      <guid>http://kangkona.github.io/oo-in-golang/</guid>
       <description>
 
 &lt;p&gt;最近在思考Go语言中面向对象实现，感觉最初的设计者真是掐准了软件工程的命脉，优雅与实用恰到好处的结合，使得这门语言于平凡处见深刻。&lt;/p&gt;
@@ -177,10 +177,10 @@ func main() {
     
     <item>
       <title>Go实践之JSON解析</title>
-      <link>http://kangkona.tk/json-and-go/</link>
+      <link>http://kangkona.github.io/json-and-go/</link>
       <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/json-and-go/</guid>
+      <guid>http://kangkona.github.io/json-and-go/</guid>
       <description>
 
 &lt;p&gt;当我们开发了一个新版本的软件时，通常需要和稳定版进行对比，进行QoS评估。对实时性网络服务而言，比较客观的做法是同时请求相同的服务，然后对比返回结果。&lt;/p&gt;
@@ -252,10 +252,10 @@ err := json.Unmarshal([]byte(bodystr), &amp;amp;person)
     
     <item>
       <title>Go实践之并发初体验</title>
-      <link>http://kangkona.tk/concurrent-in-go/</link>
+      <link>http://kangkona.github.io/concurrent-in-go/</link>
       <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/concurrent-in-go/</guid>
+      <guid>http://kangkona.github.io/concurrent-in-go/</guid>
       <description>
 
 &lt;p&gt;golang的一大卖点是并发模型基于CPS(continuation passing style)，使用起来比较简单。刚开始我也觉得比较简单，但使用之后发现，你必须很清楚golang的并发机制才能使用自如，在需要同步尤甚，一不小心就会陷入罪恶的渊薮。&lt;/p&gt;

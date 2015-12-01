@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Ml on Grey Times</title>
-    <link>http://kangkona.tk/categories/ml/</link>
+    <link>http://kangkona.github.io/categories/ml/</link>
     <description>Recent content in Ml on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Thu, 04 Jun 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://kangkona.tk/categories/ml/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.github.io/categories/ml/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>PL Meets AI</title>
-      <link>http://kangkona.tk/pl-meets-ai/</link>
+      <link>http://kangkona.github.io/pl-meets-ai/</link>
       <pubDate>Thu, 04 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/pl-meets-ai/</guid>
+      <guid>http://kangkona.github.io/pl-meets-ai/</guid>
       <description>&lt;p&gt;编程语言是很善变的，一旦用其编程，它便不再是你头脑中的那个语言。&lt;/p&gt;
 
 &lt;p&gt;上面这句话是我瞎掰的，不过确实是最近的一些体会。编程语言是高度形式化的产物，一旦用于实际生产，便免不了受到现实条件的制约。比如下面这个条件语句&lt;/p&gt;

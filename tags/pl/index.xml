@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Pl on Grey Times</title>
-    <link>http://kangkona.tk/tags/pl/</link>
+    <link>http://kangkona.github.io/tags/pl/</link>
     <description>Recent content in Pl on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Mon, 08 Jun 2015 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://kangkona.tk/tags/pl/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.github.io/tags/pl/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Go语言中的面向对象</title>
-      <link>http://kangkona.tk/oo-in-golang/</link>
+      <link>http://kangkona.github.io/oo-in-golang/</link>
       <pubDate>Mon, 08 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/oo-in-golang/</guid>
+      <guid>http://kangkona.github.io/oo-in-golang/</guid>
       <description>
 
 &lt;p&gt;最近在思考Go语言中面向对象实现，感觉最初的设计者真是掐准了软件工程的命脉，优雅与实用恰到好处的结合，使得这门语言于平凡处见深刻。&lt;/p&gt;
@@ -177,10 +177,10 @@ func main() {
     
     <item>
       <title>PL Meets AI</title>
-      <link>http://kangkona.tk/pl-meets-ai/</link>
+      <link>http://kangkona.github.io/pl-meets-ai/</link>
       <pubDate>Thu, 04 Jun 2015 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/pl-meets-ai/</guid>
+      <guid>http://kangkona.github.io/pl-meets-ai/</guid>
       <description>&lt;p&gt;编程语言是很善变的，一旦用其编程，它便不再是你头脑中的那个语言。&lt;/p&gt;
 
 &lt;p&gt;上面这句话是我瞎掰的，不过确实是最近的一些体会。编程语言是高度形式化的产物，一旦用于实际生产，便免不了受到现实条件的制约。比如下面这个条件语句&lt;/p&gt;

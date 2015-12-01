@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Json on Grey Times</title>
-    <link>http://kangkona.tk/tags/json/</link>
+    <link>http://kangkona.github.io/tags/json/</link>
     <description>Recent content in Json on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Fri, 28 Nov 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://kangkona.tk/tags/json/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.github.io/tags/json/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Go实践之JSON解析</title>
-      <link>http://kangkona.tk/json-and-go/</link>
+      <link>http://kangkona.github.io/json-and-go/</link>
       <pubDate>Fri, 28 Nov 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/json-and-go/</guid>
+      <guid>http://kangkona.github.io/json-and-go/</guid>
       <description>
 
 &lt;p&gt;当我们开发了一个新版本的软件时，通常需要和稳定版进行对比，进行QoS评估。对实时性网络服务而言，比较客观的做法是同时请求相同的服务，然后对比返回结果。&lt;/p&gt;

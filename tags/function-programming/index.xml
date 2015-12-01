@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Function Programming on Grey Times</title>
-    <link>http://kangkona.tk/tags/function-programming/</link>
+    <link>http://kangkona.github.io/tags/function-programming/</link>
     <description>Recent content in Function Programming on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <lastBuildDate>Sat, 06 Sep 2014 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://kangkona.tk/tags/function-programming/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://kangkona.github.io/tags/function-programming/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>模式匹配大法好</title>
-      <link>http://kangkona.tk/pattern-match-is-good/</link>
+      <link>http://kangkona.github.io/pattern-match-is-good/</link>
       <pubDate>Sat, 06 Sep 2014 00:00:00 +0000</pubDate>
       
-      <guid>http://kangkona.tk/pattern-match-is-good/</guid>
+      <guid>http://kangkona.github.io/pattern-match-is-good/</guid>
       <description>
 
 &lt;h2 id=&#34;if-while-for&#34;&gt;if, while, for&lt;/h2&gt;
@@ -91,11 +91,7 @@ qsort([Pivot|T]) -&amp;gt;
 
 &lt;p&gt;显而易见，自带模式匹配的语言在屏蔽了语言细节之后，直接把快速排序的本质勾勒了出来，简单粗暴且自带闪光灯！！！ 为什么仅仅是省略了选择相关的字眼，生产率以及通俗性提高那么多呢？ 我猜测的原因如下:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;    人是一种害怕做选择的动物，尤其是意识到自己面临着一个悬(选)着(择)的问题时候。使用if-then-else好比是在做选择
-    的时候告诉程序员：Hi,SB, you should make a choice!  是不是还有点细思极恐？？？！！！
-    而使用模式匹配，似乎只需要制定好一条条规则， Let the compiler do the fuck choice! 对于选择困难综合症
-    的 朋友来说，真是居家旅行，杀人越货必备之良器。
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;人是一种害怕做选择的动物，尤其是意识到自己面临选择的时候。使用if-then-else好比是在做选择的时候告诉程序员：Hi,SB, you should make a choice!  是不是还有点细思极恐？？？！！！而使用模式匹配，似乎只需要制定好一条条规则， Let the compiler do the fuck choice! 对于选择困难综合症的朋友来说，真是居家旅行，杀人越货必备之良器。&lt;/p&gt;
 
 &lt;p&gt;总结来说，简洁的事物之所以有时候威力更强大，是因为简洁的重点不是简，而是洁。 隐匿了冗余的细节，减轻了思想上的包袱，让程序员可以轻装上阵，专注于真正的问题，谓之“洁”。&lt;/p&gt;
 
