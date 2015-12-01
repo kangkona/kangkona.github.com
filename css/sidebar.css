@@ -72,10 +72,10 @@
   padding-left: 110px;
   text-align: left;
   list-style: none;
-  animation: 6s linear 0s normal none infinite change;
-  -webkit-animation: 6s linear 0s normal none infinite change;
-  -moz-animation: 6s linear 0s normal none infinite change;
-  -o-animation: 6s linear 0s normal none infinite change;
+  animation: 12s linear 2s normal none infinite change;
+  -webkit-animation: 12s linear 2s normal none infinite change;
+  -moz-animation: 12s linear 2s normal none infinite change;
+  -o-animation: 12s linear 2s normal none infinite change;
 }
 .gossip ul, .gossip li {
   line-height: 40px;
