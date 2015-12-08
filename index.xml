@@ -6,8 +6,26 @@
     <description>Recent content on Grey Times</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 08 Jun 2015 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 01 Dec 2015 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://kangkona.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>日落北京城</title>
+      <link>http://kangkona.github.io/sundown-at-peking/</link>
+      <pubDate>Tue, 01 Dec 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://kangkona.github.io/sundown-at-peking/</guid>
+      <description>&lt;p&gt;我想象中的北京，差不多一半是火海炼狱，一半是婀娜天堂，满满都是魔幻现实主义气息。&lt;/p&gt;
+
+&lt;p&gt;不过北京应该是我听说次数最多的一个城市，甚至比我自己的故乡还多。这一点确实不奇怪，好比牛肉面在兰州绝不会叫兰州牛肉面，加州也找不到一家旅馆叫california hotel。从小看到大的新闻联播每天在说北京，人们谈论这个国家时也用北京代指，关键的时刻在北京定格，重要的事情在北京发生，权力的手掌在北京挥动。任何和北京有关的东西都会打上北京烙印：北京时间，北京烤鸭，北京牌香烟，老北京方便面，北京布鞋。我有个在北京出生的表妹叫燕京，可能也是因为北京做女孩名不好听吧。&lt;/p&gt;
+
+&lt;p&gt;北京城吸引了所有人的注意力，政客，商人，艺术家，知识分子，跑龙套的，异装者，农民工，职业杀手，卖玉兰花的少女。。。各种各样的人在这片神奇的土地上贩卖着关于自己的一切。没有立足之地，生活还很艰难，但好在每个努力打拼的人都还有自己的故事。这些故事都是北京不可或缺的，人们常常讲哪个城市是有底蕴的，我觉得底蕴就是故事，故事就是几百倍几千倍于正在发生的真实。所以北京是真实的，让人又爱又恨的真实。&lt;/p&gt;
+
+&lt;p&gt;虽然我没有到过北京，我爸倒是在我小时候去北京打过一阵工。我爸每年都给我带回一些好玩的东西，印象最深刻的是个电子琴。这是我第一次接触这么精巧的东西，周围也没有一个人会摆弄，导致我只会按上面一个固定的按钮，一按就会从头到尾播放一遍《世上只有妈妈好》。我没没把手捂热，我哥就要屁颠屁颠把琴拿去学校炫耀。正如大多数故事情节一样，琴被绑在自行车后面摔了个粉碎，然后那个电子琴就停留在我记忆中的那一天。还有一年周围人都在玩小霸王学习机，我爸问我需不需要学习机来学习，我当然说要。等到年关我爸回来，他就说忘了这个事儿，然后他再没有去过北京了。&lt;/p&gt;
+
+&lt;p&gt;所以北京还欠我一个小霸王学习机。&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Go语言中的面向对象</title>
@@ -1586,274 +1604,6 @@ Spout对流入的数据进行检查，如果是符合要求的数据(好比质�
 &lt;pre&gt;&lt;code&gt;`JVM`内存限制于实际的最大物理内存，假设物理内存无限大的话，`JVM`内存的最大值跟操作系统有很大的关系。
 简单的说就32位处理器虽然可控内存空间有4GB,但是具体的操作系统会给一个限制，这个限制一般是2GB-3GB（一般
 来说`Windows`系统下为1.5G-2G，`Linux`系统下为2G-3G），而64bit以上的处理器就不会有限制了。
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>NLPNote</title>
-      <link>http://kangkona.github.io/nlp-note/</link>
-      <pubDate>Thu, 06 Feb 2014 00:00:00 +0000</pubDate>
-      
-      <guid>http://kangkona.github.io/nlp-note/</guid>
-      <description>
-
-&lt;h2 id=&#34;1-python自然语言处理-笔记&#34;&gt;1.《Python自然语言处理》笔记&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;遍历序列的各种方式&lt;br /&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    Python 表达式                       评论
-    for item in s                       遍历 s 中的元素
-    for item in sorted(s)               按顺序遍历 s 中的元素
-    for item in set(s)                  遍历 s 中的无重复的元素
-    for item in reversed(s)             按逆序遍历 s 中的元素
-    for item in set(s).difference(t)    遍历在集合 s 中不在集合 t 的元素
-    for item in random.shuffle(s)       按随机顺序遍历 s 中的元素
-
-    组合使用显威力： reversed(sorted(set(s)))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;zip &amp;amp;&amp;amp; enumerate&lt;br /&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    &amp;gt;&amp;gt;&amp;gt; words = [&#39;I&#39;, &#39;turned&#39;, &#39;off&#39;, &#39;the&#39;, &#39;spectroroute&#39;]
-    &amp;gt;&amp;gt;&amp;gt; tags = [&#39;noun&#39;, &#39;verb&#39;, &#39;prep&#39;, &#39;det&#39;, &#39;noun&#39;]
-    &amp;gt;&amp;gt;&amp;gt; zip(words, tags)
-    [(&#39;I&#39;, &#39;noun&#39;), (&#39;turned&#39;, &#39;verb&#39;), (&#39;off&#39;, &#39;prep&#39;),
-    (&#39;the&#39;, &#39;det&#39;), (&#39;spectroroute&#39;, &#39;noun&#39;)]
-    &amp;gt;&amp;gt;&amp;gt; list(enumerate(words))
-    [(0, &#39;I&#39;), (1, &#39;turned&#39;), (2, &#39;off&#39;), (3, &#39;the&#39;), (4, &#39;spectroroute&#39;)]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;对于一些 NLP 的任务,有必要将一个序列分割成两个或两个以上的部分。例如:我们&lt;br /&gt;
-可能需要用 90%的数据来“训练”一个系统,剩余 10%进行测试。要做到这一点,我们指&lt;br /&gt;
-定想要分割数据的位置,然后在这个位置分割序列。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    &amp;gt;&amp;gt;&amp;gt; text = nltk.corpus.nps_chat.words()
-    &amp;gt;&amp;gt;&amp;gt; cut = int(0.9 * len(text)) 
-    &amp;gt;&amp;gt;&amp;gt; training_data, test_data = text[:cut], text[cut:] 
-    &amp;gt;&amp;gt;&amp;gt; text == training_data + test_data 
-    True
-    &amp;gt;&amp;gt;&amp;gt; len(training_data) / len(test_data) 4
-    9
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;我们可以验证在此过程中的原始数据没有丢失,也不是复制。我们也可以验证两块大&lt;br /&gt;
-小的比例是我们预期的。&lt;/p&gt;
-
-&lt;p&gt;让我们综合关于这三种类型的序列的知识,一起使用链表推导处理一个字符串中的词,&lt;br /&gt;
-按它们的长度排序。&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    &amp;gt;&amp;gt;&amp;gt; words = &#39;I turned off the spectroroute&#39;.split() 
-    &amp;gt;&amp;gt;&amp;gt; wordlens = [(len(word), word) for word in words] 
-    &amp;gt;&amp;gt;&amp;gt; wordlens.sort() 
-    &amp;gt;&amp;gt;&amp;gt; &#39; &#39;.join(w for (_, w) in wordlens)
-    &#39;I off the turned spectroroute&#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;从html中提取信息的通用办法&lt;br /&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    import re
-    def get_text(file):
-    &amp;quot;&amp;quot;&amp;quot;Read text from a file, normalizing whitespace and stripping HTML markup.&amp;quot;&amp;quot;&amp;quot;
-    text = open(file).read()
-    text = re.sub(&#39;\s+&#39;, &#39; &#39;, text)
-    text = re.sub(r&#39;&amp;lt;.*?&amp;gt;&#39;, &#39; &#39;, text)
-    return text
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;防御性编程&lt;br /&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;     def tag(word):
-        assert isinstance(word, basestring), &amp;quot;argument to tag() must be a string&amp;quot;
-        if word in [&#39;a&#39;, &#39;the&#39;, &#39;all&#39;]:
-            return &#39;det&#39;
-        else:
-            return &#39;noun&#39;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;FreqDist&lt;br /&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;    def freq_words(file, min=1, num=10):
-        text = open(file).read()
-        tokens = nltk.word_tokenize(text)
-        freqdist = nltk.FreqDist(t for t in tokens if len(t) &amp;gt;= min)
-        return freqdist.keys()[:num]
-
-
-    def freq_words_verbose(file, min=1, num=10, verbose=False):
-     &#39;&#39;&#39;如果设置了 verbose 标志将会报告其进展情况&#39;&#39;&#39;
-     freqdist = FreqDist()
-     if trace: print &amp;quot;Opening&amp;quot;, file
-     text = open(file).read()
-     if trace: print &amp;quot;Read in %d characters&amp;quot; % len(file)
-     for word in nltk.word_tokenize(text):
-         if len(word) &amp;gt;= min:
-            freqdist.inc(word)
-            if trace and freqdist.N() % 100 == 0: print &amp;quot;.&amp;quot;
-     if trace: print
-     return freqdist.keys()[:num]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;调试＆＆Pdb&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;CSV :Python有自己的CSV库，csv.reader&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;动态规划是一种在 NLP 中广泛使用的算法设计技术,它存储以前的计算结果,&lt;br /&gt;
-以避免不必要的重复计算。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&#34;2-文本分类&#34;&gt;2. 文本分类&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;过拟合： 如果你提供太多的特征,那么该算法将高度依赖你的训练数据的特性，而一般化到新的例子的效果不会很好。这个问题被称为过拟合。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;devtest： 一旦初始特征集被选定,完善特征集的一个非常有成效的方法是错误分析。首先,我们选择一个开发集,包含用于创建模型的语料数据。然后将这种开发集分为训练集和开发测试集。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Topic映射到关键词组，映射的越多，表示越切题。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;不去关注词法，语法阶段的错误，做到隔离。面面俱到的效果未必好。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;pre&gt;&lt;code&gt;    algorithm : 主题检测
-    input: document
-    tools: 
-         - 特征提取器(eg:给定一些模式（词，词组，词模式)，得到对于给定document的`布尔数组`)
-         - 训练一个文档分类器
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;特征提取函数的行为就像有色眼镜一样,强调我们的数据中的某些属性(颜色),并使其无法看到其他属性。分类器在决定如何标记输入时,将完全依赖它们强调的属性。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;要不要走一条无监督学习之路，寻找不动点。&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;文本自动层级聚类&lt;br /&gt;
-这种试探性的数据分析(exploratory data  analysis)来识别跑题作文,并辅以人工鉴别。这种内容评价方法的特点是不需要事先基于大规模标注训练集构建评价模型,并且有着层级聚合聚类法的突出优点,郎能够生成比较规整的类集合,聚类结果不依赖文档的初始排列或输入次序,与聚类过程的先后次序无关,聚类结果比较稳定,不易导致类的重构。并且对于作文i平价来讲,得到的结果比较容易解释。实验结果表明,该方法能比较清晰地识别与大多数作文内容不同的作文,再辅以人工鉴别,可准确识别跑题作文,从而在通用自动作文评价中实现作文内容的测量。&lt;/p&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&#34;3-代码工具库&#34;&gt;3. 代码工具库&lt;/h2&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;	# -*- coding: utf-8 -*-
-	&amp;quot;&amp;quot;&amp;quot;
-	为跑题检测储备的工具代码
-	~/Project/NLTK-offTopic/.temp.py
-	&amp;quot;&amp;quot;&amp;quot;
-	import numpy as np
-	import nltk as nk
-	import re
-
-	s=open(&amp;quot;nlptest.txt&amp;quot;,&amp;quot;r&amp;quot;)
-	&#39;&#39;&#39;s.seek(0)&#39;&#39;&#39;
-	m1=s.read()
-	pattern=re.compile(&amp;quot;^A-Za-z&amp;quot;)
-	s1=re.split(&amp;quot;\s+&amp;quot;,re.sub(pattern,&amp;quot; &amp;quot;,m1.replace(&amp;quot;\n&amp;quot;,&amp;quot; &amp;quot;)))
-	s2=set(s1) #union作用
-	s3=nk.FreqDist(s1)
-	nk.FreqDist(s1).items()#显示所有信息
-	nk.FreqDist(s1).keys()[:50]#显示前50的词频为降序排列
-	s4=[len(ca) for ca in s1]#计算词频长度
-	s5=nk.FreqDist(s4)
-	max(s5)#显示最大的词频
-	s5.freq(s5.keys(max(s5))#可显示比率
-	z1=[ca for ca in set(s1) if s3[ca]&amp;gt;10]#可以只输出符合规则的词频
-	s3.plot(50,cumulative=True)#累计汇总图前50个词频的
-	s3.hapaxes()#输出只一次的词
-	nk.bigrams(s1)#形成双连词
-	s3.inc(s3)#可添加样本
-	s3.N()可现实总量
-	s3.tabulate(conditions=&amp;quot;表示第几个文本对应的名字&amp;quot;,samples=&amp;quot;表示要显示的词&amp;quot;)#绘制频率分布表
-	 
-	###nltk上的人机交互程序
-	nk.chat.chatbots()
-	 
-	##载入自己的语料库
-	 
-	from nltk.corpus import PlaintextCorpusReader
-	wd=&amp;quot;D:\\nlptest&amp;quot;
-	wd1=PlaintextCorpusReader(wd,&amp;quot;.*&amp;quot;)
-	wd1.fileids()#显示语料库中的文件名
-	wd1.words(&amp;quot;nlptest.txt&amp;quot;)#显示词和split效果一样
-	cfd=nk.ConditionalFreqDist((genre,word) for genre in [&amp;quot;first&amp;quot;,&amp;quot;second&amp;quot;] for word in s1)
-	#对应的条件概率如果在word，其实就是分类汇总
-	cfd.conditions()#显示并按照条件字母排序
-	#一样可以用tabulate显示table列表
-	 
-	 
-	#英文同义词字典库
-	 
-	from nltk.corpus import wordnet as wn
-	wn.synsets(&amp;quot;hell&amp;quot;)#显示出同义词类
-	wn.synset(&amp;quot;hell.n.01&amp;quot;).lemma_names#可以显示出在第几种词义词性下对应的相同英文
-	wn.synset(&amp;quot;hell.n.01&amp;quot;).definition#词语定义
-	wn.synset(&amp;quot;hell.n.01&amp;quot;).examples#常用词义例句子
-	wn.synset(&amp;quot;hell.n.01&amp;quot;).lemmas#显示所有词条
-	wn.lemma(&amp;quot;hell.n.01.hell_on_earth&amp;quot;)
-	wn.lemma(&amp;quot;hell.n.01.hell_on_earth&amp;quot;).synset#显示上层hell.n.01
-	wn.lemma(&amp;quot;hell.n.01.hell_on_earth&amp;quot;).name#显示单词&#39;hell_on_earth&#39;
-	hell=wn.synset(&amp;quot;cat.n.01&amp;quot;)
-	hell1=hell.hyponyms()
-	sorted([lemma.name for synset1 in hell1 for lemma in synset1.lemmas])
-	#Out[65]: [&#39;Felis_catus&#39;, &#39;Felis_domesticus&#39;, &#39;domestic_cat&#39;, &#39;house_cat&#39;, &#39;wildcat&#39;]
-	#先进行词条分类
-	#通过hyponyms找到下位词如毛 可以使什么类型的猫等
-	hell.root_hypernyms()#可以找到最一般的上位词
-	hell.hypernym_paths()#可以找到层次 len测是几类
-	wn.synset(&amp;quot;cat.n.01&amp;quot;).part_meronyms()#可以显示出如猫耳朵，猫毛这类词汇关系
-	wn.synset(&amp;quot;cat.n.01&amp;quot;).substance_meronyms()#不理解什么叫树的实质是心材和边材
-	wn.synset(&amp;quot;walk.v.01&amp;quot;).entailments()#动词的蕴含意义，如走路蕴含着抬脚，吃蕴含着咀嚼等
-	wn.lemma(&amp;quot;rush.v.01&amp;quot;).antonyms()#动词的反义
-	dir(wn.synset(&amp;quot;rush.v.01&amp;quot;))#可以通过此种方式再词汇挂你选等上查找
-	wn.synset(&amp;quot;right_whale.n.01&amp;quot;).lowest_common_hypernyms(wn.synset(&amp;quot;orca.n.01&amp;quot;))#可以计算出两个相似的类
-	wn.synset(&amp;quot;right_whale.n.01&amp;quot;).min_depth()#可以查对应的深度量化
-	wn.synset(&amp;quot;right_whale.n.01&amp;quot;).path_similarity(wn.synset(&amp;quot;orca.n.01&amp;quot;))#直接可以计算相似度1为基本一样
-	&#39;&#39;&#39;urllib urlopen urlopen().read()
-	#nk.word_tokenize()可直接对文本分词
-	#text=nk.Text(nk.word_tokenize)的list形变为nltk文本
-	list形式可用 .find(&amp;quot;&amp;quot;)
-	 
-	#html
-	k1=urlopen().read()
-	#直接转换
-	k2=nk.clean_html(k1)
-	k3=nk.word_tokenize(k2)
-	&#39;&#39;&#39;
-	 
-	#词干提取器
-	porter=nk.PorterStemmer()#或者LancasterStemmer()
-	[porter.stem(t) for t in s1]
-	#词型归并器
-	l1=nk.WordNetLemmatizer()
-	[l1.lemmatize(t) for t in s1]
-	#nk.regexp_tokenize(text,pattern)比re.findall快很多
-	#random.shuffle(sample)
-	 
-	#词性标注器
-	nk.pos_tag(s1)#cc连词 rb副词 in介词 nn名词 jj形容词 vbp动词
-	#adj形容词 adv动词 cnj连词 det限定词 ex存量词 fw外来词 mod情态动词
-	#n 名词 np 专有名词 num数量词 pro代词 p介词 to 词投 uh感叹词 v动词
-	#vd过去式 vg现有分词 vn过去分词 wh wh限定词
-	 
-	#读取已标注的语料库
-	s1.tagged_words()
-	#朴素贝叶斯
-	cla=nk.NaiveBayesClassifier.train()
-	cla.classfiy()
-	nk.classify.accuracy(cla,&amp;quot;测试集&amp;quot;)
-	#决策树
-	nk.DecisionTreeClassifier.tarin()
-
 &lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
